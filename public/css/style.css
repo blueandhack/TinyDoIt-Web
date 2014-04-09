@@ -1,0 +1,116 @@
+body{
+    padding-top: 30px;
+    padding-bottom: 40px;
+}
+.body-signin{
+    background: #eeeeee;
+}
+
+.body-register{
+    background: #eeeeee;
+}
+
+.white-background{
+    background-color: #ffffff;
+}
+
+.form-signin{
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+}
+.form-signin .checkbox{
+    font-weight: normal;
+}
+
+.form-signin .form-control {
+    position: relative;
+    font-size: 16px;
+    height: auto;
+    padding: 10px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+
+@-webkit-keyframes del-scroll {
+    0% {
+        -webkit-transform: translate3d(0, 0, 0)
+    }
+    50% {
+        -webkit-transform: translate3d(-100%, 0, 0)
+    }
+    100% {
+        -webkit-transform: translate3d(-100%, 0, 0)
+    }
+}
+
+@keyframes del-scroll {
+    0% {
+        transform: translate3d(0, 0, 0)
+    }
+    50% {
+        transform: translate3d(-100%, 0, 0)
+    }
+    100% {
+        transform: translate3d(-100%, 0, 0)
+    }
+}
+
+@-webkit-keyframes shift-scroll {
+    0% {
+        -webkit-transform: translate3d(0, 0, 0)
+    }
+    50% {
+        -webkit-transform: translate3d(0, 0, 0)
+    }
+    100% {
+        -webkit-transform: translate3d(0, -100%, 0)
+    }
+}
+
+@keyframes shift-scroll {
+    0% {
+        transform: translate3d(0, 0, 0)
+    }
+    50% {
+        transform: translate3d(0, 0, 0)
+    }
+    100% {
+        transform: translate3d(0, -100%, 0)
+    }
+}
+
+.figure_1 {
+    width: 320px;
+}
+
+.figure_2 {
+    width: 370px;
+    height: 220px;
+}
+
+.figure_3 {
+    width: 210px;
+    height: 210px;
+}
+
+
+.scroll-del {
+    -webkit-animation: del-scroll 2s linear infinite;
+    animation: del-scroll 2s linear infinite;
+}
+
+.scroll-shift {
+    -webkit-animation: shift-scroll 2s linear infinite;
+    animation: shift-scroll 2s linear infinite;
+}
+
+.figure_2 .frame{
+    width: 264px;
+    height: 165px;
+    top: 34px;
+    position: relative;
+    overflow: hidden;
+}

@@ -1,0 +1,19 @@
+doctype html
+html
+    head
+        meta(charset='utf-8')
+        link(href='css/bootstrap.css', rel='stylesheet')
+        link(href='css/style.css', rel='stylesheet')
+        link(rel='shortcut icon', href='images/favicon.ico', type='image/png')
+        script(src='js/bootstrap.js')
+        title Sign in TinyDoIt
+    body.body-signin
+        .container
+            form.form-signin(method='post')
+                h2 Please Sign in
+                input.form-control(type='text', name='email', placeholder='Email Address', required='required', autofocus='autofocus')
+                input.form-control(type='password', name='password', placeholder='Password', required='required')
+                label.checkbox
+                    input(type='checkbox', value='remember-me')
+                    | Remember me
+                button.btn.btn-block.btn-primary.btn-lg(value='submit') Sign in
