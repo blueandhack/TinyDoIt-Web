@@ -28,8 +28,5 @@ jQuery(document).ready(function ($) {
         minView: 0,
         language: 'en'
     });
-    $("[name='isReminder']").bootstrapSwitch();
-    $("[name='isRepeat']").bootstrapSwitch();
-
 
 });
