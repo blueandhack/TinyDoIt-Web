@@ -2,13 +2,13 @@ doctype html
 html
     head
         meta(charset='utf-8')
-        link(href='css/bootstrap.css', rel='stylesheet')
+        link(href='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
         link(href='css/style.css', rel='stylesheet')
         link(href='css/bootstrap-datetimepicker.css', rel='stylesheet')
         link(href='css/bootstrap-switch.css', rel='stylesheet')
         link(rel='shortcut icon', href='images/favicon.ico', type='image/png')
-        script(src='js/jquery.js')
-        script(src='js/bootstrap.js')
+        script(src='http://cdn.staticfile.org/jquery/2.1.1-beta1/jquery.min.js')
+        script(src='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/js/bootstrap.min.js')
         script(src='js/bootstrap-datetimepicker.js')
         script(src='js/bootstrap-datetimepicker.zh-CN.js')
         script(src='js/bootstrap-switch.js')
@@ -78,6 +78,10 @@ html
                                 a(href='#')
                                     | Done
                                     span#done-badge.badge.pull-right 0
+                            li#miss
+                                a(href='#')
+                                    | Miss
+                                    span#miss-badge.badge.pull-right 0
                     .col-md-9
                         p
                             button#intAddTask.btn.btn-primary(data-toggle='modal', data-target='#AddTask')
@@ -95,7 +99,7 @@ html
                                 tr
                                     td
                                         button.btn.btn-default.btn-sm Done
-                                    td 9999/99/99
+                                    td 2014/04/09
                                     td This is a Task
                                     td Running Go Go Go!
                                     td

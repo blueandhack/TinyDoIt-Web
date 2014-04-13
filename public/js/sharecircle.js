@@ -9,7 +9,7 @@ $(document).ready(function () {
         $.getJSON("/getAllShareTasks", function (data) {
             $.each(data, function (idx, item) {
                 var create_task_date = moment(item.create_task_date).format('YYYY-MM-DD');
-                $("#shareTaskTbody").append("<tr id='"+item._id+"'><td>"+item.user_email+"</td><td>"+item.title+"</td><td>"+item.description+"</td><td>"+item.tags[0]+","+item.tags[1]+","+item.tags[2]+"</td><td>"+create_task_date+"</td><td><button id='intShareTask-"+item._id+"' data-toggle='modal' data-target='#DoIt' class='btn btn-primary btn-sm' value='"+item._id+"'>Yes! I Do It!</button></td></tr>");
+                $("#shareTaskTbody").append("<tr id='"+item._id+"'><td>"+item.user_email+"</td><td>"+item.title+"</td><td>"+item.description+"</td><td><label class='label label-info'>"+item.tags[0]+"</label> <label class='label label-info'>"+item.tags[1]+"</label> <label class='label label-info'>"+item.tags[2]+"</label></td><td>"+create_task_date+"</td><td><button id='intShareTask-"+item._id+"' data-toggle='modal' data-target='#DoIt' class='btn btn-primary btn-sm' value='"+item._id+"'>Yes! I Do It!</button></td></tr>");
 
             });
 

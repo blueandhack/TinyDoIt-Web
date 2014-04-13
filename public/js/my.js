@@ -19,7 +19,7 @@ $(document).ready(function () {
             doneButton();
             deleteButton();
             shareButton();
-            getTodayTomorrowDone();
+            getTodayTomorrowDoneMiss();
         });
     }
 
@@ -41,6 +41,7 @@ $(document).ready(function () {
         $.post("addTask", {title: $("#newTitle").val(), start_date: $("#newStartDate").val(), description: $("#newDescription").val(), box: $("#newBox").val(), priority: $("#newPriority").val(), tag_one: $("#newTagOne").val(), tag_two: $("#newTagTwo").val(), tag_three: $("#newTagThree").val()  }, function (data) {
             if (data.status == 1) {
                 $("#addTaskClose").click();
+                goToTodayButton();
                 intThisPage();
             }
         });
@@ -51,6 +52,7 @@ $(document).ready(function () {
         $.post("updateTaskById/" + taskId, {title: $("#changeTitle").val(), start_date: $("#changeStartDate").val(), description: $("#changeDescription").val(), box: $("#changeBox").val(), priority: $("#changePriority").val(), tag_one: $("#changeTagOne").val(), tag_two: $("#changeTagTwo").val(), tag_three: $("#changeTagThree").val()  }, function (data) {
             if (data.status == 1) {
                 $("#changeTaskClose").click();
+                goToTodayButton();
                 intThisPage();
             }
         });
@@ -61,6 +63,7 @@ $(document).ready(function () {
         $.post("addShareTask/", {user_email: $("#shareAuthor").val(), title: $("#shareTitle").val(), description: $("#shareDescription").val(), tag_one: $("#shareTagOne").val(), tag_two: $("#shareTagTwo").val(), tag_three: $("#shareTagThree").val()  }, function (data) {
             if (data.status == 1) {
                 $("#shareTaskClose").click();
+                goToTodayButton();
                 intThisPage();
             }
         });
@@ -70,6 +73,7 @@ $(document).ready(function () {
     $("#today").click(function () {
         $("#tomorrow").removeClass("active");
         $("#done").removeClass("active");
+        $("#miss").removeClass("active");
         $("#today").addClass("active");
         $("#taskTbody").empty();
         $.getJSON("/getTaskByuId", function (data) {
@@ -84,7 +88,7 @@ $(document).ready(function () {
             doneButton();
             deleteButton();
             shareButton();
-            getTodayTomorrowDone();
+            getTodayTomorrowDoneMiss();
         });
     });
 
@@ -92,6 +96,7 @@ $(document).ready(function () {
     $("#tomorrow").click(function () {
         $("#done").removeClass("active");
         $("#today").removeClass("active");
+        $("#miss").removeClass("active");
         $("#tomorrow").addClass("active");
         $("#taskTbody").empty();
         $.getJSON("/getTaskByuId", function (data) {
@@ -106,13 +111,14 @@ $(document).ready(function () {
             doneButton();
             deleteButton();
             shareButton();
-            getTodayTomorrowDone();
+            getTodayTomorrowDoneMiss();
         });
     });
 
     $("#done").click(function () {
         $("#tomorrow").removeClass("active");
         $("#today").removeClass("active");
+        $("#miss").removeClass("active");
         $("#done").addClass("active");
         $("#taskTbody").empty();
         $.getJSON("/getTaskByuId", function (data) {
@@ -127,7 +133,29 @@ $(document).ready(function () {
             doneButton();
             deleteButton();
             shareButton();
-            getTodayTomorrowDone();
+            getTodayTomorrowDoneMiss();
+        });
+    });
+
+    $("#miss").click(function () {
+        $("#tomorrow").removeClass("active");
+        $("#done").removeClass("active");
+        $("#today").removeClass("active");
+        $("#miss").addClass("active");
+        $("#taskTbody").empty();
+        $.getJSON("/getTaskByuId", function (data) {
+            $.each(data, function (idx, item) {
+                var start_date = moment(item.start_date).format('YYYY-MM-DD');
+                if (moment().format('YYYY-MM-DD') > start_date && item.check_task == false) {
+                    $("#taskTbody").append("<tr id='" + item._id + "'><td><button id='doneTask-" + item._id + "' class='btn btn-default btn-sm' value='" + item._id + "'>Done</button></td><td>" + start_date + "</td><td>" + item.title + "</td><td>" + item.description + "</td><td><button id='intChangeTask-" + item._id + "' data-toggle='modal' data-target='#ChangeTask' class='btn btn-primary btn-sm' value='" + item._id + "'>Change</button><span>&nbsp;</span><button id='deleteTask-" + item._id + "' class='btn btn-danger btn-sm' value='" + item._id + "'>Delete</button><span>&nbsp;</span><button id='intShareTask-" + item._id + "' data-toggle='modal' data-target='#ShareTask' class='btn btn-info btn-sm' value='" + item._id + "'>Share Circle</button></td></tr>");
+                }
+            });
+            //初始化更改任务窗口
+            changButton();
+            doneButton();
+            deleteButton();
+            shareButton();
+            getTodayTomorrowDoneMiss();
         });
     });
 
@@ -168,15 +196,16 @@ $(document).ready(function () {
                     $("tr[id=" + taskId + "]").remove();
                 }
             });
-            getTodayTomorrowDone();
+            getTodayTomorrowDoneMiss();
         });
     }
 
-    function getTodayTomorrowDone() {
+    function getTodayTomorrowDoneMiss() {
         $.getJSON("/getTaskByuId", function (data) {
             var today_badge = 0,
                 tomorrow_badge = 0,
-                done_badge = 0;
+                done_badge = 0,
+                miss_badge = 0;
             $.each(data, function (idx, item) {
                 var start_date = moment(item.start_date).format('YYYY-MM-DD');
                 if (moment().format('YYYY-MM-DD') == start_date && item.check_task == false) {
@@ -188,11 +217,16 @@ $(document).ready(function () {
                 if (item.check_task == true) {
                     done_badge = done_badge + 1;
                 }
+                if (moment().format('YYYY-MM-DD') > start_date && item.check_task == false) {
+                    miss_badge = miss_badge + 1;
+                }
 
             });
             $("#today-badge").html(today_badge);
             $("#tomorrow-badge").html(tomorrow_badge);
             $("#done-badge").html(done_badge);
+            $("#miss-badge").html(miss_badge);
+
         });
     }
 
@@ -204,7 +238,7 @@ $(document).ready(function () {
                     $("tr[id=" + taskId + "]").remove();
                 }
             });
-            getTodayTomorrowDone();
+            getTodayTomorrowDoneMiss();
         });
     }
 
@@ -222,6 +256,13 @@ $(document).ready(function () {
             });
         });
 
+    }
+
+    function goToTodayButton(){
+        $("#tomorrow").removeClass("active");
+        $("#done").removeClass("active");
+        $("#miss").removeClass("active");
+        $("#today").addClass("active");
     }
 
 });
