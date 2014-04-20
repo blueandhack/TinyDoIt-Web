@@ -41,7 +41,18 @@ $(document).ready(function () {
     }
 
     $("#addTaskPost").click(function () {
-        $.post("addTask", {title: $("#newTitle").val(), start_date: $("#newStartDate").val(), description: $("#newDescription").val(), box: $("#newBox").val(), priority: $("#newPriority").val(), tag_one: $("#newTagOne").val(), tag_two: $("#newTagTwo").val(), tag_three: $("#newTagThree").val()  }, function (data) {
+        var titleVal = $("#newTitle").val();
+        var startDateVal = $("#newStartDate").val();
+        var descriptionVal = $("#newDescription").val();
+        var newTagOne = $("#newTagOne").val(),
+            newTagTwo = $("#newTagTwo").val(),
+            newTagThree = $("#newTagThree").val();
+        if (titleVal == "" || startDateVal == "" || descriptionVal == "" || newTagOne == "" || newTagTwo == "" || newTagThree == "") {
+            alert("Please fill out this form!");
+            return false;
+        }
+
+        $.post("addTask", {title: titleVal, start_date: startDateVal, description: descriptionVal, box: $("#newBox").val(), priority: $("#newPriority").val(), tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
             if (data.status == 1) {
                 $("#addTaskClose").click();
                 intThisPage();

@@ -16,14 +16,14 @@ html
                             a(href='index') Home
                         li
                             a(href='sharecircle') Share Circle
-                        li
+                        li.active
                             a(href='help') Help
-                        li.dropdown.active
+                        li.dropdown
                             a.dropdown-toggle(href='#', data-toggle='dropdown')
                                 | About
                                 b.caret
                             ul.dropdown-menu
-                                li.active
+                                li
                                     a(href='about') About
                                 li
                                     a(href='#') Blog
@@ -48,12 +48,20 @@ html
                   /.nav-collapse
         .container
             .jumbotron
-                h2 关于我们
-                p 这是一款在线管理自己时间的工具
-                p 您可以在您的团队中部署此项目，同团队中的成员分享你的计划
-                p 同时，我们的特色在于
-                p 你可以在大家分享的计划中寻找属于自己合适的计划，还可以分享自己的计划
-                p 让我们Do It吧！
-                p 我们的联系方式 blueandhack@gmail.com
+                h3 Q1：如何使用？
+                p 首先您需要注册一个账号，登入自己的管理界面，您将看到如下界面
+                img.img-rounded(src='images/My.jpg', style='max-width: 70%; max-height: 70%;')
+                p 请点击Add Task按钮添加您的任务
+                img.img-rounded(src='images/Task.jpg', style='max-width: 60%; max-height: 60%;')
+                p 当您点击Add Task按钮之后，您就可以在您的管理界面看到您的任务啦！
+                img.img-rounded(src='images/MyTask.jpg', style='max-width: 70%; max-height: 70%;')
+                p 您可以点击Done（完成任务）、Change（更改任务）、Delete（删除任务）、Share Circle（分享任务）对任务进行操作
+                p 在左侧您可以看到您今日的任务列表（Today），明日的任务列表（Tomorrow），已完成的任务列表（Done），错过的没有完成的任务列表（Miss）
+                img.img-rounded(src='images/List.jpg', style='max-width: 50%; max-height: 50%;')
+                h3 Q2：什么是Share Circle？
+                p Share Circle（分享圈）是指，使用本网站用户分享他们自己的任务的分享圈，通过这个分享圈可以让彼此交换任务，也可以找到自己想完成的任务，使得创建任务更加方便。
+                img.img-rounded(src='images/ShareCircle.jpg', style='max-width: 70%; max-height: 70%;')
+                p 当您点击Yes!I Do It!您就可以通过别人分享的任务模板创建自己的任务啦！
+                img.img-rounded(src='images/AddShareTask.jpg', style='max-width: 70%; max-height: 70%;')
         script(src='http://cdn.staticfile.org/jquery/2.1.1-beta1/jquery.min.js')
         script(src='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/js/bootstrap.min.js')

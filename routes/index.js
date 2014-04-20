@@ -26,6 +26,16 @@ module.exports = function (app) {
             userhead: userhead
         });
     });
+    app.get('/help', function (req, res) {
+        var userhead = null;
+        if (req.session.user != null) {
+            userhead = req.session.user.head;
+        }
+        res.render('help', {
+            user: req.session.user,
+            userhead: userhead
+        });
+    });
     app.get('/register', notAuthentication);
     app.get('/register', function (req, res) {
         res.render('register', {
@@ -35,13 +45,17 @@ module.exports = function (app) {
     app.post('/register', notAuthentication);
     app.post('/register', function (req, res) {
         var email = req.body.email,
+            confirm_email = req.body['confirm_email'],
             password = req.body.password,
-            re_password = req.body['re-password'],
+            confirm_password = req.body['confirm_password'],
             hmd5 = crypto.createHash('md5'),
             email_MD5 = hmd5.update(email.toLowerCase()).digest('hex'),
             head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";
         //检验用户两次输入的密码是否一致
-        if (re_password != password) {
+        if (confirm_password != password) {
+            return res.redirect('/register');//返回主册页
+        }
+        if (confirm_email != email) {
             return res.redirect('/register');//返回主册页
         }
         //生成密码的 md5 值
@@ -87,7 +101,7 @@ module.exports = function (app) {
                 return res.redirect('/signin');//密码错误则跳转到登录页
             }
             //用户名密码都匹配后，将用户信息存入 session
-            console.log(user);
+            //console.log(user);
             req.session.user = user._doc;
             res.redirect('/');//登陆成功后跳转到主页
         });
@@ -128,7 +142,7 @@ module.exports = function (app) {
         if (req.session.user != null) {
             userhead = req.session.user.head;
         }
-        console.log(moment().zone(8).format('L'));
+        //console.log(moment().zone(8).format('L'));
         res.render('my', {
             user: req.session.user,
             userhead: req.session.user.head

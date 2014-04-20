@@ -38,7 +38,18 @@ $(document).ready(function () {
 
     //提交添加任务按钮
     $("#addTaskPost").click(function () {
-        $.post("addTask", {title: $("#newTitle").val(), start_date: $("#newStartDate").val(), description: $("#newDescription").val(), box: $("#newBox").val(), priority: $("#newPriority").val(), tag_one: $("#newTagOne").val(), tag_two: $("#newTagTwo").val(), tag_three: $("#newTagThree").val()  }, function (data) {
+        var titleVal = $("#newTitle").val();
+        var startDateVal = $("#newStartDate").val();
+        var descriptionVal = $("#newDescription").val();
+        var newTagOne = $("#newTagOne").val(),
+            newTagTwo = $("#newTagTwo").val(),
+            newTagThree = $("#newTagThree").val();
+        if (titleVal == "" || startDateVal == "" || descriptionVal == "" || newTagOne == "" || newTagTwo == "" || newTagThree == "") {
+            alert("Please fill out this form!");
+            return false;
+        }
+
+        $.post("addTask", {title: titleVal, start_date: startDateVal, description: descriptionVal, box: $("#newBox").val(), priority: $("#newPriority").val(), tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
             if (data.status == 1) {
                 $("#addTaskClose").click();
                 goToTodayButton();
@@ -49,7 +60,17 @@ $(document).ready(function () {
 
     //提交更改任务按钮
     $("#changeTaskPost").click(function () {
-        $.post("updateTaskById/" + taskId, {title: $("#changeTitle").val(), start_date: $("#changeStartDate").val(), description: $("#changeDescription").val(), box: $("#changeBox").val(), priority: $("#changePriority").val(), tag_one: $("#changeTagOne").val(), tag_two: $("#changeTagTwo").val(), tag_three: $("#changeTagThree").val()  }, function (data) {
+        var titleVal = $("#changeTitle").val();
+        var startDateVal = $("#changeStartDate").val();
+        var descriptionVal = $("#changeDescription").val();
+        var newTagOne = $("#changeTagOne").val(),
+            newTagTwo = $("#changeTagTwo").val(),
+            newTagThree = $("#changeTagThree").val();
+        if (titleVal == "" || startDateVal == "" || descriptionVal == "" || newTagOne == "" || newTagTwo == "" || newTagThree == "") {
+            alert("Please fill out this form!");
+            return false;
+        }
+        $.post("updateTaskById/" + taskId, {title: titleVal, start_date: startDateVal, description: descriptionVal, box: $("#changeBox").val(), priority: $("#changePriority").val(), tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
             if (data.status == 1) {
                 $("#changeTaskClose").click();
                 goToTodayButton();
@@ -60,7 +81,16 @@ $(document).ready(function () {
 
     //提交分享任务按钮
     $("#shareTaskPost").click(function () {
-        $.post("addShareTask/", {user_email: $("#shareAuthor").val(), title: $("#shareTitle").val(), description: $("#shareDescription").val(), tag_one: $("#shareTagOne").val(), tag_two: $("#shareTagTwo").val(), tag_three: $("#shareTagThree").val()  }, function (data) {
+        var titleVal = $("#shareTitle").val();
+        var descriptionVal = $("#shareDescription").val();
+        var newTagOne = $("#shareTagOne").val(),
+            newTagTwo = $("#shareTagTwo").val(),
+            newTagThree = $("#shareTagThree").val();
+        if (titleVal == "" || descriptionVal == "" || newTagOne == "" || newTagTwo == "" || newTagThree == "") {
+            alert("Please fill out this form!");
+            return false;
+        }
+        $.post("addShareTask/", {user_email: $("#shareAuthor").val(), title: titleVal, description: descriptionVal, tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
             if (data.status == 1) {
                 $("#shareTaskClose").click();
                 goToTodayButton();
@@ -182,7 +212,6 @@ $(document).ready(function () {
                 $("#changeTagTwo").val(task.tags[1]);
                 $("#changeTagThree").val(task.tags[2]);
                 $("#changeBox").val(task.box);
-                console.log(task.box);
                 $("#changePriority").val(task.priority);
             });
         });
@@ -258,7 +287,7 @@ $(document).ready(function () {
 
     }
 
-    function goToTodayButton(){
+    function goToTodayButton() {
         $("#tomorrow").removeClass("active");
         $("#done").removeClass("active");
         $("#miss").removeClass("active");

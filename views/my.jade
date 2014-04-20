@@ -25,7 +25,7 @@ html
                         li
                             a(href='sharecircle') Share Circle
                         li
-                            a(href='#') Help
+                            a(href='help') Help
                         li.dropdown
                             a.dropdown-toggle(href='#', data-toggle='dropdown')
                                 | About
@@ -115,7 +115,7 @@ html
                         h4#AddTaskLabel.modal-title Add Task
                     .modal-body
                         .row
-                            form.form-horizontal(role='form')
+                            form#addTaskForm.form-horizontal(role='form')
                                 //
                                    Title
                                 .form-group
@@ -148,88 +148,6 @@ html
                                             span.input-group-addon
                                                 span.glyphicon.glyphicon-calendar
                                 //
-                                   Start Time
-                                //
-                                   <div class="form-group">
-                                                              <label class="col-sm-3 control-label">Start Time</label>
-                                                              <div class="col-sm-5">
-                                                                  <div class="input-group date form_time"
-                                                                       data-date="1979-09-16T05:25:07Z"
-                                                                       data-date-format="HH:ii"
-                                                                       data-link-field="dtp_input1">
-                                                                      <input class="form-control" size="16" type="text" value=""
-                                                                             readonly>
-                                                                                          <span class="input-group-addon"><span
-                                                                                                  class="glyphicon glyphicon-remove"></span></span>
-                                                                                          <span class="input-group-addon"><span
-                                                                                                  class="glyphicon glyphicon-calendar"></span></span>
-                                                                  </div>
-                                                              </div>
-                                                          </div>
-                                //
-                                   End Date
-                                //
-                                  <div class="form-group">
-                                //
-                                  <label class="col-sm-3 control-label">End Date</label>
-                                //
-                                  <div class="col-sm-5">
-                                //
-                                  <div class="input-group date form_date"
-                                //
-                                  data-date="1979-09-16T05:25:07Z"
-                                //
-                                  data-date-format="dd MM yyyy - HH:ii p"
-                                //
-                                  data-link-field="dtp_input1">
-                                //
-                                  <input class="form-control" size="16" id="newEndDate" type="text" value=""
-                                //
-                                  readonly>
-                                //
-                                  <span class="input-group-addon"><span
-                                //
-                                  class="glyphicon glyphicon-remove"></span></span>
-                                //
-                                  <span class="input-group-addon"><span
-                                //
-                                  class="glyphicon glyphicon-calendar"></span></span>
-                                //
-                                  </div>
-                                //
-                                  </div>
-                                //
-                                  </div>
-                                //
-                                   Reminder
-                                //
-                                   <div class="form-group">
-                                                              <label class="col-sm-3 control-label">Reminder</label>
-                                                              <div class="switch col-md-3">
-                                                                  <input id="reminder-checkbox" type="checkbox" name="isReminder" value="1"
-                                                                         data-size="small">
-                                                              </div>
-                                                          </div>
-                                //
-                                   Reminder Date
-                                //
-                                  <div class="form-group" id="reminder-date">
-                                                              <label class="col-sm-3 control-label">Reminder Date</label>
-                                                              <div class="col-sm-8">
-                                                                  <div class="input-group date form_datetime"
-                                                                       data-date="1979-09-16T05:25:07Z"
-                                                                       data-date-format="dd MM yyyy - HH:ii"
-                                                                       data-link-field="dtp_input1">
-                                                                      <input class="form-control" size="16" type="text" value=""
-                                                                             readonly>
-                                                                                          <span class="input-group-addon"><span
-                                                                                                  class="glyphicon glyphicon-remove"></span></span>
-                                                                                          <span class="input-group-addon"><span
-                                                                                                  class="glyphicon glyphicon-calendar"></span></span>
-                                                                  </div>
-                                                              </div>
-                                                          </div>
-                                //
                                    Tags
                                 .form-group
                                     label.col-sm-3.control-label Tags
@@ -247,25 +165,6 @@ html
                                             option(value='1') Low
                                             option(value='2') Medium
                                             option(value='3') High
-                                //
-                                   Repeat
-                                //
-                                   <div class="form-group">
-                                                              <label class="col-sm-3 control-label">Repeat</label>
-                                                              <div class="switch col-md-3">
-                                                                  <input id="repeat-checkbox" type="checkbox" name="isRepeat" value="1"
-                                                                         data-size="small">
-                                                              </div>
-                                                          </div>
-                                //
-                                   Repeat Every
-                                //
-                                   <div class="form-group" id="Repeat-Every">
-                                                              <label class="col-sm-3 control-label">Repeat</label>
-                                                              <div class="col-sm-2">
-                                                                  <input type="text" class="form-control" placeholder="days">
-                                                              </div>
-                                                          </div>
                     .modal-footer
                         button#addTaskClose.btn.btn-default(type='button', data-dismiss='modal') Close
                         button#addTaskPost.btn.btn-primary(type='button') Add Task
@@ -318,94 +217,6 @@ html
                                             span.input-group-addon
                                                 span.glyphicon.glyphicon-calendar
                                 //
-                                   End Date
-                                //
-                                  <div class="form-group">
-                                //
-                                  Date
-                                //
-                                  <label class="col-sm-3 control-label">End Date</label>
-                                //
-                                  <div class="col-sm-5">
-                                //
-                                  <div class="input-group date form_date"
-                                //
-                                  data-date="1979-09-16T05:25:07Z"
-                                //
-                                  data-date-format="dd MM yyyy"
-                                //
-                                  data-link-field="dtp_input1">
-                                //
-                                  <input class="form-control" size="16" type="text" value=""
-                                //
-                                  readonly>
-                                //
-                                  <span class="input-group-addon"><span
-                                //
-                                  class="glyphicon glyphicon-remove"></span></span>
-                                //
-                                  <span class="input-group-addon"><span
-                                //
-                                  class="glyphicon glyphicon-calendar"></span></span>
-                                //
-                                  </div>
-                                //
-                                  <input type="hidden" id="dtp_input1" value=""/>
-                                //
-                                  </div>
-                                //
-                                  </div>
-                                //
-                                   Time
-                                //
-                                   <div class="form-group">
-                                                              <label class="col-sm-3 control-label">End Time</label>
-                                                              <div class="col-sm-5">
-                                                                  <div class="input-group date form_date"
-                                                                       data-date="1979-09-16T05:25:07Z"
-                                                                       data-date-format="dd MM yyyy - HH:ii p"
-                                                                       data-link-field="dtp_input1">
-                                                                      <input class="form-control" size="16" type="text" value=""
-                                                                             readonly>
-                                                                                          <span class="input-group-addon"><span
-                                                                                                  class="glyphicon glyphicon-remove"></span></span>
-                                                                                          <span class="input-group-addon"><span
-                                                                                                  class="glyphicon glyphicon-calendar"></span></span>
-                                                                  </div>
-                                                                  <input type="hidden" id="dtp_input1" value=""/>
-                                                              </div>
-                                                          </div>
-                                //
-                                   Reminder
-                                //
-                                  <div class="form-group">
-                                                              <label class="col-sm-3 control-label">Reminder</label>
-                                                              <div class="switch col-md-3">
-                                                                  <input id="c-reminder-checkbox" type="checkbox" name="isReminder" value="1"
-                                                                         data-size="small">
-                                                              </div>
-                                                          </div>
-                                //
-                                   Reminder Date
-                                //
-                                   <div class="form-group" id="c-reminder-date">
-                                                              <label class="col-sm-3 control-label">Reminder Date</label>
-                                                              <div class="col-sm-8">
-                                                                  <div class="input-group date form_datetime"
-                                                                       data-date="1979-09-16T05:25:07Z"
-                                                                       data-date-format="dd MM yyyy - HH:ii"
-                                                                       data-link-field="dtp_input1">
-                                                                      <input class="form-control" size="16" type="text" value=""
-                                                                             readonly>
-                                                                                          <span class="input-group-addon"><span
-                                                                                                  class="glyphicon glyphicon-remove"></span></span>
-                                                                                          <span class="input-group-addon"><span
-                                                                                                  class="glyphicon glyphicon-calendar"></span></span>
-                                                                  </div>
-                                                                  <input type="hidden" id="dtp_input1" value=""/>
-                                                              </div>
-                                                          </div>
-                                //
                                    Tags
                                 .form-group
                                     label.col-sm-3.control-label Tags
@@ -423,25 +234,6 @@ html
                                             option(value='1') Low
                                             option(value='2') Medium
                                             option(value='3') High
-                                //
-                                   Repeat
-                                //
-                                   <div class="form-group">
-                                                              <label class="col-sm-3 control-label">Repeat</label>
-                                                              <div class="switch col-md-3">
-                                                                  <input id="c-repeat-checkbox" type="checkbox" name="isRepeat" value="1"
-                                                                         data-size="small">
-                                                              </div>
-                                                          </div>
-                                //
-                                   Repeat Every
-                                //
-                                   <div class="form-group" id="c-Repeat-Every">
-                                                              <label class="col-sm-3 control-label">Repeats</label>
-                                                              <div class="col-sm-2">
-                                                                  <input type="text" class="form-control" placeholder="days">
-                                                              </div>
-                                                          </div>
                     .modal-footer
                         button#changeTaskClose.btn.btn-default(type='button', data-dismiss='modal') Close
                         button#changeTaskPost.btn.btn-primary(type='button') Save Task

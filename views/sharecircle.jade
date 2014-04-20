@@ -25,7 +25,7 @@ html
                         li.active
                             a(href='sharecircle') Share Circle
                         li
-                            a(href='#help') Help
+                            a(href='help') Help
                         li.dropdown
                             a.dropdown-toggle(href='#', data-toggle='dropdown')
                                 | About
@@ -58,14 +58,6 @@ html
         .container
             .jumbotron.white-background
                 .row
-                    //
-                       <div class="col-md-12">
-                                      <ul class="nav nav-pills">
-                                          <li class="active"><a href="#">Home</a></li>
-                                          <li><a href="#">Profile</a></li>
-                                          <li><a href="#">Messages</a></li>
-                                      </ul>
-                                  </div>
                     .col-md-12
                         table.table
                             thead
@@ -98,7 +90,7 @@ html
                         h4#AddTaskLabel.modal-title Add Task
                     .modal-body
                         .row
-                            form.form-horizontal(role='form')
+                            form#addTaskForm.form-horizontal(role='form')
                                 //
                                    Title
                                 .form-group
