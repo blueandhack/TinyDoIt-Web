@@ -3,17 +3,16 @@ html
         meta(charset='utf-8')
         link(href='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
         link(href='css/style.css', rel='stylesheet')
-        link(rel='shortcut icon', href='images/favicon.ico', type='image/png')
+        link(rel='shortcut icon', href='images/favicon.png', type='image/png')
         title TinyDoIt 帮助页面
     body
         .navbar.navbar-default.navbar-fixed-top(role='navigation')
             .container
                 .navbar-header
-                    .navbar-brand TinyDoIt
+                    a.navbar-brand(href='/') TinyDoIt&nbsp;
+                        img.img-circle(src='images/favicon.png', title='TinyDoIt', style='max-width: 30px; max-height: 30px;')
                 .navbar-collapse.collapse
                     ul.nav.navbar-nav
-                        li
-                            a(href='index') 主页
                         li
                             a(href='sharecircle') 分享圈
                         li.active
