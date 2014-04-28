@@ -5,6 +5,7 @@ var crypto = require('crypto'),
     moment = require('moment');
 
 module.exports = function (app) {
+    //缺省页面
     app.get('/', function (req, res) {
         var userhead = null;
         if (req.session.user != null) {
@@ -16,6 +17,7 @@ module.exports = function (app) {
         });
 
     });
+    //主页
     app.get('/index', function (req, res) {
         var userhead = null;
         if (req.session.user != null) {
@@ -26,6 +28,7 @@ module.exports = function (app) {
             userhead: userhead
         });
     });
+    //帮助页面
     app.get('/help', function (req, res) {
         var userhead = null;
         if (req.session.user != null) {
@@ -36,12 +39,14 @@ module.exports = function (app) {
             userhead: userhead
         });
     });
+    //注册页面
     app.get('/register', notAuthentication);
     app.get('/register', function (req, res) {
         res.render('register', {
             user: req.session.user
         });
     });
+    //提交注册
     app.post('/register', notAuthentication);
     app.post('/register', function (req, res) {
         var email = req.body.email,
@@ -82,11 +87,12 @@ module.exports = function (app) {
             });
         });
     });
-
+    //登陆页面
     app.get('/signin', notAuthentication);
     app.get('/signin', function (req, res) {
         res.render('signin', {});
     });
+    //提交登录
     app.post('/signin', notAuthentication);
     app.post('/signin', function (req, res) {
         var md5 = crypto.createHash('md5'),
@@ -106,13 +112,13 @@ module.exports = function (app) {
             res.redirect('/');//登陆成功后跳转到主页
         });
     });
-
+    //登出
     app.get('/logout', authentication);
     app.get('/logout', function (req, res) {
         req.session.user = null;
         res.redirect('/');
     });
-
+    //分享圈页面
     app.get('/sharecircle', authentication);
     app.get('/sharecircle', function (req, res) {
         var userhead = null;
@@ -124,7 +130,7 @@ module.exports = function (app) {
             userhead: userhead
         });
     });
-
+    //关于页面
     app.get('/about', function (req, res) {
         var userhead = null;
         if (req.session.user != null) {
@@ -135,7 +141,7 @@ module.exports = function (app) {
             userhead: userhead
         });
     });
-
+    //我的任务页面
     app.get('/my', authentication);
     app.get('/my', function (req, res) {
         var userhead = null;
@@ -148,7 +154,7 @@ module.exports = function (app) {
             userhead: req.session.user.head
         });
     });
-
+    //提交添加任务
     app.post('/addTask', function (req, res) {
         var tags = new Array(3);
         tags[0] = req.body.tag_one;
@@ -179,6 +185,7 @@ module.exports = function (app) {
         });
     });
 
+    //获得某一用户任务JSON
     app.get('/getTaskByuId', function (req, res) {
         var userID = req.session.user._id;
         Task.getTaskByuId(userID, function (err, tasks) {
@@ -186,12 +193,14 @@ module.exports = function (app) {
         });
     });
 
+    //获得某一ID的任务JSON
     app.get('/getTaskById/:id', function (req, res) {
         Task.getTaskById(req.params.id, function (err, task) {
             res.json(task);
         });
     });
 
+    //提交更新某一ID的任务
     app.post('/updateTaskById/:id', function (req, res) {
         var tags = new Array(3);
         tags[0] = req.body.tag_one;
@@ -219,7 +228,7 @@ module.exports = function (app) {
         });
     });
 
-
+    //提交完成某一ID的任务
     app.post('/doneTaskById/:id', function (req, res) {
         var changeTask = {
             check_task: true
@@ -231,7 +240,7 @@ module.exports = function (app) {
             res.send({"status": 1});
         });
     });
-
+    //提交删除某一ID的任务
     app.get('/deleteTaskById/:id', function (req, res) {
         Task.deleteTaskById(req.params.id, function (err) {
             if (err) {
@@ -240,7 +249,7 @@ module.exports = function (app) {
             res.send({"status": 1});
         });
     });
-
+    //提交添加分享任务
     app.post('/addShareTask', function (req, res) {
         var tags = new Array(3);
         tags[0] = req.body.tag_one;
@@ -260,20 +269,90 @@ module.exports = function (app) {
             res.send({"status": 1});
         });
     });
-
+    //获得某一ID的分享任务JSON
     app.get('/getShareTaskById/:id', function (req, res) {
         ShareTask.getShareTaskById(req.params.id, function (err, sharetask) {
             res.json(sharetask);
         });
     });
-
+    //获得所有分享任务JSON
     app.get('/getAllShareTasks', function (req, res) {
         var userID = req.session.user._id;
         ShareTask.getAllShareTasks(function (err, sharetasks) {
             res.json(sharetasks);
         });
     });
+    //获得分享任务总页数JSON
+    app.get('/getShareTasksSumPage', function (req, res) {
+        ShareTask.getShareTasksSumPage(function (err, count) {
+            //res.json(count);
+            res.send({"count": count});
+        });
+    });
+    //通过某个页数获得共享任务列表JSON
+    app.get('/getShareTasksByPageCount/Page/:page', function (req, res) {
+        ShareTask.getShareTasksByPageCount(req.params.page, function (err, shatetasks) {
+            res.json(shatetasks);
+        });
+    });
 
+
+
+    //通过某个日期获得今天任务页数
+    app.get('/getTasksByToday/Date/:date/SumPage', function (req, res) {
+        Task.getTasksPageByToday(req.params.date, req.session.user._id, function (err, count) {
+            res.send({"count": count});
+        });
+    });
+    //通过某个日期获得今天任务JSON
+    app.get('/getTasksByToday/Date/:date/Page/:page', function (req, res) {
+        Task.getTasksByToday(req.params.date, req.params.page, req.session.user._id, function (err, tasks) {
+            res.json(tasks);
+        });
+    });
+
+
+    //通过某个日期获得以前任务页数
+    app.get('/getTasksByMiss/Date/:date/SumPage', function (req, res) {
+        Task.getTasksPageByMiss(req.params.date, req.session.user._id, function (err, count) {
+            res.send({"count": count});
+        });
+    });
+    //通过某个日期获得以前任务JSON
+    app.get('/getTasksByMiss/Date/:date/Page/:page', function (req, res) {
+        Task.getTasksByMiss(req.params.date, req.params.page, req.session.user._id, function (err, tasks) {
+            res.json(tasks);
+        });
+    });
+
+
+    //通过某个日期获得未来任务页数
+    app.get('/getTasksByTomorrow/Date/:date/SumPage', function (req, res) {
+        Task.getTasksPageByTomorrow(req.params.date, req.session.user._id, function (err, count) {
+            res.send({"count": count});
+        });
+    });
+    //通过某个日期获得未来任务JSON
+    app.get('/getTasksByTomorrow/Date/:date/Page/:page', function (req, res) {
+        Task.getTasksByTomorrow(req.params.date, req.params.page, req.session.user._id, function (err, tasks) {
+            res.json(tasks);
+        });
+    });
+
+    //获得已完成的任务页数
+    app.get('/getTasksPageByDone/SumPage', function (req, res) {
+        Task.getTasksPageByDone(req.session.user._id, function (err, count) {
+            res.send({"count": count});
+        });
+    });
+    //获得已完成的任务JSON
+    app.get('/getTasksByDone/Page/:page', function (req, res) {
+        Task.getTasksByDone(req.params.page, req.session.user._id, function (err, tasks) {
+            res.json(tasks);
+        });
+    });
+
+    //404不存在页面
     app.use(function (req, res) {
         var userhead = null;
         if (req.session.user != null) {
@@ -285,7 +364,7 @@ module.exports = function (app) {
             userhead: userhead
         });
     });
-
+    //验证是否登录，没有权限不予通过
     function authentication(req, res, next) {
         if (!req.session.user) {
             req.session.error = '请先登陆';
@@ -294,6 +373,7 @@ module.exports = function (app) {
         next();
     }
 
+    //验证是否登录，有权限允许通过
     function notAuthentication(req, res, next) {
         if (req.session.user) {
             req.session.error = '已登陆';

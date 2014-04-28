@@ -14,22 +14,22 @@ html
                 .navbar-collapse.collapse
                     ul.nav.navbar-nav
                         li.active
-                            a(href='index') Home
+                            a(href='index') 主页
                         li
-                            a(href='sharecircle') Share Circle
+                            a(href='sharecircle') 分享圈
                         li
-                            a(href='help') Help
+                            a(href='help') 帮助
                         li.dropdown
                             a.dropdown-toggle(href='#', data-toggle='dropdown')
-                                | About
+                                | 关于
                                 b.caret
                             ul.dropdown-menu
                                 li
-                                    a(href='about') About
+                                    a(href='about') 关于我们
                                 li
-                                    a(href='#') Blog
+                                    a(href='#') 博客
                                 li.divider
-                                li.dropdown-header Connect
+                                li.dropdown-header 联系方式
                                 li
                                     a blueandhack@gmail.com
                     if(user!=null)
@@ -37,35 +37,35 @@ html
                             li
                                 a(href='my')
                                     img.img-circle(src='#{userhead}', title='MyAvatar', style='max-width: 20px; max-height: 20px;')
-                                    | My
+                                    | 我
                             li
-                                a(href='logout') Logout
+                                a(href='logout') 登出
                     else
                         ul.nav.navbar-nav.navbar-right
                             li
-                                a(href='signin') Sign in
+                                a(href='signin') 登入
                             li
-                                a(href='register') Register
+                                a(href='register') 注册
                 //
                   /.nav-collapse
         .container
             .row
-                .jumbotron.col-md-12
-                    h2 TinyDoIt helps you that manage your time!
-                    p online management tasks in web
+                .jumbotron.col-md-12.index
+                    h2 TinyDoIt(微动) 微小的改变让您享受生活的乐趣
+                    h3 微动 在线任务管理
                     p
-                        | TinyDoIt let you more easily manage your time, Enjoy your life and Manage your time!
+                        | 让您更加便捷的管理自己的时间和任务，享受生活带来的乐趣
                     p
-                        a.btn.btn-primary(href='register') Register
+                        a.btn.btn-primary(href='register') 注册
                         span &nbsp;
-                        a.btn.btn-info(href='help') Learn More
+                        a.btn.btn-info(href='help') 了解更多
                         span &nbsp;
-                        a.btn.btn-info(href='https://github.com/blueandhack/TinyDoItWeb' target='_blank') Get Code in GitHub
+                        a.btn.btn-info(href='https://github.com/blueandhack/TinyDoItWeb' target='_blank') 从Github获取源码
                 .col-sm-6.col-md-4
                     img.figure_1(src='images/figure_1.png', alt='...')
                     .caption
-                        h3 Simple Web UI
-                        p You can in Windows, Linux, Phone
+                        h3 简洁的UI
+                        p 支持更多平台，随时随地使用
                 .col-sm-6.col-md-4
                     .figure_2
                         .frame
@@ -93,14 +93,15 @@ html
                                         td ■■■
                                         td ■■■
                     .caption
-                        h3 Convenient Management
-                        p Delete Change Create etc. We Can Do!
+                        h3 方面快捷的操作
+                        p 删除 创建 更改 我们都能做到！
                 .col-sm-6.col-md-4
                     .figure_3
-                        img.figure_3(src='images/figure_3.png', alt='...')
+                        img.figure_3_img(src='images/figure_3.png', alt='...')
                     .caption
-                        h3 Share Circle
-                        p Choose Wonderful Task and Share your Task in ShareCircle!
+                        h3 分享圈
+                        p 选择优秀的任务，分享有用的任务
+                        p 分享圈你值得拥有！
         script(src='http://cdn.staticfile.org/jquery/2.1.1-beta1/jquery.min.js')
         script(src='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/js/bootstrap.min.js')
                               

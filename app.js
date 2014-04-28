@@ -7,7 +7,6 @@ var routes = require('./routes');
 var http = require('http');
 var path = require('path');
 var SessionStore = require("session-mongoose")(express);
-var settings = require('./settings');
 
 var store = new SessionStore({
     url: "mongodb://localhost/tinydoit",
@@ -20,15 +19,14 @@ var app = express();
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-app.use(express.favicon());
+app.use(express.favicon(__dirname + '/public/images/favicon.ico'));
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(express.cookieParser('your secret here'));
 app.use(express.session({
-    secret: settings.cookieSecret,
-    //key: settings.db,//cookie name
+    secret: 'mytask',
     cookie: {maxAge: 1000 * 60 * 60 * 24 * 30},//30 days
     store: store
 }));

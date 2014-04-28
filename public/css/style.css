@@ -10,6 +10,10 @@ body{
     background: #eeeeee;
 }
 
+.index{
+    margin-top: 35px;
+}
+
 .white-background{
     background-color: #ffffff;
 }
@@ -83,7 +87,8 @@ body{
 }
 
 .figure_1 {
-    width: 320px;
+    width: 370px;
+    height: 220px;
 }
 
 .figure_2 {
@@ -92,8 +97,13 @@ body{
 }
 
 .figure_3 {
-    width: 210px;
-    height: 210px;
+    width: 220px;
+    height: 220px;
+}
+
+.figure_3 .figure_3_img{
+    left: 53px;
+    position: relative;
 }
 
 
@@ -111,6 +121,7 @@ body{
     width: 264px;
     height: 165px;
     top: 34px;
+    left: 53px;
     position: relative;
     overflow: hidden;
 }

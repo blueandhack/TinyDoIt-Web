@@ -13,7 +13,7 @@ jQuery(document).ready(function ($) {
         forceParse: 0,
         minuteStep: 2,
         minView: 2,
-        language: 'en'
+        language: 'zh-CN'
     });
     $('.form_time').datetimepicker({
         startDate: new Date(),
@@ -26,7 +26,7 @@ jQuery(document).ready(function ($) {
         forceParse: 0,
         minuteStep: 2,
         minView: 0,
-        language: 'en'
+        language: 'zh-CN'
     });
 
 });

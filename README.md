@@ -41,9 +41,10 @@ TinyDoIt Web App
 
 如何联系我
 ---------
-[我的博客](http://blueandhack.com)
-[基于此应用的网站](http://tinydoit.com)
-我的邮箱 blueandhack # gmail.com
+
++ [我的博客](http://blueandhack.com)
++ [基于此应用的网站](http://tinydoit.com)
++ 我的邮箱 blueandhack # gmail.com
 
 协议
 -----

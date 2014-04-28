@@ -5,7 +5,7 @@ $(document).ready(function () {
         rules: {
             username: {
                 required: true,
-                minlength: 2
+                minlength: 4
             },
             password: {
                 required: true,
@@ -31,20 +31,24 @@ $(document).ready(function () {
         },
         messages: {
             username: {
-                required: "Please enter a username",
-                minlength: "Your username must consist of at least 2 characters"
+                required: "请输入用户名",
+                minlength: "用户名长度必须大于4"
             },
             password: {
-                required: "Please provide a password",
-                minlength: "Your password must be at least 5 characters long"
+                required: "请输入密码",
+                minlength: "密码长度必须大于5"
             },
             confirm_password: {
-                required: "Please provide a password",
-                minlength: "Your password must be at least 5 characters long",
-                equalTo: "Please enter the same password as above"
+                required: "请输入密码",
+                minlength: "密码长度必须大于5",
+                equalTo: "与上方输入的密码不相同"
             },
-            email: "Please enter a valid email address",
-            iagree: "Please accept our policy"
+            email: "请输入正确的邮件地址",
+            confirm_email: {
+                required: "请输入正确的邮件地址",
+                equalTo: "与上方输入的邮件地址不相同"
+            },
+            iagree: "同意此协议方可注册"
         }
     });
 

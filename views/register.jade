@@ -10,27 +10,30 @@ html
         script(src='http://cdn.staticfile.org/jquery-validate/1.12.0/additional-methods.min.js')
         script(src='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/js/bootstrap.min.js')
         script(src='js/register.js')
-        title Register
+        title 注册TinyDoIt
     body.body-register
         .container
             form#registerForm.form-signin(method='post')
-                h2 Please Register User
+                h2 请注册用户
+                p
+                    | 已有账号？
+                    a(href='/signin') 请登录
                 .form-group
-                    label.control-label Email
-                    input#email.form-control(type='email', name='email', placeholder='Email Address', required='required', autofocus='autofocus')
+                    label.control-label 邮件地址
+                    input#email.form-control(type='email', name='email', placeholder='邮件地址', required='required', autofocus='autofocus')
                 .form-group
-                    label.control-label Confirm-Email
-                    input#confirm_email.form-control(type='email', name='confirm_email', placeholder='Confirm Email Address', required='required')
+                    label.control-label 确认邮件地址
+                    input#confirm_email.form-control(type='email', name='confirm_email', placeholder='确认邮件地址', required='required')
                 .form-group
-                    label.control-label Username
-                    input.form-control(type='text', name='username', placeholder='Username', required='required')
+                    label.control-label 用户名
+                    input.form-control(type='text', name='username', placeholder='用户名', required='required')
                 .form-group
-                    label.control-label Password
-                    input#password.form-control(type='password', name='password', placeholder='Password', required='required')
+                    label.control-label 密码
+                    input#password.form-control(type='password', name='password', placeholder='密码', required='required')
                 .form-group
-                    label.control-label Confirm-Password
-                    input#confirm_password.form-control(type='password', name='confirm_password', placeholder='Confirm Password', required='required')
+                    label.control-label 确认密码
+                    input#confirm_password.form-control(type='password', name='confirm_password', placeholder='确认密码', required='required')
                 label.checkbox
                     input#i_agree(type='checkbox', name='i_agree', value='agree', required='required')
-                    | I agree
-                button#register.btn.btn-block.btn-primary.btn-lg(value='submit') Register
+                    | 我同意
+                button#register.btn.btn-block.btn-primary.btn-lg(value='submit') 注册

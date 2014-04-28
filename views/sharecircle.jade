@@ -10,9 +10,10 @@ html
         script(src='js/moment-with-langs.min.js')
         script(src='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/js/bootstrap.min.js')
         script(src='js/bootstrap-datetimepicker.min.js')
+        script(src='js/bootstrap-paginator.min.js')
         script(src='js/all.js')
         script(src='js/sharecircle.js')
-        title ShareCircle Tasks List
+        title TinyDoIt 分享圈
     body
         .navbar.navbar-default.navbar-fixed-top(role='navigation')
             .container
@@ -21,22 +22,22 @@ html
                 .navbar-collapse.collapse
                     ul.nav.navbar-nav
                         li
-                            a(href='index') Home
+                            a(href='index') 主页
                         li.active
-                            a(href='sharecircle') Share Circle
+                            a(href='sharecircle') 分享圈
                         li
-                            a(href='help') Help
+                            a(href='help') 帮助
                         li.dropdown
                             a.dropdown-toggle(href='#', data-toggle='dropdown')
-                                | About
+                                | 关于
                                 b.caret
                             ul.dropdown-menu
                                 li
-                                    a(href='about') About
+                                    a(href='about') 关于我们
                                 li
-                                    a(href='#') Blog
+                                    a(href='#') 博客
                                 li.divider
-                                li.dropdown-header Connect
+                                li.dropdown-header 联系方式
                                 li
                                     a blueandhack@gmail.com
                     if(user!=null)
@@ -44,15 +45,15 @@ html
                             li
                                 a(href='my')
                                     img.img-circle(src='#{userhead}', title='MyAvatar', style='max-width: 20px; max-height: 20px;')
-                                    | My
+                                    | 我
                             li
-                                a(href='logout') Logout
+                                a(href='logout') 登出
                     else
                         ul.nav.navbar-nav.navbar-right
                             li
-                                a(href='signin') Sign in
+                                a(href='signin') 登入
                             li
-                                a(href='register') Register
+                                a(href='register') 注册
                 //
                   /.nav-collapse
         .container
@@ -62,22 +63,15 @@ html
                         table.table
                             thead
                                 tr
-                                    th Author
-                                    th Title
-                                    th Description
-                                    th Tags
-                                    th Create Task Date
-                                    th Do It?
+                                    th 分享者
+                                    th 标题
+                                    th 描述
+                                    th 标签
+                                    th 分享日期
+                                    th Do It？
                             tbody#shareTaskTbody
-                                tr
-                                    td XXXX@XXXX
-                                    td Running
-                                    td Go go go! let's go running!
-                                    td Run, Fit, Go
-                                    td 2014-04-01
-                                    td
-                                        button.btn.btn-primary.btn-sm(data-toggle='modal', data-target='#DoIt')
-                                            | Yes! I Do It!
+                    .col-md-12
+                        ul#pagination.pagination
         //
            Do It
         //
@@ -87,34 +81,34 @@ html
                 .modal-content
                     .modal-header
                         button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
-                        h4#AddTaskLabel.modal-title Add Task
+                        h4#AddTaskLabel.modal-title 添加此任务到你的任务列表
                     .modal-body
                         .row
                             form#addTaskForm.form-horizontal(role='form')
                                 //
                                    Title
                                 .form-group
-                                    label.col-sm-3.control-label(for='title') Title
+                                    label.col-sm-3.control-label(for='title') 标题
                                     .col-sm-5
-                                        input#newTitle.form-control(type='text', placeholder='input title')
+                                        input#newTitle.form-control(type='text', placeholder='输入一个标题')
                                 //
                                    Description
                                 .form-group
-                                    label.col-sm-3.control-label Description
+                                    label.col-sm-3.control-label 描述
                                     .col-sm-8
-                                        textarea#newDescription.form-control(rows='1')
+                                        textarea#newDescription.form-control(rows='1',placeholder='输入一段描述')
                                 //
                                    Box
                                 .form-group
-                                    label.col-sm-3.control-label Box
+                                    label.col-sm-3.control-label 盒子
                                     .col-sm-4
                                         select#newBox.form-control
-                                            option(value='0') Today
-                                            option(value='1') Tomorrow
+                                            option(value='0') 今日
+                                            option(value='1') 未来
                                 //
                                    Start Date
                                 .form-group
-                                    label.col-sm-3.control-label Start Date
+                                    label.col-sm-3.control-label 开始日期
                                     .col-sm-5
                                         .input-group.date.form_date(data-date='1979-09-16T05:25:07Z', data-date-format='dd-mm-yyyy', data-link-field='dtp_input1')
                                             input#newStartDate.form-control(size='16', type='text', value='', readonly='readonly')
@@ -125,7 +119,7 @@ html
                                 //
                                    Tags
                                 .form-group
-                                    label.col-sm-3.control-label Tags
+                                    label.col-sm-3.control-label 标签
                                     .col-sm-8
                                         input#newTagOne.col-sm-3
                                         input#newTagTwo.col-sm-3
@@ -133,16 +127,16 @@ html
                                 //
                                    Priority
                                 .form-group
-                                    label.col-sm-3.control-label Priority
+                                    label.col-sm-3.control-label 等级
                                     .col-sm-4
                                         select#newPriority.form-control
-                                            option(value='0') None
-                                            option(value='1') Low
-                                            option(value='2') Medium
-                                            option(value='3') High
+                                            option(value='0') 无
+                                            option(value='1') 低
+                                            option(value='2') 中
+                                            option(value='3') 高
                     .modal-footer
-                        button#addTaskClose.btn.btn-default(type='button', data-dismiss='modal') Close
-                        button#addTaskPost.btn.btn-primary(type='button') Add Task
+                        button#addTaskClose.btn.btn-default(type='button', data-dismiss='modal') 关闭
+                        button#addTaskPost.btn.btn-primary(type='button') 添加
                 //
                    /.modal-content
             //

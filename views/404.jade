@@ -16,22 +16,22 @@ html
                 .navbar-collapse.collapse
                     ul.nav.navbar-nav
                         li
-                            a(href='index') Home
+                            a(href='index') 主页
                         li
-                            a(href='sharecircle') Share Circle
+                            a(href='sharecircle') 分享圈
                         li
-                            a(href='help') Help
+                            a(href='help') 帮助
                         li.dropdown
                             a.dropdown-toggle(href='#', data-toggle='dropdown')
-                                | About
+                                | 关于
                                 b.caret
                             ul.dropdown-menu
                                 li
-                                    a(href='about') About
+                                    a(href='about') 关于我们
                                 li
-                                    a(href='#') Blog
+                                    a(href='#') 博客
                                 li.divider
-                                li.dropdown-header Connect
+                                li.dropdown-header 联系方式
                                 li
                                     a blueandhack@gmail.com
                     if(user!=null)
@@ -39,18 +39,18 @@ html
                             li
                                 a(href='my')
                                     img.img-circle(src='#{userhead}', title='MyAvatar', style='max-width: 20px; max-height: 20px;')
-                                    | My
+                                    | 我
                             li
-                                a(href='logout') Logout
+                                a(href='logout') 登出
                     else
                         ul.nav.navbar-nav.navbar-right
                             li
-                                a(href='signin') Sign in
+                                a(href='signin') 登入
                             li
-                                a(href='register') Register
+                                a(href='register') 注册
                 //
                   /.nav-collapse
         .container
             .jumbotron.white-background
                 .alert.alert-warning
-                    | Not Found Page 404
+                    | 404 没有找到此页面
