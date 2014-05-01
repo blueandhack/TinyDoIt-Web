@@ -1,7 +1,5 @@
-/**
- * Created by Yoga on 14-3-26.
- */
-jQuery(document).ready(function () {
+$(document).ready(function () {
+
     $.scrollUp({
         scrollName: 'scrollUp', // Element ID
         topDistance: '300', // Distance from top before showing element (px)

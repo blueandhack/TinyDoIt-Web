@@ -45,10 +45,10 @@ $(document).ready(function () {
             },
             email: "请输入正确的邮件地址",
             confirm_email: {
-                required: "请输入正确的邮件地址",
+                email: "请输入正确的邮件地址",
                 equalTo: "与上方输入的邮件地址不相同"
             },
-            iagree: "同意此协议方可注册"
+            i_agree: "同意此协议方可注册"
         }
     });
 

@@ -21,7 +21,7 @@ $(document).ready(function () {
             $("#newBox").val(0);
             $("#newPriority").val(0);
             taskId = $(this).val();
-            $.getJSON("/getShareTaskById/" + $(this).val()+ "?rand=" + Math.floor(Math.random()*100000), function (data) {
+            $.getJSON("/getShareTaskById/" + $(this).val()+ "?time=" + new Date().getTime(), function (data) {
                 var task = eval(data);
                 $("#newTitle").val(task.title);
                 $("#newDescription").val(task.description);
@@ -45,7 +45,7 @@ $(document).ready(function () {
             return false;
         }
 
-        $.post("addTask"+ "?rand=" + Math.floor(Math.random()*100000), {title: titleVal, start_date: startDateVal, description: descriptionVal, box: $("#newBox").val(), priority: $("#newPriority").val(), tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
+        $.post("addTask"+ "?time=" + new Date().getTime(), {title: titleVal, start_date: startDateVal, description: descriptionVal, box: $("#newBox").val(), priority: $("#newPriority").val(), tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
             if (data.status == 1) {
                 $("#addTaskClose").click();
                 //intThisPage();
@@ -55,7 +55,7 @@ $(document).ready(function () {
 
     //获得总页数
     function getPageCount() {
-        $.getJSON("/getShareTasksSumPage"+ "?rand=" + Math.floor(Math.random()*100000), function (result) {
+        $.getJSON("/getShareTasksSumPage"+ "?time=" + new Date().getTime(), function (result) {
             if (result.count == 1 || result.count == 0) {
                 $('#pagination').empty();
                 if (result.count == 1) {
@@ -88,14 +88,41 @@ $(document).ready(function () {
 
     function getShareTasks(page){
         $("#shareTaskTbody").empty();
-        $.getJSON("/getShareTasksByPageCount/Page/" + page+ "?rand=" + Math.floor(Math.random()*100000), function (data) {
+        $.getJSON("/getShareTasksByPageCount/Page/" + page+ "?time=" + new Date().getTime(), function (data) {
             $.each(data, function (idx, item) {
                 var create_task_date = moment(item.create_task_date).format('YYYY-MM-DD');
-                $("#shareTaskTbody").append("<tr id='" + item._id + "'><td>" + item.user_email + "</td><td>" + item.title + "</td><td>" + item.description + "</td><td><label class='label label-info'>" + item.tags[0] + "</label> <label class='label label-info'>" + item.tags[1] + "</label> <label class='label label-info'>" + item.tags[2] + "</label></td><td>" + create_task_date + "</td><td><button id='intShareTask-" + item._id + "' data-toggle='modal' data-target='#DoIt' title='将此任务添加到您的任务列表？' class='btn btn-primary btn-sm' value='" + item._id + "'>Yes! I Do It!</button></td></tr>");
+                $("#shareTaskTbody").append("<tr id='" + item._id + "'><td>" + item.username + "</td><td>" + item.title + "</td><td>" + item.description + "</td><td><label class='label label-info'>" + item.tags[0] + "</label> <label class='label label-info'>" + item.tags[1] + "</label> <label class='label label-info'>" + item.tags[2] + "</label></td><td>" + create_task_date + "</td><td><button id='intShareTask-" + item._id + "' data-toggle='modal' data-target='#DoIt' title='将此任务添加到您的任务列表？' class='btn btn-primary btn-sm' value='" + item._id + "'>Yes! I Do It!</button></td></tr>");
 
             });
             //初始化更改任务窗口
             doButton();
         });
     }
+
+    $('.form_date').datetimepicker({
+        startDate: new Date(),
+        format: "yyyy-mm-dd",
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: true,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        minuteStep: 2,
+        minView: 2,
+        language: 'zh-CN'
+    });
+    $('.form_time').datetimepicker({
+        startDate: new Date(),
+        format: "HH:ii",
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        minuteStep: 2,
+        minView: 0,
+        language: 'zh-CN'
+    });
 });

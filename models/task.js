@@ -12,7 +12,7 @@ var TaskSchema = new Schema({
     box: Number,
     priority: Number,
     uID: String,
-    user_email: String,
+    username: String,
     create_task_date: {type: Date, default: moment().zone(8).format()}
 
 });
@@ -43,6 +43,13 @@ TaskDAO.prototype.updateTaskById = function (Id, task, callback) {
 //通过ID删除任务
 TaskDAO.prototype.deleteTaskById = function (Id, callback) {
     Task.remove({_id: Id}, function (err) {
+        callback(err);
+    });
+};
+
+//通过用户名删除任务
+TaskDAO.prototype.deleteTasksByUsername = function (username, callback) {
+    Task.remove({username: username}, function (err) {
         callback(err);
     });
 };

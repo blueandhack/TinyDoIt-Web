@@ -1,6 +1,9 @@
 TinyDoIt Web App
 ================
-[**TinyDoIt(微动)**](http://tinydoit.com) Web App 是一款在线任务管理应用，我们的目的是，将您的行动记录下来，并一一完成他们，我们不同的地方在于，我们拥有ShareCircle（共享圈），让您与您的团队分享任务，共同完成属于自己的任务。您可以将您有意思的任务、应该做的任务分享到共享圈里，与您的团队成员一起分享，您也可以选择他人创建好的任务模板，快速创建自己的任务。
+
+![Logo](https://raw.githubusercontent.com/blueandhack/TinyDoItWeb/master/public/images/favicon.png)
+
+[**TinyDoIt(微动)**](http://tinydoit.com) Web App 是一款在线任务管理应用，我们的目的是，将您的行动记录下来，并一一完成他们，我们不同的地方在于，我们拥有ShareCircle（共享圈），让您与您的团队分享任务，共同探讨分享的任务并完成他们。您可以将您觉得有意思的任务、应该做的任务分享到共享圈里，与您的团队成员一起分享，您也可以选择他人分享的任务模板，快速创建自己的任务。
 
 如何使用？
 ----------
@@ -31,6 +34,7 @@ TinyDoIt Web App
 
     F:
     cd TinyDoItWeb
+    npm install
     node app.js
 
 之后您就可以在您的本地计算机中的网页浏览器中输入
@@ -45,6 +49,12 @@ TinyDoIt Web App
 + [我的博客](http://blueandhack.com)
 + [基于此应用的网站](http://tinydoit.com)
 + 我的邮箱 blueandhack # gmail.com
+
+感谢
+----
+
++ 感谢[女朋友](http://yogashirley.com)一直对我的支持
++ 感谢Logo[设计者](http://www.7imc.com/)
 
 协议
 -----

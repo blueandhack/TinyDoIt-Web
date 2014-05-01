@@ -6,13 +6,13 @@ html
         link(href='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
         link(href='css/style.css', rel='stylesheet')
         link(rel='shortcut icon', href='images/favicon.png', type='image/png')
-        title 帮助 - TinyDoIt 微动
+        title 我的任务 - TinyDoIt 微动
     body
         .navbar.navbar-default.navbar-fixed-top(role='navigation')
             .container
                 .navbar-header
                     a.navbar-brand(href='/') TinyDoIt&nbsp;
-                        img.logo.img-circle(src='images/favicon.png', title='TinyDoIt')
+                        img.img-circle.logo(src='images/favicon.png', title='TinyDoIt')
                     button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
                         span.icon-bar
                         span.icon-bar
@@ -21,7 +21,7 @@ html
                     ul.nav.navbar-nav
                         li
                             a(href='sharecircle') 分享圈
-                        li.active
+                        li
                             a(href='help') 帮助
                         li.dropdown
                             a.dropdown-toggle(href='#', data-toggle='dropdown')
@@ -36,11 +36,11 @@ html
                                 li.dropdown-header 联系方式
                                 li
                                     a blueandhack@gmail.com
-                    ul.nav.navbar-nav.navbar-right
-                        if(user)
+                    if(user!=null)
+                        ul.nav.navbar-nav.navbar-right
                             li.hidden-xs
                                 a(href='settings') 设置
-                                    img.avatar.img-circle(src='#{userhead}', title='设置')
+                                    img.avatar.img-circle(src='#{userhead}', title='设置',style='-moz-box-shadow:0px 0px 10px #000 ;-webkit-box-shadow:0px 0px 10px #000;box-shadow:0px 0px 10px #000;')
                             li.visible-xs
                                 a(href='settings') 设置
                             li
@@ -48,7 +48,8 @@ html
                                     | 我的任务
                             li
                                 a(href='logout') 登出
-                        else
+                    else
+                        ul.nav.navbar-nav.navbar-right
                             li
                                 a(href='signin') 登入
                             li
@@ -56,23 +57,35 @@ html
                 //
                   /.nav-collapse
         .container
-            .jumbotron.index
-                h3 Q1：如何使用？
-                p 首先您需要注册一个账号，登入自己的管理界面，您将看到如下界面
-                img.img-rounded(src='images/My.jpg', style='max-width: 70%; max-height: 70%;')
-                p 请点击Add Task按钮添加您的任务
-                img.img-rounded(src='images/Task.jpg', style='max-width: 60%; max-height: 60%;')
-                p 当您点击Add Task按钮之后，您就可以在您的管理界面看到您的任务啦！
-                img.img-rounded(src='images/MyTask.jpg', style='max-width: 70%; max-height: 70%;')
-                p 您可以点击Done（完成任务）、Change（更改任务）、Delete（删除任务）、Share Circle（分享任务）对任务进行操作
-                p 在左侧您可以看到您今日的任务列表（Today），明日的任务列表（Tomorrow），已完成的任务列表（Done），错过的没有完成的任务列表（Miss）
-                img.img-rounded(src='images/List.jpg', style='max-width: 50%; max-height: 50%;')
-                h3 Q2：什么是Share Circle？
-                p Share Circle（分享圈）是指，使用本网站用户分享他们自己的任务的分享圈，通过这个分享圈可以让彼此交换任务，也可以找到自己想完成的任务，使得创建任务更加方便。
-                img.img-rounded(src='images/ShareCircle.jpg', style='max-width: 70%; max-height: 70%;')
-                p 当您点击Yes!I Do It!您就可以通过别人分享的任务模板创建自己的任务啦！
-                img.img-rounded(src='images/AddShareTask.jpg', style='max-width: 70%; max-height: 70%;')
+            //
+               Content
+            .index.col-md-12.white-background
+                .row
+                    #box-list.col-md-3
+                        ul.nav.nav-pills.nav-stacked
+                            li#information.active
+                                a(href='javascript:void(0)')
+                                    | 个人信息
+                            li#password
+                                a(href='javascript:void(0)')
+                                    | 修改密码
+                            li#email
+                                a(href='javascript:void(0)')
+                                    | 修改邮箱
+                            li#delete
+                                a(href='javascript:void(0)')
+                                    | 删除账号
+                    .col-md-9
+                        - if(message)
+                            .alert.alert-warning.alert-dismissable
+                            button.close(type='button', data-dismiss='alert', aria-hidden='true') &times;
+                            | #{message}
+                        #title
+                            h4 个人信息
+                        #content
         script(src='http://cdn.staticfile.org/jquery/2.1.1-beta1/jquery.min.js')
         script(src='http://cdn.staticfile.org/jquery-scrollUp/2.1.0/jquery.scrollUp.min.js')
+        script(src='js/moment-with-langs.min.js')
         script(src='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/js/bootstrap.min.js')
-        script(src='../js/all.js')
+        script(src='js/all.js')
+        script(src='js/settings.js')

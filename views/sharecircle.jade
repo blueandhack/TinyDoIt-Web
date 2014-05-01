@@ -2,24 +2,22 @@ doctype html
 html
     head
         meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1.0')
         link(href='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
         link(href='css/style.css', rel='stylesheet')
         link(href='css/bootstrap-datetimepicker.min.css', rel='stylesheet')
         link(rel='shortcut icon', href='images/favicon.png', type='image/png')
-        script(src='http://cdn.staticfile.org/jquery/2.1.1-beta1/jquery.min.js')
-        script(src='js/moment-with-langs.min.js')
-        script(src='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/js/bootstrap.min.js')
-        script(src='js/bootstrap-datetimepicker.min.js')
-        script(src='js/bootstrap-paginator.min.js')
-        script(src='js/all.js')
-        script(src='js/sharecircle.js')
-        title TinyDoIt 分享圈
+        title 分享圈 - TinyDoIt 微动
     body
         .navbar.navbar-default.navbar-fixed-top(role='navigation')
             .container
                 .navbar-header
                     a.navbar-brand(href='/') TinyDoIt&nbsp;
-                        img.img-circle(src='images/favicon.png', title='TinyDoIt', style='max-width: 30px; max-height: 30px;')
+                        img.logo.img-circle(src='images/favicon.png', title='TinyDoIt')
+                    button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+                        span.icon-bar
+                        span.icon-bar
+                        span.icon-bar
                 .navbar-collapse.collapse
                     ul.nav.navbar-nav
                         li.active
@@ -41,10 +39,14 @@ html
                                     a blueandhack@gmail.com
                     if(user!=null)
                         ul.nav.navbar-nav.navbar-right
+                            li.hidden-xs
+                                a(href='settings') 设置
+                                    img.avatar.img-circle(src='#{userhead}', title='设置')
+                            li.visible-xs
+                                a(href='settings') 设置
                             li
                                 a(href='my')
-                                    img.img-circle(src='#{userhead}', title='MyAvatar', style='max-width: 20px; max-height: 20px;')
-                                    | 我
+                                    | 我的任务
                             li
                                 a(href='logout') 登出
                     else
@@ -56,7 +58,7 @@ html
                 //
                   /.nav-collapse
         .container
-            .jumbotron.white-background
+            .index.white-background
                 .row
                     .col-md-12
                         table.table
@@ -142,3 +144,11 @@ html
                /.modal-dialog
         //
            /.modal
+        script(src='http://cdn.staticfile.org/jquery/2.1.1-beta1/jquery.min.js')
+        script(src='http://cdn.staticfile.org/jquery-scrollUp/2.1.0/jquery.scrollUp.min.js')
+        script(src='js/moment-with-langs.min.js')
+        script(src='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/js/bootstrap.min.js')
+        script(src='js/bootstrap-datetimepicker.min.js')
+        script(src='js/bootstrap-paginator.min.js')
+        script(src='js/all.js')
+        script(src='js/sharecircle.js')

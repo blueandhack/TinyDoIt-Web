@@ -64,8 +64,8 @@ module.exports = function (app) {
             return res.redirect('/register');//返回主册页
         }
         //生成密码的 md5 值
-        var md5 = crypto.createHash('md5'),
-            password = md5.update(req.body.password).digest('hex');
+        var md5 = crypto.createHash('md5');
+        password = md5.update(req.body.password).digest('hex');
         var newUser = {
             username: req.body.username,
             password: password,
@@ -73,17 +73,24 @@ module.exports = function (app) {
             head: head
         };
 
-        //检查邮箱是否已经存在
-        User.getUserByEmailAndUsername(newUser.email, newUser.username, function (err, user) {
-            if (user.length != 0) {
-                req.session.error = 'user have';
+        //检查邮箱与用户名是否已经存在
+        User.getUserByEmail(newUser.email, function (err, user) {
+            if (user != null) {
+                req.session.error = '此邮箱已存在';
                 return res.redirect('/register');
             }
-            User.save(newUser, function (err) {
-                User.getUserByEmail(newUser.email, function (err, user) {
-                    req.session.user = user._doc;
-                    res.redirect('/');
+            User.getUserByUsername(newUser.username, function (err, user) {
+                if (user != null) {
+                    req.session.error = '此用户已存在';
+                    return res.redirect('/register');
+                }
+                User.save(newUser, function (err) {
+                    User.getUserByEmail(newUser.email, function (err, user) {
+                        req.session.user = user._doc;
+                        res.redirect('/');
+                    });
                 });
+
             });
         });
     });
@@ -100,10 +107,12 @@ module.exports = function (app) {
         //检查用户是否存在
         User.getUserByEmail(req.body.email, function (err, user) {
             if (!user) {
+                req.session.error = '此用户不存在';
                 return res.redirect('/signin');//用户不存在则跳转到登录页
             }
             //检查密码是否一致
             if (user.password != password) {
+                req.session.error = '用户名或密码不正确';
                 return res.redirect('/signin');//密码错误则跳转到登录页
             }
             //用户名密码都匹配后，将用户信息存入 session
@@ -112,11 +121,77 @@ module.exports = function (app) {
             res.redirect('/');//登陆成功后跳转到主页
         });
     });
+
+    //提交更改密码
+    app.post('/changePassword', function (req, res) {
+        var md5 = crypto.createHash('md5'),
+            password = md5.update(req.body.password).digest('hex');
+        User.changePasswordByUsername(password, req.session.user.username, function (err) {
+            if (err) {
+                req.session.error = '密码未能修改成功请重试';
+                res.send({"status": 0});
+                return err;
+            }
+            res.send({"status": 1});
+        });
+    });
+
+    //提交更改邮箱
+    app.post('/changeEmail', function (req, res) {
+        User.getUserByEmail(req.body.email, function (err, user) {
+            if (user != null) {
+                req.session.error = '此邮箱已存在，请重新输入';
+                res.send({"status": 2});
+                return err;
+            }
+            User.changeEmailByUsername(req.body.email, req.session.user.username, function (err) {
+                if (err) {
+                    req.session.error = '邮箱未能修改成功请重试';
+                    res.send({"status": 0});
+                    return err;
+                }
+                res.send({"status": 1});
+            });
+        });
+
+    });
+
+    //提交删除账户
+    app.post('/deleteAccount', function (req, res) {
+        User.deleteUserByUsername(req.session.user.username, function (err) {
+            if (err) {
+                req.session.error = '删除账户出现错误，请重试';
+                res.send({"status": 0});
+                return err;
+            }
+            res.send({"status": 1});
+        });
+    });
+
+    //通过某一用户删除此用户所有任务
+    app.post('/deleteTasksByUsername', function (req, res) {
+        Task.deleteTasksByUsername(req.session.user.username, function (err) {
+            if (err) {
+                req.session.error = '清空账户所有内容出现错误，请重试';
+                res.send({"status": 0});
+                return err;
+            }
+            res.send({"status": 1});
+        });
+    });
+
+
     //登出
     app.get('/logout', authentication);
     app.get('/logout', function (req, res) {
         req.session.user = null;
         res.redirect('/');
+    });
+    //获取用户信息
+    app.get('/getUserByUsername', function (req, res) {
+        User.getUserByUsername(req.session.user.username, function (err, user) {
+            res.json(user);
+        });
     });
     //分享圈页面
     app.get('/sharecircle', authentication);
@@ -154,6 +229,19 @@ module.exports = function (app) {
             userhead: req.session.user.head
         });
     });
+    //设置页面
+    app.get('/settings', authentication);
+    app.get('/settings', function (req, res) {
+        var userhead = null;
+        if (req.session.user != null) {
+            userhead = req.session.user.head;
+        }
+        res.render('settings', {
+            user: req.session.user,
+            userhead: req.session.user.head
+        });
+    });
+
     //提交添加任务
     app.post('/addTask', function (req, res) {
         var tags = new Array(3);
@@ -175,7 +263,7 @@ module.exports = function (app) {
             box: req.body.box,
             priority: req.body.priority,
             uID: req.session.user._id,
-            user_email: req.session.user.email
+            username: req.session.user.username
         };
         Task.save(newTask, function (err) {
             if (err) {
@@ -257,7 +345,7 @@ module.exports = function (app) {
         tags[2] = req.body.tag_three;
 
         var newShareTask = {
-            user_email: req.body.user_email,
+            username: req.body.username,
             title: req.body.title,
             description: req.body.description,
             tags: tags
@@ -295,7 +383,6 @@ module.exports = function (app) {
             res.json(shatetasks);
         });
     });
-
 
 
     //通过某个日期获得今天任务页数

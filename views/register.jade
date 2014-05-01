@@ -2,6 +2,7 @@ doctype html
 html
     head(lang='en')
         meta(charset='UTF-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1.0')
         link(href='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
         link(href='css/style.css', rel='stylesheet')
         link(rel='shortcut icon', href='images/favicon.png', type='image/png')
@@ -10,7 +11,7 @@ html
         script(src='http://cdn.staticfile.org/jquery-validate/1.12.0/additional-methods.min.js')
         script(src='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/js/bootstrap.min.js')
         script(src='js/register.js')
-        title 注册TinyDoIt
+        title 注册 - TinyDoIt 微动
     body.body-register
         .container
             form#registerForm.form-signin(method='post')
@@ -18,6 +19,12 @@ html
                 p
                     | 已有账号？
                     a(href='/signin') 请登录
+                    | &nbsp;&nbsp;
+                    a(href='/') 返回主页
+                - if(message)
+                    .alert.alert-warning.alert-dismissable
+                        button.close(type='button', data-dismiss='alert', aria-hidden='true') &times;
+                        | #{message}
                 .form-group
                     label.control-label 邮件地址
                     input#email.form-control(type='email', name='email', placeholder='邮件地址', required='required', autofocus='autofocus')

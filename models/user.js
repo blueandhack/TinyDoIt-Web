@@ -49,13 +49,37 @@ UserDAO.prototype.getUserByEmailAndUsername = function (email, username, callbac
     });
 };
 
+//通过用户名修改密码
+UserDAO.prototype.changePasswordByUsername = function (password, username, callback) {
+    User.findOne({username: username}).update({password: password}, function (err, user) {
+        callback(err, user);
+    });
+};
+
+//通过用户名修改邮箱
+UserDAO.prototype.changeEmailByUsername = function (email, username, callback) {
+    User.findOne({username: username}).update({email: email}, function (err, user) {
+        callback(err, user);
+    });
+};
+
+//通过用户名删除用户
+UserDAO.prototype.deleteUserByUsername = function (username, callback) {
+    User.remove({username: username},function (err, user) {
+        callback(err);
+    });
+};
+
+UserDAO.prototype.getUserByUsername = function (username, callback) {
+    User.findOne({username: username}, {username: 1, email: 1, create: 1, head: 1}, function (err, user) {
+        callback(err, user);
+    });
+};
+
 UserDAO.prototype.getUserByEmail = function (email, callback) {
     User.findOne({email: email}, function (err, user) {
-            callback(err, user);
-        }
-    )
-    ;
-}
-;
+        callback(err, user);
+    });
+};
 
 module.exports = new UserDAO();

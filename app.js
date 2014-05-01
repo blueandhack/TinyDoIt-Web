@@ -35,7 +35,7 @@ app.use(function(req, res, next){
     var err = req.session.error;
     delete req.session.error;
     res.locals.message = '';
-    if (err) res.locals.message = '<div class="alert alert-error">' + err + '</div>';
+    if (err) res.locals.message = err;
     next();
 });
 app.use(app.router);

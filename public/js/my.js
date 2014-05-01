@@ -37,7 +37,7 @@ $(document).ready(function () {
             return false;
         }
 
-        $.post("addTask" + "?rand=" + Math.floor(Math.random() * 100000), {title: titleVal, start_date: startDateVal, description: descriptionVal, box: $("#newBox").val(), priority: $("#newPriority").val(), tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
+        $.post("addTask" + "?time=" + new Date().getTime(), {title: titleVal, start_date: startDateVal, description: descriptionVal, box: $("#newBox").val(), priority: $("#newPriority").val(), tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
             if (data.status == 1) {
                 $("#addTaskClose").click();
                 goToTodayButton();
@@ -58,7 +58,7 @@ $(document).ready(function () {
             alert("请填写完全！");
             return false;
         }
-        $.post("updateTaskById/" + taskId + "?rand=" + Math.floor(Math.random() * 100000), {title: titleVal, start_date: startDateVal, description: descriptionVal, box: $("#changeBox").val(), priority: $("#changePriority").val(), tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
+        $.post("updateTaskById/" + taskId + "?time=" + new Date().getTime(), {title: titleVal, start_date: startDateVal, description: descriptionVal, box: $("#changeBox").val(), priority: $("#changePriority").val(), tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
             if (data.status == 1) {
                 $("#changeTaskClose").click();
                 goToTodayButton();
@@ -78,7 +78,7 @@ $(document).ready(function () {
             alert("请填写完全");
             return false;
         }
-        $.post("addShareTask/" + "?rand=" + Math.floor(Math.random() * 100000), {user_email: $("#shareAuthor").val(), title: titleVal, description: descriptionVal, tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
+        $.post("/addShareTask" + "?time=" + new Date().getTime(), {username: $("#shareAuthor").val(), title: titleVal, description: descriptionVal, tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
             if (data.status == 1) {
                 $("#shareTaskClose").click();
 //                goToTodayButton();
@@ -137,7 +137,7 @@ $(document).ready(function () {
             $("#changePriority").val(0);
             taskId = $(this).val();
 
-            $.getJSON("/getTaskById/" + $(this).val() + "?rand=" + Math.floor(Math.random() * 100000), function (data) {
+            $.getJSON("/getTaskById/" + $(this).val() + "?time=" + new Date().getTime(), function (data) {
                 var task = eval(data);
                 var start_date = moment(task.start_date).format('YYYY-MM-DD');
                 $("#changeTitle").val(task.title);
@@ -156,7 +156,7 @@ $(document).ready(function () {
     function doneButton() {
         $("[id^=doneTask-]").click(function () {
             taskId = $(this).val();
-            $.post("doneTaskById/" + $(this).val() + "?rand=" + Math.floor(Math.random() * 100000), {}, function (data) {
+            $.post("doneTaskById/" + $(this).val() + "?time=" + new Date().getTime(), {}, function (data) {
                 if (data.status == 1) {
                     $("tr[id=" + taskId + "]").remove();
                 }
@@ -167,7 +167,7 @@ $(document).ready(function () {
 
     //获取今日明日已完成错过分类各项任务数
     function getTodayTomorrowDoneMiss() {
-        $.getJSON("/getTaskByuId" + "?rand=" + Math.floor(Math.random() * 100000), function (data) {
+        $.getJSON("/getTaskByuId" + "?time=" + new Date().getTime(), function (data) {
             var today_badge = 0,
                 tomorrow_badge = 0,
                 done_badge = 0,
@@ -201,7 +201,7 @@ $(document).ready(function () {
         $("[id^=deleteTask-]").click(function () {
             if (confirm("确认删除？")) {
                 taskId = $(this).val();
-                $.get("deleteTaskById/" + $(this).val() + "?rand=" + Math.floor(Math.random() * 100000), function (data) {
+                $.get("deleteTaskById/" + $(this).val() + "?time=" + new Date().getTime(), function (data) {
                     if (data.status == 1) {
                         $("tr[id=" + taskId + "]").remove();
                     }
@@ -215,9 +215,9 @@ $(document).ready(function () {
     function shareButton() {
         $("[id^=intShareTask-]").click(function () {
             taskId = $(this).val();
-            $.getJSON("/getTaskById/" + $(this).val() + "?rand=" + Math.floor(Math.random() * 100000), function (data) {
+            $.getJSON("/getTaskById/" + $(this).val() + "?time=" + new Date().getTime(), function (data) {
                 var task = eval(data);
-                $("#shareAuthor").val(task.user_email);
+                $("#shareAuthor").val(task.username);
                 $("#shareTitle").val(task.title);
                 $("#shareDescription").val(task.description);
                 $("#shareTagOne").val(task.tags[0]);
@@ -240,7 +240,7 @@ $(document).ready(function () {
     //获得今天任务总页数
     function getTodayPageCount() {
         var today = moment().format('YYYY-MM-DD');
-        $.getJSON("/getTasksByToday/Date/" + today + "/SumPage" + "?rand=" + Math.floor(Math.random() * 100000), function (result) {
+        $.getJSON("/getTasksByToday/Date/" + today + "/SumPage" + "?time=" + new Date().getTime(), function (result) {
             if (result.count == 1 || result.count == 0) {
                 $('#pagination').empty();
                 if (result.count == 1) {
@@ -273,7 +273,7 @@ $(document).ready(function () {
     //获得今日任务并分页显示
     function getTodayTasks(page) {
         $("#taskTbody").empty();
-        $.getJSON("/getTasksByToday/Date/" + moment().format('YYYY-MM-DD') + "/Page/" + page + "?rand=" + Math.floor(Math.random() * 100000), function (data) {
+        $.getJSON("/getTasksByToday/Date/" + moment().format('YYYY-MM-DD') + "/Page/" + page + "?time=" + new Date().getTime(), function (data) {
             $.each(data, function (idx, item) {
                 var start_date = moment(item.start_date).format('YYYY-MM-DD');
                 $("#taskTbody").append("<tr id='" + item._id + "'><td><button id='doneTask-" + item._id + "' class='btn btn-default btn-sm' value='" + item._id + "'>标记</button></td><td>" + start_date + "</td><td>" + item.title + "</td><td>" + item.description + "</td><td><button id='intChangeTask-" + item._id + "' data-toggle='modal' data-target='#ChangeTask' class='btn btn-primary btn-sm' value='" + item._id + "'>更改</button><span>&nbsp;</span><button id='deleteTask-" + item._id + "' class='btn btn-danger btn-sm' value='" + item._id + "'>删除</button><span>&nbsp;</span><button id='intShareTask-" + item._id + "' data-toggle='modal' data-target='#ShareTask' title='觉得不错，分享到分享圈吧！' class='btn btn-info btn-sm' value='" + item._id + "'>分享圈</button></td></tr>");
@@ -293,7 +293,7 @@ $(document).ready(function () {
     //获得以前任务总页数
     function getMissPageCount() {
         var today = moment().format('YYYY-MM-DD');
-        $.getJSON("/getTasksByMiss/Date/" + today + "/SumPage" + "?rand=" + Math.floor(Math.random() * 100000), function (result) {
+        $.getJSON("/getTasksByMiss/Date/" + today + "/SumPage" + "?time=" + new Date().getTime(), function (result) {
             if (result.count == 1 || result.count == 0) {
                 $('#pagination').empty();
                 if (result.count == 1) {
@@ -326,7 +326,7 @@ $(document).ready(function () {
     //获得以前任务并分页显示
     function getMissTasks(page) {
         $("#taskTbody").empty();
-        $.getJSON("/getTasksByMiss/Date/" + moment().format('YYYY-MM-DD') + "/Page/" + page + "?rand=" + Math.floor(Math.random() * 100000), function (data) {
+        $.getJSON("/getTasksByMiss/Date/" + moment().format('YYYY-MM-DD') + "/Page/" + page + "?time=" + new Date().getTime(), function (data) {
             $.each(data, function (idx, item) {
                 var start_date = moment(item.start_date).format('YYYY-MM-DD');
                 $("#taskTbody").append("<tr id='" + item._id + "'><td><button id='doneTask-" + item._id + "' class='btn btn-default btn-sm' value='" + item._id + "'>标记</button></td><td>" + start_date + "</td><td>" + item.title + "</td><td>" + item.description + "</td><td><button id='intChangeTask-" + item._id + "' data-toggle='modal' data-target='#ChangeTask' class='btn btn-primary btn-sm' value='" + item._id + "'>更改</button><span>&nbsp;</span><button id='deleteTask-" + item._id + "' class='btn btn-danger btn-sm' value='" + item._id + "'>删除</button><span>&nbsp;</span><button id='intShareTask-" + item._id + "' data-toggle='modal' data-target='#ShareTask' title='觉得不错，分享到分享圈吧！' class='btn btn-info btn-sm' value='" + item._id + "'>分享圈</button></td></tr>");
@@ -347,7 +347,7 @@ $(document).ready(function () {
     //获得未来任务总页数
     function getTomorrowPageCount() {
         var today = moment().format('YYYY-MM-DD');
-        $.getJSON("/getTasksByTomorrow/Date/" + today + "/SumPage" + "?rand=" + Math.floor(Math.random() * 100000), function (result) {
+        $.getJSON("/getTasksByTomorrow/Date/" + today + "/SumPage" + "?time=" + new Date().getTime(), function (result) {
             if (result.count == 1 || result.count == 0) {
                 $('#pagination').empty();
                 if (result.count == 1) {
@@ -380,7 +380,7 @@ $(document).ready(function () {
     //获得以前任务并分页显示
     function getTomorrowTasks(page) {
         $("#taskTbody").empty();
-        $.getJSON("/getTasksByTomorrow/Date/" + moment().format('YYYY-MM-DD') + "/Page/" + page + "?rand=" + Math.floor(Math.random() * 100000), function (data) {
+        $.getJSON("/getTasksByTomorrow/Date/" + moment().format('YYYY-MM-DD') + "/Page/" + page + "?time=" + new Date().getTime(), function (data) {
             $.each(data, function (idx, item) {
                 var start_date = moment(item.start_date).format('YYYY-MM-DD');
                 $("#taskTbody").append("<tr id='" + item._id + "'><td><button id='doneTask-" + item._id + "' class='btn btn-default btn-sm' value='" + item._id + "'>标记</button></td><td>" + start_date + "</td><td>" + item.title + "</td><td>" + item.description + "</td><td><button id='intChangeTask-" + item._id + "' data-toggle='modal' data-target='#ChangeTask' class='btn btn-primary btn-sm' value='" + item._id + "'>更改</button><span>&nbsp;</span><button id='deleteTask-" + item._id + "' class='btn btn-danger btn-sm' value='" + item._id + "'>删除</button><span>&nbsp;</span><button id='intShareTask-" + item._id + "' data-toggle='modal' data-target='#ShareTask' title='觉得不错，分享到分享圈吧！' class='btn btn-info btn-sm' value='" + item._id + "'>分享圈</button></td></tr>");
@@ -400,7 +400,7 @@ $(document).ready(function () {
 
     //获得已完成任务总页数
     function getDonePageCount() {
-        $.getJSON("/getTasksPageByDone/SumPage" + "?rand=" + Math.floor(Math.random() * 100000), function (result) {
+        $.getJSON("/getTasksPageByDone/SumPage" + "?time=" + new Date().getTime(), function (result) {
             if (result.count == 1 || result.count == 0) {
                 $('#pagination').empty();
                 if (result.count == 1) {
@@ -433,7 +433,7 @@ $(document).ready(function () {
     //获得已完成任务并分页显示
     function getDoneTasks(page) {
         $("#taskTbody").empty();
-        $.getJSON("/getTasksByDone/Page/" + page + "?rand=" + Math.floor(Math.random() * 100000), function (data) {
+        $.getJSON("/getTasksByDone/Page/" + page + "?time=" + new Date().getTime(), function (data) {
             $.each(data, function (idx, item) {
                 var start_date = moment(item.start_date).format('YYYY-MM-DD');
                 $("#taskTbody").append("<tr id='" + item._id + "'><td><button id='doneTask-" + item._id + "' class='btn btn-default btn-sm' value='" + item._id + "' disabled='disabled'>标记</button></td><td>" + start_date + "</td><td>" + item.title + "</td><td>" + item.description + "</td><td><button id='intChangeTask-" + item._id + "' data-toggle='modal' data-target='#ChangeTask' class='btn btn-primary btn-sm' value='" + item._id + "'>更改</button><span>&nbsp;</span><button id='deleteTask-" + item._id + "' class='btn btn-danger btn-sm' value='" + item._id + "'>删除</button><span>&nbsp;</span><button id='intShareTask-" + item._id + "' data-toggle='modal' data-target='#ShareTask' title='觉得不错，分享到分享圈吧！' class='btn btn-info btn-sm' value='" + item._id + "'>分享圈</button></td></tr>");
@@ -447,5 +447,32 @@ $(document).ready(function () {
             getTodayTomorrowDoneMiss();
         });
     }
+
+    $('.form_date').datetimepicker({
+        startDate: new Date(),
+        format: "yyyy-mm-dd",
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: true,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        minuteStep: 2,
+        minView: 2,
+        language: 'zh-CN'
+    });
+    $('.form_time').datetimepicker({
+        startDate: new Date(),
+        format: "HH:ii",
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        minuteStep: 2,
+        minView: 0,
+        language: 'zh-CN'
+    });
 
 });

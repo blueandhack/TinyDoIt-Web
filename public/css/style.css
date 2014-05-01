@@ -1,29 +1,45 @@
-body{
+body {
     padding-top: 30px;
     padding-bottom: 40px;
 }
-.body-signin{
+
+.body-signin {
     background: #eeeeee;
 }
 
-.body-register{
+.body-register {
     background: #eeeeee;
 }
 
-.index{
+.index {
     margin-top: 35px;
 }
 
-.white-background{
+.logo {
+    max-width: 30px;
+    max-height: 30px;
+    margin-top: -5px;
+}
+
+.avatar {
+    max-width: 30px;
+    max-height: 30px;
+    position: absolute;
+    margin-left: -30px;
+    margin-top: -5px;
+}
+
+.white-background {
     background-color: #ffffff;
 }
 
-.form-signin{
+.form-signin {
     max-width: 330px;
     padding: 15px;
     margin: 0 auto;
 }
-.form-signin .checkbox{
+
+.form-signin .checkbox {
     font-weight: normal;
 }
 
@@ -36,7 +52,6 @@ body{
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-
 
 @-webkit-keyframes del-scroll {
     0% {
@@ -101,11 +116,10 @@ body{
     height: 220px;
 }
 
-.figure_3 .figure_3_img{
+.figure_3 .figure_3_img {
     left: 53px;
     position: relative;
 }
-
 
 .scroll-del {
     -webkit-animation: del-scroll 2s linear infinite;
@@ -117,11 +131,19 @@ body{
     animation: shift-scroll 2s linear infinite;
 }
 
-.figure_2 .frame{
+.figure_2 .frame {
     width: 264px;
     height: 165px;
     top: 34px;
     left: 53px;
     position: relative;
     overflow: hidden;
+}
+
+#scrollUp {
+    bottom: 20px;
+    right: 20px;
+    height: 38px;
+    width: 38px;
+    background: url("../images/top.png") no-repeat
 }
