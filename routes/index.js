@@ -7,36 +7,36 @@ var crypto = require('crypto'),
 module.exports = function (app) {
     //缺省页面
     app.get('/', function (req, res) {
-        var userhead = null;
+        var userHead = null;
         if (req.session.user != null) {
-            userhead = req.session.user.head;
+            userHead = req.session.user.head;
         }
         res.render('index', {
             user: req.session.user,
-            userhead: userhead
+            userHead: userHead
         });
 
     });
     //主页
     app.get('/index', function (req, res) {
-        var userhead = null;
+        var userHead = null;
         if (req.session.user != null) {
-            userhead = req.session.user.head;
+            userHead = req.session.user.head;
         }
         res.render('index', {
             user: req.session.user,
-            userhead: userhead
+            userHead: userHead
         });
     });
     //帮助页面
     app.get('/help', function (req, res) {
-        var userhead = null;
+        var userHead = null;
         if (req.session.user != null) {
-            userhead = req.session.user.head;
+            userHead = req.session.user.head;
         }
         res.render('help', {
             user: req.session.user,
-            userhead: userhead
+            userHead: userHead
         });
     });
     //注册页面
@@ -150,6 +150,18 @@ module.exports = function (app) {
                     res.send({"status": 0});
                     return err;
                 }
+                var email = req.body.email,
+                    hmd5 = crypto.createHash('md5'),
+                    email_MD5 = hmd5.update(email.toLowerCase()).digest('hex'),
+                    head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";
+                User.changeHeadByUsername(head, req.session.user.username, function (err) {
+                    return err;
+                });
+                //重新刷新session
+                User.getUserByUsername(req.session.user.username, function (err, user) {
+                    req.session.user = user._doc;
+                    req.session.save();
+                });
                 res.send({"status": 1});
             });
         });
@@ -196,49 +208,49 @@ module.exports = function (app) {
     //分享圈页面
     app.get('/sharecircle', authentication);
     app.get('/sharecircle', function (req, res) {
-        var userhead = null;
+        var userHead = null;
         if (req.session.user != null) {
-            userhead = req.session.user.head;
+            userHead = req.session.user.head;
         }
         res.render('sharecircle', {
             user: req.session.user,
-            userhead: userhead
+            userHead: userHead
         });
     });
     //关于页面
     app.get('/about', function (req, res) {
-        var userhead = null;
+        var userHead = null;
         if (req.session.user != null) {
-            userhead = req.session.user.head;
+            userHead = req.session.user.head;
         }
         res.render('about', {
             user: req.session.user,
-            userhead: userhead
+            userHead: userHead
         });
     });
     //我的任务页面
     app.get('/my', authentication);
     app.get('/my', function (req, res) {
-        var userhead = null;
+        var userHead = null;
         if (req.session.user != null) {
-            userhead = req.session.user.head;
+            userHead = req.session.user.head;
         }
         //console.log(moment().zone(8).format('L'));
         res.render('my', {
             user: req.session.user,
-            userhead: req.session.user.head
+            userHead: req.session.user.head
         });
     });
     //设置页面
     app.get('/settings', authentication);
     app.get('/settings', function (req, res) {
-        var userhead = null;
+        var userHead = null;
         if (req.session.user != null) {
-            userhead = req.session.user.head;
+            userHead = req.session.user.head;
         }
         res.render('settings', {
             user: req.session.user,
-            userhead: req.session.user.head
+            userHead: req.session.user.head
         });
     });
 
@@ -441,20 +453,20 @@ module.exports = function (app) {
 
     //404不存在页面
     app.use(function (req, res) {
-        var userhead = null;
+        var userHead = null;
         if (req.session.user != null) {
-            userhead = req.session.user.head;
+            userHead = req.session.user.head;
         }
         res.status("404");
         res.render('404', {
             user: req.session.user,
-            userhead: userhead
+            userHead: userHead
         });
     });
     //验证是否登录，没有权限不予通过
     function authentication(req, res, next) {
         if (!req.session.user) {
-            req.session.error = '请先登陆';
+            req.session.error = '请您先登陆';
             return res.redirect('/signin');
         }
         next();

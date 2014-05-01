@@ -22,7 +22,7 @@ UserDAO.prototype.save = function (user, callback) {
         head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";
     var date = new Date();
     //要存入数据库的用户信息文档
-    var user = {
+    var newUser = {
         username: user.username,
         password: user.password,
         email: user.email,
@@ -31,7 +31,7 @@ UserDAO.prototype.save = function (user, callback) {
     };
 
 
-    var instance = new User(user);
+    var instance = new User(newUser);
     instance.save(function (err, user) {
         callback(err, user);
     });
@@ -63,9 +63,16 @@ UserDAO.prototype.changeEmailByUsername = function (email, username, callback) {
     });
 };
 
+//通过用户名修改头像
+UserDAO.prototype.changeHeadByUsername = function (head, username, callback) {
+    User.findOne({username: username}).update({head: head}, function (err, user) {
+        callback(err, user);
+    });
+};
+
 //通过用户名删除用户
 UserDAO.prototype.deleteUserByUsername = function (username, callback) {
-    User.remove({username: username},function (err, user) {
+    User.remove({username: username}, function (err, user) {
         callback(err);
     });
 };

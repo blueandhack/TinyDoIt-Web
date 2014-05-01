@@ -13,9 +13,10 @@ TinyDoIt Web App
 
 在何种情境下使用？
 -----------------
-*   小组设计
+*   小组协作设计
 *   个人减肥计划
-*   各种竞赛
+*   作业完成情况记录
+*   ...
 
 依赖的模块
 ----------
@@ -54,7 +55,7 @@ TinyDoIt Web App
 ----
 
 + 感谢[女朋友](http://yogashirley.com)一直对我的支持
-+ 感谢Logo[设计者](http://www.7imc.com/)
++ 感谢Logo设计者 [iMC](http://www.7imc.com/)
 
 协议
 -----

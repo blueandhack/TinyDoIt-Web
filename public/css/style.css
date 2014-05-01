@@ -1,6 +1,5 @@
 body {
     padding-top: 30px;
-    padding-bottom: 40px;
 }
 
 .body-signin {
@@ -146,4 +145,13 @@ body {
     height: 38px;
     width: 38px;
     background: url("../images/top.png") no-repeat
+}
+
+.footer {
+    color: #999;
+    text-align: center;
+    padding: 30px 0;
+    margin-top: 70px;
+    border-top: 1px solid #e5e5e5;
+    background-color: #f5f5f5;
 }
