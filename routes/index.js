@@ -49,8 +49,9 @@ module.exports = function (app) {
     //提交注册
     app.post('/register', notAuthentication);
     app.post('/register', function (req, res) {
-        var email = req.body.email,
-            confirm_email = req.body['confirm_email'],
+        var email = req.body.email.toLowerCase(),
+            username = req.body.username,
+            confirm_email = req.body['confirm_email'].toLowerCase(),
             password = req.body.password,
             confirm_password = req.body['confirm_password'],
             hmd5 = crypto.createHash('md5'),
@@ -58,18 +59,20 @@ module.exports = function (app) {
             head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";
         //检验用户两次输入的密码是否一致
         if (confirm_password != password) {
+            req.session.error = '两次密码输入不一致';
             return res.redirect('/register');//返回主册页
         }
         if (confirm_email != email) {
+            req.session.error = '两次邮箱输入不一致';
             return res.redirect('/register');//返回主册页
         }
         //生成密码的 md5 值
         var md5 = crypto.createHash('md5');
         password = md5.update(req.body.password).digest('hex');
         var newUser = {
-            username: req.body.username,
+            username: username,
             password: password,
-            email: req.body.email,
+            email: email,
             head: head
         };
 
@@ -103,9 +106,12 @@ module.exports = function (app) {
     app.post('/signin', notAuthentication);
     app.post('/signin', function (req, res) {
         var md5 = crypto.createHash('md5'),
-            password = md5.update(req.body.password).digest('hex');
+            password = md5.update(req.body.password).digest('hex'),
+            email = req.body.email.toLowerCase();
+        console.log(email);
         //检查用户是否存在
-        User.getUserByEmail(req.body.email, function (err, user) {
+        User.getUserByEmail(email, function (err, user) {
+            console.log(user.email);
             if (!user) {
                 req.session.error = '此用户不存在';
                 return res.redirect('/signin');//用户不存在则跳转到登录页
@@ -138,13 +144,16 @@ module.exports = function (app) {
 
     //提交更改邮箱
     app.post('/changeEmail', function (req, res) {
-        User.getUserByEmail(req.body.email, function (err, user) {
+        var email = req.body.email.toLowerCase();
+        //将email转换为小写并查找
+        User.getUserByEmail(email, function (err, user) {
             if (user != null) {
                 req.session.error = '此邮箱已存在，请重新输入';
                 res.send({"status": 2});
                 return err;
             }
-            User.changeEmailByUsername(req.body.email, req.session.user.username, function (err) {
+            //将email转换为小写并更改
+            User.changeEmailByUsername(email, req.session.user.username, function (err) {
                 if (err) {
                     req.session.error = '邮箱未能修改成功请重试';
                     res.send({"status": 0});
@@ -158,7 +167,7 @@ module.exports = function (app) {
                     return err;
                 });
                 //重新刷新session
-                User.getUserByUsername(req.session.user.username, function (err, user) {
+                User.getUserByEmail(email.toLowerCase(), function (err, user) {
                     req.session.user = user._doc;
                     req.session.save();
                 });
@@ -341,7 +350,7 @@ module.exports = function (app) {
         });
     });
     //提交删除某一ID的任务
-    app.get('/deleteTaskById/:id', function (req, res) {
+    app.post('/deleteTaskById/:id', function (req, res) {
         Task.deleteTaskById(req.params.id, function (err) {
             if (err) {
                 return err;
@@ -369,6 +378,37 @@ module.exports = function (app) {
             res.send({"status": 1});
         });
     });
+    //更改分享任务
+    app.post('/changeShareTaskById/:id', function (req, res) {
+        var tags = new Array(3);
+        tags[0] = req.body.tag_one;
+        tags[1] = req.body.tag_two;
+        tags[2] = req.body.tag_three;
+
+        var shareTask = {
+            username: req.body.username,
+            title: req.body.title,
+            description: req.body.description,
+            tags: tags
+        };
+        ShareTask.updateShareTaskById(req.params.id, shareTask, function (err) {
+            if (err) {
+                return err;
+            }
+            res.send({"status": 1});
+        });
+    });
+
+    //删除某一ID的分享任务
+    app.post('/deleteShareTaskById/:id', function (req, res) {
+        ShareTask.deleteShareTaskById(req.params.id, function (err) {
+            if (err) {
+                return err;
+            }
+            res.send({"status": 1});
+        });
+    });
+
     //获得某一ID的分享任务JSON
     app.get('/getShareTaskById/:id', function (req, res) {
         ShareTask.getShareTaskById(req.params.id, function (err, sharetask) {

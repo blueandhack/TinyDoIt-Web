@@ -78,7 +78,8 @@ UserDAO.prototype.deleteUserByUsername = function (username, callback) {
 };
 
 UserDAO.prototype.getUserByUsername = function (username, callback) {
-    User.findOne({username: username}, {username: 1, email: 1, create: 1, head: 1}, function (err, user) {
+    //正则表达式，不区分大小写搜索
+    User.findOne({username: {$regex: username, $options: "i"}}, {username: 1, email: 1, create: 1, head: 1}, function (err, user) {
         callback(err, user);
     });
 };

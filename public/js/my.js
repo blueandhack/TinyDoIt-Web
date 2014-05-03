@@ -201,7 +201,7 @@ $(document).ready(function () {
         $("[id^=deleteTask-]").click(function () {
             if (confirm("确认删除？")) {
                 taskId = $(this).val();
-                $.get("deleteTaskById/" + $(this).val() + "?time=" + new Date().getTime(), function (data) {
+                $.post("deleteTaskById/" + $(this).val() + "?time=" + new Date().getTime(), function (data) {
                     if (data.status == 1) {
                         $("tr[id=" + taskId + "]").remove();
                     }

@@ -25,13 +25,16 @@ ShareTaskDAO.prototype.save = function (sharetask, callback) {
 
 };
 
-ShareTaskDAO.prototype.editTaskById = function () {
+ShareTaskDAO.prototype.updateShareTaskById = function (Id, shareTask, callback) {
+    ShareTask.update({_id: Id}, shareTask, function (err, shareTask) {
+        callback(err, shareTask);
+    });
 };
 
-ShareTaskDAO.prototype.updateTaskById = function () {
-};
-
-ShareTaskDAO.prototype.deleteTaskById = function () {
+ShareTaskDAO.prototype.deleteShareTaskById = function (Id,callback) {
+    ShareTask.remove({_id:Id},function(err){
+        callback(err);
+    });
 };
 
 //获得共享任务总页数
