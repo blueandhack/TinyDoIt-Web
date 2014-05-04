@@ -1,6 +1,7 @@
 $(document).ready(function () {
 
-    var taskId;
+    var taskId,
+        thisPage;
 
     intThisPage();
 
@@ -46,13 +47,14 @@ $(document).ready(function () {
         var newTagOne = $("#changeShareTagOne").val(),
             newTagTwo = $("#changeShareTagTwo").val(),
             newTagThree = $("#changeShareTagThree").val();
-        if (titleVal == "" || descriptionVal == "" || newTagOne == "" || newTagTwo == "" || newTagThree == "") {
+        if (titleVal == "" || descriptionVal == "" || (newTagOne == "" && newTagTwo == "" && newTagThree == "")) {
             alert("请填写完全");
             return false;
         }
         $.post("/changeShareTaskById/" + taskId + "?time=" + new Date().getTime(), {username: $("#changeShareAuthor").val(), title: titleVal, description: descriptionVal, tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
             if (data.status == 1) {
                 $("#changeShareTaskClose").click();
+                getShareTasks(thisPage);
             }
         });
     });
@@ -89,7 +91,7 @@ $(document).ready(function () {
         var newTagOne = $("#newTagOne").val(),
             newTagTwo = $("#newTagTwo").val(),
             newTagThree = $("#newTagThree").val();
-        if (titleVal == "" || startDateVal == "" || descriptionVal == "" || newTagOne == "" || newTagTwo == "" || newTagThree == "") {
+        if (titleVal == "" || startDateVal == "" || descriptionVal == "" || (newTagOne == "" && newTagTwo == "" && newTagThree == "")) {
             alert("请填写完全");
             return false;
         }
@@ -128,6 +130,7 @@ $(document).ready(function () {
             currentPage: 1,
             totalPages: pageCount,
             onPageClicked: function (e, originalEvent, type, page) {
+                thisPage=page;
                 getShareTasks(page);
             }
         };
@@ -158,29 +161,11 @@ $(document).ready(function () {
     }
 
     $('.form_date').datetimepicker({
-        startDate: new Date(),
-        format: "yyyy-mm-dd",
-        weekStart: 1,
-        todayBtn: 1,
-        autoclose: true,
-        todayHighlight: 1,
-        startView: 2,
-        forceParse: 0,
-        minuteStep: 2,
-        minView: 2,
-        language: 'zh-CN'
+        minDate: moment().subtract('days', 1),
+        showToday: true,
+        language: 'zh-CN',
+        pickTime: false,
+        autoclose: 1
     });
-    $('.form_time').datetimepicker({
-        startDate: new Date(),
-        format: "HH:ii",
-        weekStart: 1,
-        todayBtn: 1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        forceParse: 0,
-        minuteStep: 2,
-        minView: 0,
-        language: 'zh-CN'
-    });
+
 });

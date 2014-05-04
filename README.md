@@ -55,7 +55,7 @@ TinyDoIt Web App
 ----
 
 + 感谢[女朋友](http://yogashirley.com)一直对我的支持
-+ 感谢Logo设计者 [iMC](http://www.7imc.com/)
++ 感谢Logo设计者 [iMc](http://www.7imc.com/)
 
 协议
 -----

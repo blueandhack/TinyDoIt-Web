@@ -5,7 +5,7 @@ html
         meta(name='viewport', content='width=device-width, initial-scale=1.0')
         link(href='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
         link(href='css/style.css', rel='stylesheet')
-        link(href='css/bootstrap-datetimepicker.min.css', rel='stylesheet')
+        link(href='http://cdn.staticfile.org/bootstrap-datetimepicker/3.0.0/css/bootstrap-datetimepicker.css', rel='stylesheet')
         link(rel='shortcut icon', href='images/favicon.png', type='image/png')
         title 我的任务 - TinyDoIt 微动
     body
@@ -42,11 +42,11 @@ html
                             li.hidden-xs
                                 a(href='settings') 设置
                                     img.avatar.img-circle(src='#{userHead}', title='设置', alt='我的头像')
-                            li.visible-xs
-                                a(href='settings') 设置
                             li.active
                                 a(href='my')
                                     | 我的任务
+                            li.visible-xs
+                                a(href='settings') 设置
                             li
                                 a(href='logout') 登出
                     else
@@ -131,12 +131,10 @@ html
                                 .form-group
                                     label.col-sm-3.control-label 开始日期
                                     .col-sm-5
-                                        .input-group.date.form_date(data-date='1979-09-16T05:25:07Z', data-date-format='dd-mm-yyyy', data-link-field='dtp_input1')
+                                        .input-group.date.form_date(data-date-format='YYYY-MM-DD')
                                             span.input-group-addon
                                                 span.glyphicon.glyphicon-calendar
                                             input#newStartDate.form-control(size='16', type='text', value='', readonly='readonly')
-                                            span.input-group-addon
-                                                span.glyphicon.glyphicon-remove
                                 //
                                    Tags
                                 .form-group
@@ -200,12 +198,10 @@ html
                                 .form-group
                                     label.col-sm-3.control-label 开始日期
                                     .col-sm-5
-                                        .input-group.date.form_date(data-date='1979-09-16T05:25:07Z', data-date-format='dd MM yyyy', data-link-field='dtp_input1')
+                                        .input-group.date.form_date(data-date-format='YYYY-MM-DD')
                                             span.input-group-addon
                                                 span.glyphicon.glyphicon-calendar
                                             input#changeStartDate.form-control(size='16', type='text', value='', readonly='readonly')
-                                            span.input-group-addon
-                                                span.glyphicon.glyphicon-remove
                                 //
                                    Tags
                                 .form-group
@@ -283,8 +279,7 @@ html
         script(src='http://cdn.staticfile.org/jquery-scrollUp/2.1.0/jquery.scrollUp.min.js')
         script(src='js/moment-with-langs.min.js')
         script(src='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/js/bootstrap.min.js')
-        script(src='js/bootstrap-datetimepicker.min.js')
-        script(src='js/bootstrap-datetimepicker.zh-CN.js')
+        script(src='http://cdn.staticfile.org/bootstrap-datetimepicker/3.0.0/js/bootstrap-datetimepicker.js')
         script(src='js/bootstrap-paginator.min.js')
         script(src='js/all.js')
         script(src='js/my.js')

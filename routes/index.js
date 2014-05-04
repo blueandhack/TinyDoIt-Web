@@ -5,6 +5,9 @@ var crypto = require('crypto'),
     moment = require('moment');
 
 module.exports = function (app) {
+    /*
+     各种页面路由
+     */
     //缺省页面
     app.get('/', function (req, res) {
         var userHead = null;
@@ -127,87 +130,6 @@ module.exports = function (app) {
             res.redirect('/');//登陆成功后跳转到主页
         });
     });
-
-    //提交更改密码
-    app.post('/changePassword', function (req, res) {
-        var md5 = crypto.createHash('md5'),
-            password = md5.update(req.body.password).digest('hex');
-        User.changePasswordByUsername(password, req.session.user.username, function (err) {
-            if (err) {
-                req.session.error = '密码未能修改成功请重试';
-                res.send({"status": 0});
-                return err;
-            }
-            res.send({"status": 1});
-        });
-    });
-
-    //提交更改邮箱
-    app.post('/changeEmail', function (req, res) {
-        var email = req.body.email.toLowerCase();
-        //将email转换为小写并查找
-        User.getUserByEmail(email, function (err, user) {
-            if (user != null) {
-                req.session.error = '此邮箱已存在，请重新输入';
-                res.send({"status": 2});
-                return err;
-            }
-            //将email转换为小写并更改
-            User.changeEmailByUsername(email, req.session.user.username, function (err) {
-                if (err) {
-                    req.session.error = '邮箱未能修改成功请重试';
-                    res.send({"status": 0});
-                    return err;
-                }
-                var email = req.body.email,
-                    hmd5 = crypto.createHash('md5'),
-                    email_MD5 = hmd5.update(email.toLowerCase()).digest('hex'),
-                    head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";
-                User.changeHeadByUsername(head, req.session.user.username, function (err) {
-                    return err;
-                });
-                //重新刷新session
-                User.getUserByEmail(email.toLowerCase(), function (err, user) {
-                    req.session.user = user._doc;
-                    req.session.save();
-                });
-                res.send({"status": 1});
-            });
-        });
-
-    });
-
-    //提交删除账户
-    app.post('/deleteAccount', function (req, res) {
-        User.deleteUserByUsername(req.session.user.username, function (err) {
-            if (err) {
-                req.session.error = '删除账户出现错误，请重试';
-                res.send({"status": 0});
-                return err;
-            }
-            res.send({"status": 1});
-        });
-    });
-
-    //通过某一用户删除此用户所有任务
-    app.post('/deleteTasksByUsername', function (req, res) {
-        Task.deleteTasksByUsername(req.session.user.username, function (err) {
-            if (err) {
-                req.session.error = '清空账户所有内容出现错误，请重试';
-                res.send({"status": 0});
-                return err;
-            }
-            res.send({"status": 1});
-        });
-    });
-
-
-    //登出
-    app.get('/logout', authentication);
-    app.get('/logout', function (req, res) {
-        req.session.user = null;
-        res.redirect('/');
-    });
     //获取用户信息
     app.get('/getUserByUsername', function (req, res) {
         User.getUserByUsername(req.session.user.username, function (err, user) {
@@ -262,7 +184,101 @@ module.exports = function (app) {
             userHead: req.session.user.head
         });
     });
+    //404不存在页面
+    app.use(function (req, res) {
+        var userHead = null;
+        if (req.session.user != null) {
+            userHead = req.session.user.head;
+        }
+        res.status("404");
+        res.render('404', {
+            user: req.session.user,
+            userHead: userHead
+        });
+    });
 
+    /*
+     设置页面各项功能
+     */
+    //提交更改密码
+    app.post('/changePassword', function (req, res) {
+        var md5 = crypto.createHash('md5'),
+            password = md5.update(req.body.password).digest('hex');
+        User.changePasswordByUsername(password, req.session.user.username, function (err) {
+            if (err) {
+                req.session.error = '密码未能修改成功请重试';
+                res.send({"status": 0});
+                return err;
+            }
+            res.send({"status": 1});
+        });
+    });
+    //提交更改邮箱
+    app.post('/changeEmail', function (req, res) {
+        var email = req.body.email.toLowerCase();
+        //将email转换为小写并查找
+        User.getUserByEmail(email, function (err, user) {
+            if (user != null) {
+                req.session.error = '此邮箱已存在，请重新输入';
+                res.send({"status": 2});
+                return err;
+            }
+            //将email转换为小写并更改
+            User.changeEmailByUsername(email, req.session.user.username, function (err) {
+                if (err) {
+                    req.session.error = '邮箱未能修改成功请重试';
+                    res.send({"status": 0});
+                    return err;
+                }
+                var email = req.body.email,
+                    hmd5 = crypto.createHash('md5'),
+                    email_MD5 = hmd5.update(email.toLowerCase()).digest('hex'),
+                    head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";
+                User.changeHeadByUsername(head, req.session.user.username, function (err) {
+                    return err;
+                });
+                //重新刷新session
+                User.getUserByEmail(email.toLowerCase(), function (err, user) {
+                    req.session.user = user._doc;
+                    req.session.save();
+                });
+                res.send({"status": 1});
+            });
+        });
+
+    });
+    //提交删除账户
+    app.post('/deleteAccount', function (req, res) {
+        User.deleteUserByUsername(req.session.user.username, function (err) {
+            if (err) {
+                req.session.error = '删除账户出现错误，请重试';
+                res.send({"status": 0});
+                return err;
+            }
+            res.send({"status": 1});
+        });
+    });
+    //通过某一用户删除此用户所有任务
+    app.post('/deleteTasksByUsername', function (req, res) {
+        Task.deleteTasksByUsername(req.session.user.username, function (err) {
+            if (err) {
+                req.session.error = '清空账户所有内容出现错误，请重试';
+                res.send({"status": 0});
+                return err;
+            }
+            res.send({"status": 1});
+        });
+    });
+    //登出
+    app.get('/logout', authentication);
+    app.get('/logout', function (req, res) {
+        req.session.user = null;
+        res.redirect('/');
+    });
+
+    /*
+     我的任务页面各项功能
+     */
     //提交添加任务
     app.post('/addTask', function (req, res) {
         var tags = new Array(3);
@@ -293,34 +309,28 @@ module.exports = function (app) {
             res.send({"status": 1});
         });
     });
-
-    //获得某一用户任务JSON
+    //获得某一用户任务
     app.get('/getTaskByuId', function (req, res) {
         var userID = req.session.user._id;
         Task.getTaskByuId(userID, function (err, tasks) {
             res.json(tasks);
         });
     });
-
-    //获得某一ID的任务JSON
+    //获得某一ID的任务
     app.get('/getTaskById/:id', function (req, res) {
         Task.getTaskById(req.params.id, function (err, task) {
             res.json(task);
         });
     });
-
     //提交更新某一ID的任务
     app.post('/updateTaskById/:id', function (req, res) {
         var tags = new Array(3);
         tags[0] = req.body.tag_one;
         tags[1] = req.body.tag_two;
         tags[2] = req.body.tag_three;
-
-        var date = new Date();
         //Start Date
         var start_date = req.body.start_date;
         start_date = moment(start_date, "YYYY-MM-DD");
-
         var changeTask = {
             title: req.body.title,
             description: req.body.description,
@@ -336,7 +346,6 @@ module.exports = function (app) {
             res.send({"status": 1});
         });
     });
-
     //提交完成某一ID的任务
     app.post('/doneTaskById/:id', function (req, res) {
         var changeTask = {
@@ -364,7 +373,6 @@ module.exports = function (app) {
         tags[0] = req.body.tag_one;
         tags[1] = req.body.tag_two;
         tags[2] = req.body.tag_three;
-
         var newShareTask = {
             username: req.body.username,
             title: req.body.title,
@@ -378,64 +386,6 @@ module.exports = function (app) {
             res.send({"status": 1});
         });
     });
-    //更改分享任务
-    app.post('/changeShareTaskById/:id', function (req, res) {
-        var tags = new Array(3);
-        tags[0] = req.body.tag_one;
-        tags[1] = req.body.tag_two;
-        tags[2] = req.body.tag_three;
-
-        var shareTask = {
-            username: req.body.username,
-            title: req.body.title,
-            description: req.body.description,
-            tags: tags
-        };
-        ShareTask.updateShareTaskById(req.params.id, shareTask, function (err) {
-            if (err) {
-                return err;
-            }
-            res.send({"status": 1});
-        });
-    });
-
-    //删除某一ID的分享任务
-    app.post('/deleteShareTaskById/:id', function (req, res) {
-        ShareTask.deleteShareTaskById(req.params.id, function (err) {
-            if (err) {
-                return err;
-            }
-            res.send({"status": 1});
-        });
-    });
-
-    //获得某一ID的分享任务JSON
-    app.get('/getShareTaskById/:id', function (req, res) {
-        ShareTask.getShareTaskById(req.params.id, function (err, sharetask) {
-            res.json(sharetask);
-        });
-    });
-    //获得所有分享任务JSON
-    app.get('/getAllShareTasks', function (req, res) {
-        var userID = req.session.user._id;
-        ShareTask.getAllShareTasks(function (err, sharetasks) {
-            res.json(sharetasks);
-        });
-    });
-    //获得分享任务总页数JSON
-    app.get('/getShareTasksSumPage', function (req, res) {
-        ShareTask.getShareTasksSumPage(function (err, count) {
-            //res.json(count);
-            res.send({"count": count});
-        });
-    });
-    //通过某个页数获得共享任务列表JSON
-    app.get('/getShareTasksByPageCount/Page/:page', function (req, res) {
-        ShareTask.getShareTasksByPageCount(req.params.page, function (err, shatetasks) {
-            res.json(shatetasks);
-        });
-    });
-
 
     //通过某个日期获得今天任务页数
     app.get('/getTasksByToday/Date/:date/SumPage', function (req, res) {
@@ -491,18 +441,68 @@ module.exports = function (app) {
         });
     });
 
-    //404不存在页面
-    app.use(function (req, res) {
-        var userHead = null;
-        if (req.session.user != null) {
-            userHead = req.session.user.head;
-        }
-        res.status("404");
-        res.render('404', {
-            user: req.session.user,
-            userHead: userHead
+    /*
+     分享任务页面各项功能
+     */
+    //更改分享任务
+    app.post('/changeShareTaskById/:id', function (req, res) {
+        var tags = new Array(3);
+        tags[0] = req.body.tag_one;
+        tags[1] = req.body.tag_two;
+        tags[2] = req.body.tag_three;
+        var shareTask = {
+            username: req.body.username,
+            title: req.body.title,
+            description: req.body.description,
+            tags: tags
+        };
+        ShareTask.updateShareTaskById(req.params.id, shareTask, function (err) {
+            if (err) {
+                return err;
+            }
+            res.send({"status": 1});
         });
     });
+    //删除某一ID的分享任务
+    app.post('/deleteShareTaskById/:id', function (req, res) {
+        ShareTask.deleteShareTaskById(req.params.id, function (err) {
+            if (err) {
+                return err;
+            }
+            res.send({"status": 1});
+        });
+    });
+    //获得某一ID的分享任务
+    app.get('/getShareTaskById/:id', function (req, res) {
+        ShareTask.getShareTaskById(req.params.id, function (err, sharetask) {
+            res.json(sharetask);
+        });
+    });
+    //获得所有分享任务
+    app.get('/getAllShareTasks', function (req, res) {
+        var userID = req.session.user._id;
+        ShareTask.getAllShareTasks(function (err, sharetasks) {
+            res.json(sharetasks);
+        });
+    });
+    //获得分享任务总页数
+    app.get('/getShareTasksSumPage', function (req, res) {
+        ShareTask.getShareTasksSumPage(function (err, count) {
+            //res.json(count);
+            res.send({"count": count});
+        });
+    });
+    //通过某个页数获得共享任务列表
+    app.get('/getShareTasksByPageCount/Page/:page', function (req, res) {
+        ShareTask.getShareTasksByPageCount(req.params.page, function (err, shatetasks) {
+            res.json(shatetasks);
+        });
+    });
+
+
+    /*
+     登录验证
+     */
     //验证是否登录，没有权限不予通过
     function authentication(req, res, next) {
         if (!req.session.user) {

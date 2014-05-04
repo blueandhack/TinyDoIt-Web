@@ -1,6 +1,8 @@
 $(document).ready(function () {
 
-    var taskId;
+    var taskId,
+        thisClass = 0,
+        thisPage = 1;
     //初始化当前页面
     intThisPage();
 
@@ -32,7 +34,7 @@ $(document).ready(function () {
             newTagTwo = $("#newTagTwo").val(),
             newTagThree = $("#newTagThree").val();
         //表单验证
-        if (titleVal == "" || startDateVal == "" || descriptionVal == "" || newTagOne == "" || newTagTwo == "" || newTagThree == "") {
+        if (titleVal == "" || startDateVal == "" || descriptionVal == "" || (newTagOne == "" && newTagTwo == "" && newTagThree == "")) {
             alert("请填写完全！");
             return false;
         }
@@ -54,15 +56,26 @@ $(document).ready(function () {
         var newTagOne = $("#changeTagOne").val(),
             newTagTwo = $("#changeTagTwo").val(),
             newTagThree = $("#changeTagThree").val();
-        if (titleVal == "" || startDateVal == "" || descriptionVal == "" || newTagOne == "" || newTagTwo == "" || newTagThree == "") {
+        if (titleVal == "" || startDateVal == "" || descriptionVal == "" || (newTagOne == "" && newTagTwo == "" && newTagThree == "")) {
             alert("请填写完全！");
             return false;
         }
         $.post("updateTaskById/" + taskId + "?time=" + new Date().getTime(), {title: titleVal, start_date: startDateVal, description: descriptionVal, box: $("#changeBox").val(), priority: $("#changePriority").val(), tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
             if (data.status == 1) {
                 $("#changeTaskClose").click();
-                goToTodayButton();
-                intThisPage();
+                console.log(thisClass);
+                if(thisClass==0){
+                    getTodayTasks(thisPage);
+                }
+                if(thisClass==1){
+                    getTomorrowTasks(thisPage);
+                }
+                if(thisClass==2){
+                    getDoneTasks(thisPage);
+                }
+                if(thisClass==3){
+                    getMissTasks(thisPage);
+                }
             }
         });
     });
@@ -81,8 +94,6 @@ $(document).ready(function () {
         $.post("/addShareTask" + "?time=" + new Date().getTime(), {username: $("#shareAuthor").val(), title: titleVal, description: descriptionVal, tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
             if (data.status == 1) {
                 $("#shareTaskClose").click();
-//                goToTodayButton();
-//                intThisPage();
             }
         });
     });
@@ -93,6 +104,7 @@ $(document).ready(function () {
         $("#done").removeClass("active");
         $("#miss").removeClass("active");
         $("#today").addClass("active");
+        thisClass = 0;
         getTodayPageCount();
     });
 
@@ -102,6 +114,7 @@ $(document).ready(function () {
         $("#today").removeClass("active");
         $("#miss").removeClass("active");
         $("#tomorrow").addClass("active");
+        thisClass = 1;
         getTomorrowPageCount();
     });
 
@@ -111,6 +124,7 @@ $(document).ready(function () {
         $("#today").removeClass("active");
         $("#miss").removeClass("active");
         $("#done").addClass("active");
+        thisClass = 2;
         getDonePageCount();
     });
 
@@ -120,6 +134,7 @@ $(document).ready(function () {
         $("#done").removeClass("active");
         $("#today").removeClass("active");
         $("#miss").addClass("active");
+        thisClass = 3;
         getMissPageCount();
     });
 
@@ -244,6 +259,7 @@ $(document).ready(function () {
             if (result.count == 1 || result.count == 0) {
                 $('#pagination').empty();
                 if (result.count == 1) {
+                    thisPage = 1;
                     getTodayTasks(1);
                 } else {
                     $("#taskTbody").empty();
@@ -264,6 +280,7 @@ $(document).ready(function () {
             currentPage: 1,
             totalPages: pageCount,
             onPageClicked: function (e, originalEvent, type, page) {
+                thisPage = page;
                 getTodayTasks(page);
             }
         };
@@ -297,6 +314,7 @@ $(document).ready(function () {
             if (result.count == 1 || result.count == 0) {
                 $('#pagination').empty();
                 if (result.count == 1) {
+                    thisPage = 1;
                     getMissTasks(1);
                 } else {
                     $("#taskTbody").empty();
@@ -317,6 +335,7 @@ $(document).ready(function () {
             currentPage: 1,
             totalPages: pageCount,
             onPageClicked: function (e, originalEvent, type, page) {
+                thisPage = page;
                 getMissTasks(page);
             }
         };
@@ -351,6 +370,7 @@ $(document).ready(function () {
             if (result.count == 1 || result.count == 0) {
                 $('#pagination').empty();
                 if (result.count == 1) {
+                    thisPage = 1;
                     getTomorrowTasks(1);
                 } else {
                     $("#taskTbody").empty();
@@ -363,7 +383,7 @@ $(document).ready(function () {
         });
     }
 
-    //初始化以前任务分页导航
+    //初始化未来任务分页导航
     function tomorrowPagination(pageCount) {
         //分页参数
         var options = {
@@ -371,13 +391,14 @@ $(document).ready(function () {
             currentPage: 1,
             totalPages: pageCount,
             onPageClicked: function (e, originalEvent, type, page) {
+                thisPage = page;
                 getMissTasks(page);
             }
         };
         $('#pagination').bootstrapPaginator(options);
     }
 
-    //获得以前任务并分页显示
+    //获得未来任务并分页显示
     function getTomorrowTasks(page) {
         $("#taskTbody").empty();
         $.getJSON("/getTasksByTomorrow/Date/" + moment().format('YYYY-MM-DD') + "/Page/" + page + "?time=" + new Date().getTime(), function (data) {
@@ -404,6 +425,7 @@ $(document).ready(function () {
             if (result.count == 1 || result.count == 0) {
                 $('#pagination').empty();
                 if (result.count == 1) {
+                    thisPage = 1;
                     getDoneTasks(1);
                 } else {
                     $("#taskTbody").empty();
@@ -424,6 +446,7 @@ $(document).ready(function () {
             currentPage: 1,
             totalPages: pageCount,
             onPageClicked: function (e, originalEvent, type, page) {
+                thisPage = page;
                 getDoneTasks(page);
             }
         };
@@ -449,30 +472,11 @@ $(document).ready(function () {
     }
 
     $('.form_date').datetimepicker({
-        startDate: new Date(),
-        format: "yyyy-mm-dd",
-        weekStart: 1,
-        todayBtn: 1,
-        autoclose: true,
-        todayHighlight: 1,
-        startView: 2,
-        forceParse: 0,
-        minuteStep: 2,
-        minView: 2,
-        language: 'zh-CN'
-    });
-    $('.form_time').datetimepicker({
-        startDate: new Date(),
-        format: "HH:ii",
-        weekStart: 1,
-        todayBtn: 1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        forceParse: 0,
-        minuteStep: 2,
-        minView: 0,
-        language: 'zh-CN'
+        minDate: moment().subtract('days', 1),
+        showToday: true,
+        language: 'zh-CN',
+        pickTime: false,
+        autoclose: 1
     });
 
 });
