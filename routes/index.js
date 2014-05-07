@@ -257,6 +257,33 @@ module.exports = function (app) {
         });
     });
 
+    //匹配超级管理员路径
+    app.get('/:x', function (req, res, next) {
+        fs.exists('config.json', function (exists) {
+            if (exists) {
+                fs.readFile('config.json', function (err, data) {
+                    if (err) throw err;
+                    var jsonObj = JSON.parse(data);
+                    configPath = jsonObj.path;
+                    console.log(configPath);
+                    var path = req.params.x;
+                    if (path == configPath) {
+                        if (req.session.admin) {
+                            res.redirect('/' + configPath + '/dashboard');
+                        } else {
+                            res.redirect('/' + configPath + '/login');
+                        }
+                    } else {
+                        next();
+                    }
+                });
+            } else {
+                next();
+            }
+        });
+
+    });
+
     //超级管理员登陆界面
     app.get('/:x/login', function (req, res, next) {
         fs.exists('config.json', function (exists) {
