@@ -1,0 +1,49 @@
+//
+   Created by Yoga on 2014/5/5.
+doctype html
+html
+    head
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1.0')
+        link(href='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
+        link(href='../css/style.css', rel='stylesheet')
+        link(rel='shortcut icon', href='images/favicon.png', type='../image/png')
+
+        title 配置管理用户 - TinyDoIt 微动
+    body.body-signin
+        .container
+            form#configForm.form-config(method='post')
+                h2
+                    img.logo.img-circle(src='../images/favicon.png', title='TinyDoIt')
+                    | 配置管理用户
+                .alert.alert-danger
+                    | 请勿使用<code>admin</code>之类的目录，为了网站安全，防止被猜解，请设置一个非常规路径名&nbsp;&nbsp;
+                    a(href='/') 返回主页
+                - if(message)
+                    .alert.alert-warning.alert-dismissable
+                        button.close(type='button', data-dismiss='alert', aria-hidden='true') &times;
+                        | #{message}
+                .form-group
+                    label.control-label 管理后台路径
+                    input.form-control(type='text', name='path', placeholder='后台路径请直接写路径名，不需要斜线 如 /admin/ 请输入admin', required='required', autofocus='autofocus')
+                .form-group
+                    label.control-label 邮箱地址
+                    input#email.form-control(type='email', name='email', placeholder='邮件地址', required='required', autofocus='autofocus')
+                .form-group
+                    label.control-label 确认邮件地址
+                    input#confirm_email.form-control(type='email', name='confirm_email', placeholder='管理员邮箱', required='required')
+                .form-group
+                    label.control-label 用户名
+                    input#username.form-control(type='text', name='username', placeholder='管理员用户名', required='required')
+                .form-group
+                    label.control-label 密码
+                    input#password.form-control(type='password', name='password', placeholder='管理员密码', required='required')
+                .form-group
+                    label.control-label 确认密码
+                    input#confirm_password.form-control(type='password', name='confirm_password', placeholder='确认密码', required='required')
+                button#okConfig.btn.btn-block.btn-primary.btn-lg(value='submit') 确认配置完毕？
+        script(src='http://cdn.staticfile.org/jquery/2.1.1-beta1/jquery.min.js')
+        script(src='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/js/bootstrap.min.js')
+        script(src='http://cdn.staticfile.org/jquery-validate/1.12.0/jquery.validate.min.js')
+        script(src='http://cdn.staticfile.org/jquery-validate/1.12.0/additional-methods.min.js')
+        script(src='../js/config.js')

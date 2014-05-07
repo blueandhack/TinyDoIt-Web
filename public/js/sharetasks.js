@@ -32,7 +32,7 @@ $(document).ready(function () {
         $("[id^=deleteShareTask-]").click(function () {
             if (confirm("确认删除？")) {
                 taskId = $(this).val();
-                $.post("deleteShareTaskById/" + taskId + "?time=" + new Date().getTime(), function (data) {
+                $.post("/deleteShareTaskById/" + taskId + "?time=" + new Date().getTime(), function (data) {
                     if (data.status == 1) {
                         $("tr[id=" + taskId + "]").remove();
                     }
@@ -140,19 +140,10 @@ $(document).ready(function () {
 
     function getShareTasks(page) {
         $("#shareTaskTbody").empty();
-        var username;
-        $.getJSON("/getUserByUsername" + "?time=" + new Date().getTime(), function (data) {
-            username = data.username;
-        });
         $.getJSON("/getShareTasksByPageCount/Page/" + page + "?time=" + new Date().getTime(), function (data) {
             $.each(data, function (idx, item) {
                 var create_task_date = moment(item.create_task_date).format('YYYY-MM-DD');
-                if (username == item.username) {
-                    $("#shareTaskTbody").append("<tr id='" + item._id + "'><td>" + item.username + "</td><td>" + item.title + "</td><td>" + item.description + "</td><td><label class='label label-info'>" + item.tags[0] + "</label> <label class='label label-info'>" + item.tags[1] + "</label> <label class='label label-info'>" + item.tags[2] + "</label></td><td>" + create_task_date + "</td><td><button id='intChangeShareTask-" + item._id + "' data-toggle='modal' data-target='#ChangeShareTask' class='btn btn-info btn-sm' value='" + item._id + "'>更改</button>&nbsp;<button id='deleteShareTask-" + item._id + "' class='btn btn-danger btn-sm' value='" + item._id + "'>删除</button></td><td><button id='intShareTask-" + item._id + "' data-toggle='modal' data-target='#DoIt' title='将此任务添加到您的任务列表？' class='btn btn-primary btn-sm' value='" + item._id + "'>Yes! I Do It!</button></td></tr>");
-                } else {
-                    $("#shareTaskTbody").append("<tr id='" + item._id + "'><td>" + item.username + "</td><td>" + item.title + "</td><td>" + item.description + "</td><td><label class='label label-info'>" + item.tags[0] + "</label> <label class='label label-info'>" + item.tags[1] + "</label> <label class='label label-info'>" + item.tags[2] + "</label></td><td>" + create_task_date + "</td><td></td><td><button id='intShareTask-" + item._id + "' data-toggle='modal' data-target='#DoIt' title='将此任务添加到您的任务列表？' class='btn btn-primary btn-sm' value='" + item._id + "'>Yes! I Do It!</button></td></tr>");
-                }
-
+                $("#shareTaskTbody").append("<tr id='" + item._id + "'><td>" + item.username + "</td><td>" + item.title + "</td><td>" + item.description + "</td><td><label class='label label-info'>" + item.tags[0] + "</label> <label class='label label-info'>" + item.tags[1] + "</label> <label class='label label-info'>" + item.tags[2] + "</label></td><td>" + create_task_date + "</td><td><button id='intChangeShareTask-" + item._id + "' data-toggle='modal' data-target='#ChangeShareTask' class='btn btn-info btn-sm' value='" + item._id + "'>更改</button>&nbsp;<button id='deleteShareTask-" + item._id + "' class='btn btn-danger btn-sm' value='" + item._id + "'>删除</button></td></tr>");
             });
             //初始化更改任务窗口
             doButton();

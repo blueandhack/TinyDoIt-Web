@@ -28,6 +28,11 @@ body {
     margin-top: -5px;
 }
 
+.user-avatar {
+    max-width: 40px;
+    max-height: 40px;
+}
+
 .white-background {
     background-color: #ffffff;
 }
@@ -50,6 +55,12 @@ body {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+}
+
+.form-config {
+    max-width: 520px;
+    padding: 15px;
+    margin: 0 auto;
 }
 
 @-webkit-keyframes del-scroll {

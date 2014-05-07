@@ -1,0 +1,106 @@
+doctype html
+html
+    head
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1.0')
+        link(href='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
+        link(href='../css/style.css', rel='stylesheet')
+        link(href='http://cdn.staticfile.org/bootstrap-datetimepicker/3.0.0/css/bootstrap-datetimepicker.css', rel='stylesheet')
+        link(rel='shortcut icon', href='../images/favicon.png', type='image/png')
+        title 管理分享任务 - TinyDoIt 微动
+    body
+        .navbar.navbar-default.navbar-fixed-top(role='navigation')
+            .container
+                .navbar-header
+                    a.navbar-brand(href='/') TinyDoIt&nbsp;
+                        img.logo.img-circle(src='../images/favicon.png', title='TinyDoIt')
+                    button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+                        span.icon-bar
+                        span.icon-bar
+                        span.icon-bar
+                .navbar-collapse.collapse
+                    ul.nav.navbar-nav
+                        li
+                            a(href='dashboard') 管理员控制面板
+                        li
+                            a(href='users') 管理用户
+                        li.active
+                            a(href='sharetasks') 管理分享任务
+                    ul.nav.navbar-nav.navbar-right
+                        li.hidden-xs
+                            a
+                                img.avatar.img-circle(src='#{userHead}', title='设置', alt='我的头像')
+                        li
+                            a(href='logout') 登出
+                //
+                  /.nav-collapse
+        .container
+            .index.white-background
+                .row
+                    .col-md-12
+                        table.table
+                            thead
+                                tr
+                                    th 分享者
+                                    th 标题
+                                    th 描述
+                                    th 标签
+                                    th 分享日期
+                                    th 功能
+                            tbody#shareTaskTbody
+                    .col-md-12
+                        ul#pagination.pagination
+        //
+            ChangeShareTask
+        #ChangeShareTask.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+            .modal-dialog
+                .modal-content
+                    .modal-header
+                        button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+                        h4#myModalLabel.modal-title 更改分享任务
+                    .modal-body
+                        .row
+                            form.form-horizontal(role='form')
+                                //
+                                   Author
+                                .form-group
+                                    label.col-sm-3.control-label 分享者
+                                    .col-sm-5
+                                        input#changeShareAuthor.form-control(type='text' readonly)
+                                //
+                                   Title
+                                .form-group
+                                    label.col-sm-3.control-label(for='title') 标题
+                                    .col-sm-5
+                                        input#changeShareTitle.form-control(type='text', placeholder='请输入一个标题')
+                                //
+                                   Description
+                                .form-group
+                                    label.col-sm-3.control-label 描述
+                                    .col-sm-8
+                                        textarea#changeShareDescription.form-control(rows='1',placeholder='请输入一段描述')
+                                //
+                                   Tags
+                                .form-group
+                                    label.col-sm-3.control-label 标签
+                                    .col-sm-8
+                                        input#changeShareTagOne.col-sm-3
+                                        input#changeShareTagTwo.col-sm-3
+                                        input#changeShareTagThree.col-sm-3
+                    .modal-footer
+                        button#changeShareTaskClose.btn.btn-default(type='button', data-dismiss='modal') 关闭
+                        button#changeShareTaskPost.btn.btn-primary(type='button') 更改
+                //
+                   /.modal-content
+            //
+               /.modal-dialog
+        //
+           /.modal
+        script(src='http://cdn.staticfile.org/jquery/2.1.1-beta1/jquery.min.js')
+        script(src='http://cdn.staticfile.org/jquery-scrollUp/2.1.0/jquery.scrollUp.min.js')
+        script(src='../js/moment-with-langs.min.js')
+        script(src='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/js/bootstrap.min.js')
+        script(src='http://cdn.staticfile.org/bootstrap-datetimepicker/3.0.0/js/bootstrap-datetimepicker.js')
+        script(src='../js/bootstrap-paginator.min.js')
+        script(src='../js/all.js')
+        script(src='../js/sharetasks.js')

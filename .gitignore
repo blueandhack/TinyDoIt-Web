@@ -60,4 +60,4 @@ build/Release
 node_modules
 
 # TinyDoItWeb's configuration file
-/settings.json
+/config.json

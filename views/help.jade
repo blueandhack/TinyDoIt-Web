@@ -4,15 +4,15 @@ html
         meta(charset='utf-8')
         meta(name='viewport', content='width=device-width, initial-scale=1.0')
         link(href='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
-        link(href='css/style.css', rel='stylesheet')
-        link(rel='shortcut icon', href='images/favicon.png', type='image/png')
+        link(href='../css/style.css', rel='stylesheet')
+        link(rel='shortcut icon', href='../images/favicon.png', type='image/png')
         title 帮助 - TinyDoIt 微动
     body
         .navbar.navbar-default.navbar-fixed-top(role='navigation')
             .container
                 .navbar-header
                     a.navbar-brand(href='/') TinyDoIt&nbsp;
-                        img.logo.img-circle(src='images/favicon.png', title='TinyDoIt')
+                        img.logo.img-circle(src='../images/favicon.png', title='TinyDoIt')
                     button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
                         span.icon-bar
                         span.icon-bar
@@ -20,69 +20,56 @@ html
                 .navbar-collapse.collapse
                     ul.nav.navbar-nav
                         li
-                            a(href='sharecircle') 分享圈
+                            a(href='/sharecircle') 分享圈
                         li.active
-                            a(href='help') 帮助
-                        li.dropdown
-                            a.dropdown-toggle(href='#', data-toggle='dropdown')
-                                | 关于
-                                b.caret
-                            ul.dropdown-menu
-                                li
-                                    a(href='about') 关于我们
-                                li
-                                    a(href='#') 博客
-                                li.divider
-                                li.dropdown-header 联系方式
-                                li
-                                    a blueandhack@gmail.com
+                            a(href='/help') 帮助
+                        li
+                            a(href='/about') 关于
                     ul.nav.navbar-nav.navbar-right
                         if(user)
                             li.hidden-xs
-                                a(href='settings') 设置
+                                a(href='/settings') 设置
                                     img.avatar.img-circle(src='#{userHead}', title='设置', alt='我的头像')
                             li
-                                a(href='my')
+                                a(href='/my')
                                     | 我的任务
                             li.visible-xs
-                                a(href='settings') 设置
+                                a(href='/settings') 设置
                             li
-                                a(href='logout') 登出
+                                a(href='/signout') 登出
                         else
                             li
-                                a(href='signin') 登入
+                                a(href='/signin') 登入
                             li
-                                a(href='register') 注册
+                                a(href='/register') 注册
                 //
                   /.nav-collapse
         .container
-            .jumbotron.index
-                h3 Q1：如何使用？
-                p 首先您需要注册一个账号，登入自己的管理界面，您将看到如下界面
-                img.img-rounded(src='images/My.jpg', style='max-width: 70%; max-height: 70%;')
-                p 请点击Add Task按钮添加您的任务
-                img.img-rounded(src='images/Task.jpg', style='max-width: 60%; max-height: 60%;')
-                p 当您点击Add Task按钮之后，您就可以在您的管理界面看到您的任务啦！
-                img.img-rounded(src='images/MyTask.jpg', style='max-width: 70%; max-height: 70%;')
-                p 您可以点击Done（完成任务）、Change（更改任务）、Delete（删除任务）、Share Circle（分享任务）对任务进行操作
-                p 在左侧您可以看到您今日的任务列表（Today），明日的任务列表（Tomorrow），已完成的任务列表（Done），错过的没有完成的任务列表（Miss）
-                img.img-rounded(src='images/List.jpg', style='max-width: 50%; max-height: 50%;')
-                h3 Q2：什么是Share Circle？
-                p Share Circle（分享圈）是指，使用本网站用户分享他们自己的任务的分享圈，通过这个分享圈可以让彼此交换任务，也可以找到自己想完成的任务，使得创建任务更加方便。
-                img.img-rounded(src='images/ShareCircle.jpg', style='max-width: 70%; max-height: 70%;')
-                p 当您点击Yes!I Do It!您就可以通过别人分享的任务模板创建自己的任务啦！
-                img.img-rounded(src='images/AddShareTask.jpg', style='max-width: 70%; max-height: 70%;')
+            .index
+                .row.well
+                    h3 Q1：如何使用？
+                    p 首先您需要注册一个账号，登入自己的管理界面，您将看到如下界面
+                    img.img-rounded(src='../images/My.jpg', style='max-width: 70%; max-height: 70%;')
+                    p 请点击添加任务按钮添加您的任务
+                    img.img-rounded(src='../images/Task.jpg', style='max-width: 60%; max-height: 60%;')
+                    p 当您点击添加任务按钮之后，您就可以在您的管理界面看到您的任务啦！
+                    img.img-rounded(src='../images/MyTask.jpg', style='max-width: 70%; max-height: 70%;')
+                    p 您可以点击标记、更改、删除、分享到分享圈对任务进行操作
+                    p 在左侧您可以看到您今日的任务列表，明日的任务列表，已完成的任务列表，错过的没有完成的任务列表
+                    img.img-rounded(src='../images/List.jpg', style='max-width: 50%; max-height: 50%;')
+                    h3 Q2：什么是分享圈？
+                    p 分享圈是指，使用本网站用户分享他们自己的任务的分享圈，通过这个分享圈可以让彼此交换任务，也可以找到自己想完成的任务，使得创建任务更加方便。
+                    p 我们希望您分享您认为有价值有必要的任务并分享，并写好标题和描述，让大家一看就明白。您在我的任务中找到您要分享的任务，点击分享到分享圈按钮，进行分享
+                    img.img-rounded(src='../images/ShareTask.jpg', style='max-width: 70%; max-height: 70%;')
+                    p 然后您就可以分享圈页面看到您分享的任务啦
+                    img.img-rounded(src='../images/ShareCircle.jpg', style='max-width: 70%; max-height: 70%;')
+                    p 当您点击Yes!I Do It!您就可以通过别人分享的任务模板创建自己的任务啦！
+                    img.img-rounded(src='../images/AddShareTask.jpg', style='max-width: 60%; max-height: 60%;')
         footer.footer
             p
-                |本站用户贡献的内容遵循
-                a(href='http://creativecommons.org/licenses/by/3.0/',target='_blank') CC BY 3.0
-                |协议发布
-            p
-                | Created by&nbsp;
-                | <a href="http://blueandhack.com" target="_blank">blueandahck&nbsp;</a>
+                | ♥ made by&nbsp;
                 | <iframe src="http://ghbtns.com/github-btn.html?user=blueandhack&repo=TinyDoItWeb&type=follow" allowtransparency="true" frameborder="0" scrolling="0" width="155" height="20"></iframe>
-                | <iframe src="http://ghbtns.com/github-btn.html?user=blueandhack&repo=TinyDoItWeb&type=fork" allowtransparency="true" frameborder="0" scrolling="0" width="53" height="20"></iframe>
-            p Copyright © 2014&nbsp;
+            p © 2014&nbsp;
                 a(href='http://tinydoit.com') TinyDoIt 微动
         script(src='http://cdn.staticfile.org/jquery/2.1.1-beta1/jquery.min.js')
         script(src='http://cdn.staticfile.org/jquery-scrollUp/2.1.0/jquery.scrollUp.min.js')

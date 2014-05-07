@@ -23,19 +23,8 @@ html
                             a(href='sharecircle') 分享圈
                         li
                             a(href='help') 帮助
-                        li.dropdown.active
-                            a.dropdown-toggle(href='#', data-toggle='dropdown')
-                                | 关于
-                                b.caret
-                            ul.dropdown-menu
-                                li.active
-                                    a(href='about') 关于我们
-                                li
-                                    a(href='#') 博客
-                                li.divider
-                                li.dropdown-header 联系方式
-                                li
-                                    a blueandhack@gmail.com
+                        li.active
+                            a(href='about') 关于
                     ul.nav.navbar-nav.navbar-right
                         if(user)
                             li.hidden-xs
@@ -56,26 +45,21 @@ html
                 //
                   /.nav-collapse
         .container
-            .jumbotron.index
-                h2 关于我们
-                p 这是一款在线管理自己时间的工具
-                p 您可以在您的团队中部署此项目，同团队中的成员分享你的计划
-                p 同时，我们的特色在于
-                p 你可以在大家分享的计划中寻找属于自己合适的计划，还可以分享自己的计划
-                p 让我们Do It吧！
-                p 我们的联系方式&nbsp;
-                    img(src='http://blueandhack.qiniudn.com/gmail.png' ,title='我们的邮箱',alt='我们的邮箱')
+            .index
+                .row.well
+                    h2 关于我们
+                    p 这是一款在线管理自己时间的工具
+                    p 您可以在您的团队中部署此项目，同团队中的成员分享你的计划
+                    p 同时，我们的特色在于
+                    p 你可以在大家分享的计划中寻找属于自己合适的计划，还可以分享自己的计划
+                    p 让我们Do It吧！
+                    p 我们的联系方式&nbsp;
+                        img(src='http://blueandhack.qiniudn.com/gmail.png' ,title='我们的邮箱',alt='我们的邮箱')
         footer.footer
             p
-                |本站用户贡献的内容遵循
-                a(href='http://creativecommons.org/licenses/by/3.0/',target='_blank') CC BY 3.0
-                |协议发布
-            p
-                | Created by&nbsp;
-                | <a href="http://blueandhack.com" target="_blank">blueandahck&nbsp;</a>
+                | ♥ made by&nbsp;
                 | <iframe src="http://ghbtns.com/github-btn.html?user=blueandhack&repo=TinyDoItWeb&type=follow" allowtransparency="true" frameborder="0" scrolling="0" width="155" height="20"></iframe>
-                | <iframe src="http://ghbtns.com/github-btn.html?user=blueandhack&repo=TinyDoItWeb&type=fork" allowtransparency="true" frameborder="0" scrolling="0" width="53" height="20"></iframe>
-            p Copyright © 2014&nbsp;
+            p © 2014&nbsp;
                 a(href='http://tinydoit.com') TinyDoIt 微动
         script(src='http://cdn.staticfile.org/jquery/2.1.1-beta1/jquery.min.js')
         script(src='http://cdn.staticfile.org/jquery-scrollUp/2.1.0/jquery.scrollUp.min.js')

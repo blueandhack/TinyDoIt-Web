@@ -2,17 +2,19 @@ doctype html
 html
     head
         meta(charset='utf-8')
+        meta(name='description',content='TinyDoIt，是一款在线任务管理工具，支持与他人分享，与小组分享你的任务。TinyDoIt让您更加便捷的管理自己的时间和任务，享受生活带来的乐趣！')
+        meta(name='keywords',content='时间管理,任务管理')
         meta(name='viewport', content='width=device-width, initial-scale=1.0')
         link(href='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
         link(href='../css/style.css', rel='stylesheet')
-        link(rel='shortcut icon', href='images/favicon.png', type='image/png')
-        title TinyDoIt 微动 | Enjoy your life and Manage your time
+        link(rel='shortcut icon', href='../images/favicon.png', type='image/png')
+        title TinyDoIt 微动
     body
         .navbar.navbar-default.navbar-fixed-top(role='navigation')
             .container
                 .navbar-header
                     a.navbar-brand(href='/') TinyDoIt&nbsp;
-                        img.img-circle.logo(src='images/favicon.png', title='TinyDoIt')
+                        img.img-circle.logo(src='../images/favicon.png', title='TinyDoIt')
                     button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
                         span.icon-bar
                         span.icon-bar
@@ -20,58 +22,46 @@ html
                 .navbar-collapse.collapse
                     ul.nav.navbar-nav
                         li
-                            a(href='sharecircle') 分享圈
+                            a(href='/sharecircle') 分享圈
                         li
-                            a(href='help') 帮助
-                        li.dropdown
-                            a.dropdown-toggle(href='#', data-toggle='dropdown')
-                                | 关于
-                                b.caret
-                            ul.dropdown-menu
-                                li
-                                    a(href='about') 关于我们
-                                li
-                                    a(href='#') 博客
-                                li.divider
-                                li.dropdown-header 联系方式
-                                li
-                                    a blueandhack@gmail.com
+                            a(href='/help') 帮助
+                        li
+                            a(href='/about') 关于
                     if(user!=null)
                         ul.nav.navbar-nav.navbar-right
                             li.hidden-xs
-                                a(href='settings') 设置
+                                a(href='/settings') 设置
                                     img.avatar.img-circle(src='#{userHead}', title='设置', alt='我的头像')
                             li
-                                a(href='my')
+                                a(href='/my')
                                     | 我的任务
                             li.visible-xs
-                                a(href='settings') 设置
+                                a(href='/settings') 设置
                             li
-                                a(href='logout') 登出
+                                a(href='/signout') 登出
                     else
                         ul.nav.navbar-nav.navbar-right
                             li
-                                a(href='signin') 登入
+                                a(href='/signin') 登入
                             li
-                                a(href='register') 注册
+                                a(href='/register') 注册
                 //
                   /.nav-collapse
 
         .container
             .row
                 .jumbotron.col-md-12.index
-                    h2 TinyDoIt(微动) 微小的改变让您享受生活的乐趣
-                    h3 微动 在线任务管理
+                    h2 TinyDoIt（微动） 微小的改变让您享受生活的乐趣
                     p
-                        | 让您更加便捷的管理自己的时间和任务，享受生活带来的乐趣
+                        | 微动 在线任务管理，让您更加便捷的管理自己的时间和任务，享受生活带来的乐趣
                     p
-                        a.btn.btn-primary(href='register') 注册
+                        a.btn.btn-primary(href='/register') 注册
                         span &nbsp;
-                        a.btn.btn-info(href='about') 了解更多
+                        a.btn.btn-info(href='/about') 了解更多
                         span &nbsp;
-                        a.btn.btn-info(href='https://github.com/blueandhack/TinyDoItWeb', target='_blank') 在Github获取源码
+                        a.btn.btn-success(href='https://github.com/blueandhack/TinyDoItWeb', target='_blank') 在Github获取源码
                 .col-sm-6.col-md-4
-                    img.figure_1(src='images/figure_1.png', alt='...')
+                    img.figure_1(src='../images/figure_1.png', alt='...')
                     .caption
                         h3 简洁的UI
                         p 支持更多平台，随时随地使用
@@ -106,22 +96,16 @@ html
                         p 删除 创建 更改 我们都能做到！
                 .col-sm-6.col-md-4
                     .figure_3
-                        img.figure_3_img(src='images/figure_3.png', alt='...')
+                        img.figure_3_img(src='../images/figure_3.png', alt='...')
                     .caption
                         h3 分享圈
                         p 选择优秀的任务，分享有用的任务
                         p 分享圈你值得拥有！
         footer.footer
             p
-              |本站用户贡献的内容遵循
-              a(href='http://creativecommons.org/licenses/by/3.0/',target='_blank') CC BY 3.0
-              |协议发布
-            p
-                | Created by&nbsp;
-                | <a href="http://blueandhack.com" target="_blank">blueandahck&nbsp;</a>
+                | ♥ made by&nbsp;
                 | <iframe src="http://ghbtns.com/github-btn.html?user=blueandhack&repo=TinyDoItWeb&type=follow" allowtransparency="true" frameborder="0" scrolling="0" width="155" height="20"></iframe>
-                | <iframe src="http://ghbtns.com/github-btn.html?user=blueandhack&repo=TinyDoItWeb&type=fork" allowtransparency="true" frameborder="0" scrolling="0" width="53" height="20"></iframe>
-            p Copyright © 2014&nbsp;
+            p © 2014&nbsp;
                 a(href='http://tinydoit.com') TinyDoIt 微动
         script(src='http://cdn.staticfile.org/jquery/2.1.1-beta1/jquery.min.js')
         script(src='http://cdn.staticfile.org/jquery-scrollUp/2.1.0/jquery.scrollUp.min.js')

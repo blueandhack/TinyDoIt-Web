@@ -31,8 +31,8 @@ ShareTaskDAO.prototype.updateShareTaskById = function (Id, shareTask, callback) 
     });
 };
 
-ShareTaskDAO.prototype.deleteShareTaskById = function (Id,callback) {
-    ShareTask.remove({_id:Id},function(err){
+ShareTaskDAO.prototype.deleteShareTaskById = function (Id, callback) {
+    ShareTask.remove({_id: Id}, function (err) {
         callback(err);
     });
 };
@@ -65,6 +65,12 @@ ShareTaskDAO.prototype.getAllShareTasks = function (callback) {
 ShareTaskDAO.prototype.getShareTaskById = function (Id, callback) {
     ShareTask.findOne({_id: Id}, function (err, sharetask) {
         callback(err, sharetask);
+    });
+};
+
+ShareTaskDAO.prototype.getShareTasksCount = function (callback) {
+    ShareTask.find({}).count({}, function (err, count) {
+        callback(err, count);
     });
 };
 

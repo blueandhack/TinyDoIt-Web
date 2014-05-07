@@ -1,48 +1,35 @@
-doctype html
 html
     head
         meta(charset='utf-8')
         meta(name='viewport', content='width=device-width, initial-scale=1.0')
         link(href='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
         link(href='../css/style.css', rel='stylesheet')
-        link(rel='shortcut icon', href='images/favicon.png', type='../image/png')
-        title 我的任务 - TinyDoIt 微动
+        link(rel='shortcut icon', href='../images/favicon.png', type='image/png')
+        title 管理员控制面板 - TinyDoIt 微动
     body
         .navbar.navbar-default.navbar-fixed-top(role='navigation')
             .container
                 .navbar-header
                     a.navbar-brand(href='/') TinyDoIt&nbsp;
-                        img.img-circle.logo(src='../images/favicon.png', title='TinyDoIt')
+                        img.logo.img-circle(src='../images/favicon.png', title='TinyDoIt')
                     button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
                         span.icon-bar
                         span.icon-bar
                         span.icon-bar
                 .navbar-collapse.collapse
                     ul.nav.navbar-nav
+                        li.active
+                            a(href='dashboard') 管理员控制面板
                         li
-                            a(href='/sharecircle') 分享圈
+                            a(href='users') 管理用户
                         li
-                            a(href='/help') 帮助
+                            a(href='sharetasks') 管理分享任务
+                    ul.nav.navbar-nav.navbar-right
+                        li.hidden-xs
+                            a
+                                img.avatar.img-circle(src='#{userHead}', title='设置', alt='我的头像')
                         li
-                            a(href='/about') 关于
-                    if(user!=null)
-                        ul.nav.navbar-nav.navbar-right
-                            li.hidden-xs
-                                a(href='/settings') 设置
-                                    img.avatar.img-circle(src='#{userHead}', title='设置',style='-moz-box-shadow:0px 0px 10px #000 ;-webkit-box-shadow:0px 0px 10px #000;box-shadow:0px 0px 10px #000;', alt='我的头像')
-                            li
-                                a(href='/my')
-                                    | 我的任务
-                            li.visible-xs
-                                a(href='/settings') 设置
-                            li
-                                a(href='/signout') 登出
-                    else
-                        ul.nav.navbar-nav.navbar-right
-                            li
-                                a(href='/signin') 登入
-                            li
-                                a(href='/register') 注册
+                            a(href='logout') 登出
                 //
                   /.nav-collapse
         .container
@@ -54,27 +41,26 @@ html
                         ul.nav.nav-pills.nav-stacked
                             li#information.active
                                 a(href='javascript:void(0)')
-                                    | 个人信息
+                                    | 站点信息
                             li#password
                                 a(href='javascript:void(0)')
-                                    | 修改密码
+                                    | 修改管理员密码
                             li#email
                                 a(href='javascript:void(0)')
-                                    | 修改邮箱
+                                    | 修改管理员邮箱
                             li#delete
                                 a(href='javascript:void(0)')
-                                    | 删除账号
+                                    | 删除管理员账号
                     .col-md-9
                         - if(message)
                             .alert.alert-warning.alert-dismissable
                             button.close(type='button', data-dismiss='alert', aria-hidden='true') &times;
                             | #{message}
                         #title
-                            h4 个人信息
+                            h4 站点信息
                         #content
         script(src='http://cdn.staticfile.org/jquery/2.1.1-beta1/jquery.min.js')
         script(src='http://cdn.staticfile.org/jquery-scrollUp/2.1.0/jquery.scrollUp.min.js')
-        script(src='../js/moment-with-langs.min.js')
         script(src='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/js/bootstrap.min.js')
         script(src='../js/all.js')
-        script(src='../js/settings.js')
+        script(src='../js/dashboard.js')

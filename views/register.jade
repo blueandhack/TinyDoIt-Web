@@ -4,18 +4,20 @@ html
         meta(charset='UTF-8')
         meta(name='viewport', content='width=device-width, initial-scale=1.0')
         link(href='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
-        link(href='css/style.css', rel='stylesheet')
-        link(rel='shortcut icon', href='images/favicon.png', type='image/png')
+        link(href='../css/style.css', rel='stylesheet')
+        link(rel='shortcut icon', href='../images/favicon.png', type='image/png')
         script(src='http://cdn.staticfile.org/jquery/2.1.1-beta1/jquery.min.js')
         script(src='http://cdn.staticfile.org/jquery-validate/1.12.0/jquery.validate.min.js')
         script(src='http://cdn.staticfile.org/jquery-validate/1.12.0/additional-methods.min.js')
         script(src='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/js/bootstrap.min.js')
-        script(src='js/register.js')
+        script(src='../js/register.js')
         title 注册 - TinyDoIt 微动
     body.body-register
         .container
             form#registerForm.form-signin(method='post')
-                h2 请注册用户
+                h2
+                    img.logo.img-circle(src='../images/favicon.png', title='TinyDoIt')
+                    | 请注册用户
                 p
                     | 已有账号？
                     a(href='/signin') 请登录

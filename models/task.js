@@ -47,6 +47,13 @@ TaskDAO.prototype.deleteTaskById = function (Id, callback) {
     });
 };
 
+//通过ID删除任务
+TaskDAO.prototype.deleteTaskByuID = function (Id, callback) {
+    Task.remove({uID: Id}, function (err) {
+        callback(err);
+    });
+};
+
 //通过用户名删除任务
 TaskDAO.prototype.deleteTasksByUsername = function (username, callback) {
     Task.remove({username: username}, function (err) {
@@ -132,6 +139,12 @@ TaskDAO.prototype.getTasksByDone = function (page, uID, callback) {
     var start = (page - 1) * 10;
     Task.find({"check_task": true, "uID": uID}).skip(start).limit(10).exec(function (err, tasks) {
         callback(err, tasks);
+    });
+};
+
+TaskDAO.prototype.getTasksCount = function (callback) {
+    Task.find({}).count({}, function (err, count) {
+        callback(err, count);
     });
 };
 

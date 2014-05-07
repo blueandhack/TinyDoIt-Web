@@ -4,16 +4,16 @@ html
         meta(charset='utf-8')
         meta(name='viewport', content='width=device-width, initial-scale=1.0')
         link(href='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
-        link(href='css/style.css', rel='stylesheet')
+        link(href='../css/style.css', rel='stylesheet')
         link(href='http://cdn.staticfile.org/bootstrap-datetimepicker/3.0.0/css/bootstrap-datetimepicker.css', rel='stylesheet')
-        link(rel='shortcut icon', href='images/favicon.png', type='image/png')
+        link(rel='shortcut icon', href='../images/favicon.png', type='image/png')
         title 我的任务 - TinyDoIt 微动
     body
         .navbar.navbar-default.navbar-fixed-top(role='navigation')
             .container
                 .navbar-header
                     a.navbar-brand(href='/') TinyDoIt&nbsp;
-                        img.img-circle.logo(src='images/favicon.png', title='TinyDoIt')
+                        img.img-circle.logo(src='../images/favicon.png', title='TinyDoIt')
                     button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
                         span.icon-bar
                         span.icon-bar
@@ -21,40 +21,29 @@ html
                 .navbar-collapse.collapse
                     ul.nav.navbar-nav
                         li
-                            a(href='sharecircle') 分享圈
+                            a(href='/sharecircle') 分享圈
                         li
-                            a(href='help') 帮助
-                        li.dropdown
-                            a.dropdown-toggle(href='#', data-toggle='dropdown')
-                                | 关于
-                                b.caret
-                            ul.dropdown-menu
-                                li
-                                    a(href='about') 关于我们
-                                li
-                                    a(href='#') 博客
-                                li.divider
-                                li.dropdown-header 联系方式
-                                li
-                                    a blueandhack@gmail.com
+                            a(href='/help') 帮助
+                        li
+                            a(href='/about') 关于
                     if(user!=null)
                         ul.nav.navbar-nav.navbar-right
                             li.hidden-xs
-                                a(href='settings') 设置
+                                a(href='/settings') 设置
                                     img.avatar.img-circle(src='#{userHead}', title='设置', alt='我的头像')
                             li.active
-                                a(href='my')
+                                a(href='/my')
                                     | 我的任务
                             li.visible-xs
-                                a(href='settings') 设置
+                                a(href='/settings') 设置
                             li
-                                a(href='logout') 登出
+                                a(href='/signout') 登出
                     else
                         ul.nav.navbar-nav.navbar-right
                             li
-                                a(href='signin') 登入
+                                a(href='/signin') 登入
                             li
-                                a(href='register') 注册
+                                a(href='/register') 注册
                 //
                   /.nav-collapse
         .container
@@ -277,9 +266,9 @@ html
            /.modal
         script(src='http://cdn.staticfile.org/jquery/2.1.1-beta1/jquery.min.js')
         script(src='http://cdn.staticfile.org/jquery-scrollUp/2.1.0/jquery.scrollUp.min.js')
-        script(src='js/moment-with-langs.min.js')
+        script(src='../js/moment-with-langs.min.js')
         script(src='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/js/bootstrap.min.js')
         script(src='http://cdn.staticfile.org/bootstrap-datetimepicker/3.0.0/js/bootstrap-datetimepicker.js')
-        script(src='js/bootstrap-paginator.min.js')
-        script(src='js/all.js')
-        script(src='js/my.js')
+        script(src='../js/bootstrap-paginator.min.js')
+        script(src='../js/all.js')
+        script(src='../js/my.js')

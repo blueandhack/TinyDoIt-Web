@@ -1,3 +1,5 @@
+//
+   Admin Login page
 doctype html
 html
     head
@@ -8,17 +10,14 @@ html
         link(rel='shortcut icon', href='../images/favicon.png', type='image/png')
         script(src='http://cdn.staticfile.org/jquery/2.1.1-beta1/jquery.min.js')
         script(src='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/js/bootstrap.min.js')
-        title 登入 - TinyDoIt 微动
+        title 管理员登入 - TinyDoIt 微动
     body.body-signin
         .container
             form.form-signin(method='post')
                 h2
                     img.logo.img-circle(src='../images/favicon.png', title='TinyDoIt')
-                    | 请登入
+                    | 管理员请登入
                 p
-                    | 没有账号？
-                    a(href='/register') 请注册
-                    | &nbsp;&nbsp;
                     a(href='/') 返回主页
                 - if(message)
                     .alert.alert-warning.alert-dismissable
@@ -30,3 +29,4 @@ html
                     input(type='checkbox', value='remember-me')
                     | 记住我
                 button.btn.btn-block.btn-primary.btn-lg(value='submit') 登入
+
