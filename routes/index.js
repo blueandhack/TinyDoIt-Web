@@ -657,7 +657,8 @@ module.exports = function (app) {
     //提交完成某一ID的任务
     app.post('/doneTaskById/:id', function (req, res) {
         var changeTask = {
-            check_task: true
+            check_task: true,
+            check_date: new Date()
         };
         Task.updateTaskById(req.params.id, changeTask, function (err) {
             if (err) {

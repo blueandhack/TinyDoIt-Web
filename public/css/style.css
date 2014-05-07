@@ -150,6 +150,22 @@ body {
     overflow: hidden;
 }
 
+.low {
+    border-left:7px solid #66FF99;
+}
+
+.medium {
+    border-left:7px solid #FFFF66;
+}
+
+.high {
+    border-left:7px solid #FF9966;
+}
+
+.none{
+    border-left:7px solid #ffffff;
+}
+
 #scrollUp {
     bottom: 20px;
     right: 20px;

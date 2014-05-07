@@ -8,12 +8,13 @@ var TaskSchema = new Schema({
     title: String,
     description: String,
     start_date: Date,
+    check_date: {type: Date, default: null},
     tags: [String],
     box: Number,
     priority: Number,
     uID: String,
     username: String,
-    create_task_date: {type: Date, default: moment().zone(8).format()}
+    create_task_date: {type: Date, default: new Date()}
 
 });
 
@@ -137,7 +138,7 @@ TaskDAO.prototype.getTasksPageByDone = function (uID, callback) {
 //获取已完成任务
 TaskDAO.prototype.getTasksByDone = function (page, uID, callback) {
     var start = (page - 1) * 10;
-    Task.find({"check_task": true, "uID": uID}).skip(start).limit(10).exec(function (err, tasks) {
+    Task.find({"check_task": true, "uID": uID}).sort({check_date: -1}).skip(start).limit(10).exec(function (err, tasks) {
         callback(err, tasks);
     });
 };

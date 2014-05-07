@@ -49,7 +49,7 @@ html
         .container
             .index.white-background
                 .row
-                    .col-md-12
+                    .col-md-12.col-xs-12
                         table.table
                             thead
                                 tr
@@ -61,7 +61,7 @@ html
                                     th 功能
                                     th Do It？
                             tbody#shareTaskTbody
-                    .col-md-12
+                    .col-md-12.col-xs-12
                         ul#pagination.pagination
         //
            Do It
@@ -79,28 +79,32 @@ html
                                 //
                                    Title
                                 .form-group
-                                    label.col-sm-3.control-label(for='title') 标题
-                                    .col-sm-5
+                                    label.col-sm-3.col-xs-3.control-label(for='title') 标题
+                                    .col-sm-5.col-xs-12
                                         input#newTitle.form-control(type='text', placeholder='输入一个标题')
                                 //
                                    Description
                                 .form-group
-                                    label.col-sm-3.control-label 描述
-                                    .col-sm-8
-                                        textarea#newDescription.form-control(rows='1',placeholder='输入一段描述')
+                                    label.col-sm-3.col-xs-3.control-label 描述
+                                    .col-sm-8.col-xs-12
+                                        textarea#newDescription.form-control(rows='2',placeholder='输入一段描述')
                                 //
                                    Box
                                 .form-group
-                                    label.col-sm-3.control-label 盒子
-                                    .col-sm-4
+                                    label.col-sm-3.col-xs-3.control-label 盒子
+                                    .col-sm-4.col-xs-4
                                         select#newBox.form-control
                                             option(value='0') 今日
-                                            option(value='1') 未来
+                                            option(value='1') 明日
+                                            option(value='2') 日程
+                                            option(value='3') 将来
+                                            option(value='4') 等待
+                                            option(value='5') 收集
                                 //
                                    Start Date
                                 .form-group
-                                    label.col-sm-3.control-label 开始日期
-                                    .col-sm-5
+                                    label.col-sm-3.col-xs-3.control-label 开始日期
+                                    .col-sm-5.col-xs-8
                                         .form_date.input-group.date(data-date-format='YYYY-MM-DD')
                                             span.input-group-addon
                                                 span.glyphicon.glyphicon-calendar
@@ -108,16 +112,19 @@ html
                                 //
                                    Tags
                                 .form-group
-                                    label.col-sm-3.control-label 标签
-                                    .col-sm-8
-                                        input#newTagOne.col-sm-3
-                                        input#newTagTwo.col-sm-3
-                                        input#newTagThree.col-sm-3
+                                    label.col-sm-3.col-xs-3.control-label 标签
+                                    .col-sm-8.col-xs-8
+                                        .col-sm-4.col-xs-12
+                                            input#newTagOne.form-control
+                                        .col-sm-4.col-xs-12
+                                            input#newTagTwo.form-control
+                                        .col-sm-4.col-xs-12
+                                            input#newTagThree.form-control
                                 //
                                    Priority
                                 .form-group
-                                    label.col-sm-3.control-label 等级
-                                    .col-sm-4
+                                    label.col-sm-3.col-xs-3.control-label 等级
+                                    .col-sm-4.col-xs-4
                                         select#newPriority.form-control
                                             option(value='0') 无
                                             option(value='1') 低
@@ -147,32 +154,35 @@ html
                                 //
                                    Author
                                 .form-group
-                                    label.col-sm-3.control-label 分享者
-                                    .col-sm-5
+                                    label.col-sm-3.col-xs-3.control-label 分享者
+                                    .col-sm-5.col-xs-12
                                         input#changeShareAuthor.form-control(type='text' readonly)
                                 //
                                    Title
                                 .form-group
-                                    label.col-sm-3.control-label(for='title') 标题
-                                    .col-sm-5
+                                    label.col-sm-3.col-xs-3.control-label(for='title') 标题
+                                    .col-sm-5.col-xs-12
                                         input#changeShareTitle.form-control(type='text', placeholder='请输入一个标题')
                                 //
                                    Description
                                 .form-group
-                                    label.col-sm-3.control-label 描述
-                                    .col-sm-8
-                                        textarea#changeShareDescription.form-control(rows='1',placeholder='请输入一段描述')
+                                    label.col-sm-3.col-xs-3.control-label 描述
+                                    .col-sm-8.col-xs-12
+                                        textarea#changeShareDescription.form-control(rows='2',placeholder='请输入一段描述')
                                 //
                                    Tags
                                 .form-group
-                                    label.col-sm-3.control-label 标签
-                                    .col-sm-8
-                                        input#changeShareTagOne.col-sm-3
-                                        input#changeShareTagTwo.col-sm-3
-                                        input#changeShareTagThree.col-sm-3
+                                    label.col-sm-3.col-xs-3.control-label 标签
+                                    .col-sm-8.col-xs-8
+                                        .col-sm-4.col-xs-12
+                                            input#changeShareTagOne.form-control
+                                        .col-sm-4.col-xs-12
+                                            input#changeShareTagTwo.form-control
+                                        .col-sm-4.col-xs-12
+                                            input#changeShareTagThree.form-control
                     .modal-footer
                         button#changeShareTaskClose.btn.btn-default(type='button', data-dismiss='modal') 关闭
-                        button#changeShareTaskPost.btn.btn-primary(type='button') 分享
+                        button#changeShareTaskPost.btn.btn-primary(type='button') 更改
                 //
                    /.modal-content
             //

@@ -51,7 +51,7 @@ html
                Content
             .index.col-md-12.white-background
                 .row
-                    #box-list.col-md-3
+                    #box-list.col-md-3.col-xs-12
                         h4 聚焦
                         ul.nav.nav-pills.nav-stacked
                             li#today.active
@@ -70,7 +70,7 @@ html
                                 a(href='javascript:void(0)')
                                     | 错过
                                     span#miss-badge.badge.pull-right 0
-                    .col-md-9
+                    .col-md-9.col-xs-12
                         p
                             button#intAddTask.btn.btn-primary(data-toggle='modal', data-target='#AddTask')
                                 | 添加任务
@@ -78,7 +78,7 @@ html
                             thead
                                 tr
                                     th 完成
-                                    th 日期
+                                    th 开始日期
                                     th 标题
                                     th 描述
                                     th 功能
@@ -98,28 +98,32 @@ html
                                 //
                                    Title
                                 .form-group
-                                    label.col-sm-3.control-label(for='title') 标题
-                                    .col-sm-5
+                                    label.col-sm-3.col-xs-3.control-label(for='title') 标题
+                                    .col-sm-5.col-xs-12
                                         input#newTitle.form-control(type='text', placeholder='请输入一个标题')
                                 //
                                    Description
                                 .form-group
-                                    label.col-sm-3.control-label 描述
-                                    .col-sm-8
-                                        textarea#newDescription.form-control(rows='1',placeholder='请输入一段描述')
+                                    label.col-sm-3.col-xs-3.control-label 描述
+                                    .col-sm-8.col-xs-12
+                                        textarea#newDescription.form-control(rows='2',placeholder='请输入一段描述')
                                 //
                                    Box
                                 .form-group
-                                    label.col-sm-3.control-label 盒子
-                                    .col-sm-4
+                                    label.col-sm-3.col-xs-3.control-label 盒子
+                                    .col-sm-4.col-xs-4
                                         select#newBox.form-control
                                             option(value='0') 今日
-                                            option(value='1') 未来
+                                            option(value='1') 明日
+                                            option(value='2') 日程
+                                            option(value='3') 将来
+                                            option(value='4') 等待
+                                            option(value='5') 收集
                                 //
                                    Start Date
                                 .form-group
-                                    label.col-sm-3.control-label 开始日期
-                                    .col-sm-5
+                                    label.col-sm-3.col-xs-3.control-label 开始日期
+                                    .col-sm-5.col-xs-8
                                         .input-group.date.form_date(data-date-format='YYYY-MM-DD')
                                             span.input-group-addon
                                                 span.glyphicon.glyphicon-calendar
@@ -127,16 +131,19 @@ html
                                 //
                                    Tags
                                 .form-group
-                                    label.col-sm-3.control-label 标签
-                                    .col-sm-8
-                                        input#newTagOne.col-sm-3(placeholder='')
-                                        input#newTagTwo.col-sm-3(placeholder='')
-                                        input#newTagThree.col-sm-3(placeholder='')
+                                    label.col-sm-3.col-xs-3.control-label 标签
+                                    .col-sm-8.col-xs-8
+                                        .col-sm-4.col-xs-12
+                                            input#newTagOne.form-control(placeholder='')
+                                        .col-sm-4.col-xs-12
+                                            input#newTagTwo.form-control(placeholder='')
+                                        .col-sm-4.col-xs-12
+                                            input#newTagThree.form-control(placeholder='')
                                 //
                                    Priority
                                 .form-group
-                                    label.col-sm-3.control-label 等级
-                                    .col-sm-4
+                                    label.col-sm-3.col-xs-3.control-label 等级
+                                    .col-sm-4.col-xs-4
                                         select#newPriority.form-control
                                             option(value='0') 无
                                             option(value='1') 低
@@ -165,28 +172,32 @@ html
                                 //
                                    Title
                                 .form-group
-                                    label.col-sm-3.control-label(for='title') 标题
-                                    .col-sm-5
+                                    label.col-sm-3.col-xs-3.control-label(for='title') 标题
+                                    .col-sm-5.col-xs-12
                                         input#changeTitle.form-control(type='text', placeholder='请输入一个标题')
                                 //
                                    Description
                                 .form-group
-                                    label.col-sm-3.control-label 描述
-                                    .col-sm-8
-                                        textarea#changeDescription.form-control(rows='1',placeholder='请输入一段描述')
+                                    label.col-sm-3.col-xs-3.control-label 描述
+                                    .col-sm-8.col-xs-12
+                                        textarea#changeDescription.form-control(rows='2',placeholder='请输入一段描述')
                                 //
                                    Box
                                 .form-group
-                                    label.col-sm-3.control-label 盒子
-                                    .col-sm-4
+                                    label.col-sm-3.col-xs-3.control-label 盒子
+                                    .col-sm-4.col-xs-4
                                         select#changeBox.form-control
                                             option(value='0') 今日
-                                            option(value='1') 未来
+                                            option(value='1') 明日
+                                            option(value='2') 日程
+                                            option(value='3') 将来
+                                            option(value='4') 等待
+                                            option(value='5') 收集
                                 //
                                    Start Date
                                 .form-group
-                                    label.col-sm-3.control-label 开始日期
-                                    .col-sm-5
+                                    label.col-sm-3.col-xs-3.control-label 开始日期
+                                    .col-sm-5.col-xs-8
                                         .input-group.date.form_date(data-date-format='YYYY-MM-DD')
                                             span.input-group-addon
                                                 span.glyphicon.glyphicon-calendar
@@ -194,16 +205,19 @@ html
                                 //
                                    Tags
                                 .form-group
-                                    label.col-sm-3.control-label 标签
-                                    #changeTags.col-sm-8
-                                        input#changeTagOne.col-sm-3
-                                        input#changeTagTwo.col-sm-3
-                                        input#changeTagThree.col-sm-3
+                                    label.col-sm-3.col-xs-3.control-label 标签
+                                    #changeTags.col-sm-8.col-xs-8
+                                        .col-sm-4.col-xs-12
+                                            input#changeTagOne.form-control
+                                        .col-sm-4.col-xs-12
+                                            input#changeTagTwo.form-control
+                                        .col-sm-4.col-xs-12
+                                            input#changeTagThree.form-control
                                 //
                                    Priority
                                 .form-group
-                                    label.col-sm-3.control-label 等级
-                                    .col-sm-4
+                                    label.col-sm-3.col-xs-3.control-label 等级
+                                    .col-sm-4.col-xs-4
                                         select#changePriority.form-control
                                             option(value='0') 无
                                             option(value='1') 低
@@ -232,29 +246,32 @@ html
                                 //
                                    Author
                                 .form-group
-                                    label.col-sm-3.control-label 分享者
-                                    .col-sm-5
+                                    label.col-sm-3.col-xs-3.control-label 分享者
+                                    .col-sm-5.col-xs-12
                                         input#shareAuthor.form-control(type='text' readonly)
                                 //
                                    Title
                                 .form-group
-                                    label.col-sm-3.control-label(for='title') 标题
-                                    .col-sm-5
+                                    label.col-sm-3.col-xs-3.control-label(for='title') 标题
+                                    .col-sm-5.col-xs-12
                                         input#shareTitle.form-control(type='text', placeholder='请输入一个标题')
                                 //
                                    Description
                                 .form-group
-                                    label.col-sm-3.control-label 描述
-                                    .col-sm-8
-                                        textarea#shareDescription.form-control(rows='1',placeholder='请输入一段描述')
+                                    label.col-sm-3.col-xs-3.control-label 描述
+                                    .col-sm-8.col-xs-12
+                                        textarea#shareDescription.form-control(rows='2',placeholder='请输入一段描述')
                                 //
                                    Tags
                                 .form-group
-                                    label.col-sm-3.control-label 标签
-                                    .col-sm-8
-                                        input#shareTagOne.col-sm-3
-                                        input#shareTagTwo.col-sm-3
-                                        input#shareTagThree.col-sm-3
+                                    label.col-sm-3.col-xs-3.control-label 标签
+                                    .col-sm-8.col-xs-8
+                                        .col-sm-4.col-xs-12
+                                            input#shareTagOne.form-control
+                                        .col-sm-4.col-xs-12
+                                            input#shareTagTwo.form-control
+                                        .col-sm-4.col-xs-12
+                                            input#shareTagThree.form-control
                     .modal-footer
                         button#shareTaskClose.btn.btn-default(type='button', data-dismiss='modal') 关闭
                         button#shareTaskPost.btn.btn-primary(type='button') 分享
