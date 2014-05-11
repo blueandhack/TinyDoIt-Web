@@ -60,7 +60,7 @@ $(document).ready(function () {
             alert("请填写完全");
             return false;
         }
-        if(passwordVal.length<5){
+        if (passwordVal.length <= 5) {
             alert("密码长度必须大于5");
             return false;
         }

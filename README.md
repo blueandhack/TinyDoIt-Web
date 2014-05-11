@@ -72,7 +72,6 @@ v0.1.1
 ---------
 
 + [我的博客](http://blueandhack.com)
-+ [基于此应用的网站](http://tinydoit.com)
 + 我的邮箱 blueandhack # gmail.com
 
 感谢

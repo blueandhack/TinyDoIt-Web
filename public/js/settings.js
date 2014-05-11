@@ -98,7 +98,7 @@ $(document).ready(function () {
         $("#changePasswordButton").click(function () {
             var password = $("#passwordForm").val(),
                 confirmPassword = $("#confirm_passwordForm").val();
-            if ($.trim(password).length >= 5) {
+            if ($.trim(password).length > 5) {
                 if ($.trim(password) == $.trim(confirmPassword)) {
                     $.post("/changePassword", {password: password}, function (data) {
                         if (data.status == 1) {

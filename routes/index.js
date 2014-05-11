@@ -118,7 +118,7 @@ module.exports = function (app) {
         console.log(email);
         //检查用户是否存在
         User.getUserByEmail(email, function (err, user) {
-            console.log(user.email);
+            //console.log(user.email);
             if (!user) {
                 req.session.error = '此用户不存在';
                 return res.redirect('/signin');//用户不存在则跳转到登录页
