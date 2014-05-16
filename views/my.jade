@@ -6,6 +6,7 @@ html
         link(href='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
         link(href='../css/style.css', rel='stylesheet')
         link(href='http://cdn.staticfile.org/bootstrap-datetimepicker/3.0.0/css/bootstrap-datetimepicker.css', rel='stylesheet')
+        link(href='http://cdn.staticfile.org/bootstrap-switch/3.0.0rc/css/bootstrap3/bootstrap-switch.min.css', rel='stylesheet')
         link(rel='shortcut icon', href='../images/favicon.png', type='image/png')
         title 我的任务 - TinyDoIt 微动
     body
@@ -120,14 +121,29 @@ html
                                             option(value='4') 等待
                                             option(value='5') 收集
                                 //
-                                   Start Date
+                                    Start Time Checkbox
                                 .form-group
+                                    label.col-sm-3.col-xs-3.control-label 具体时间
+                                    .col-sm-3
+                                        input#startTime-checkbox(type='checkbox', name='isStartTime')
+                                //
+                                   Start Date
+                                #start-date.form-group
                                     label.col-sm-3.col-xs-3.control-label 开始日期
                                     .col-sm-5.col-xs-8
                                         .input-group.date.form_date(data-date-format='YYYY-MM-DD')
                                             span.input-group-addon
                                                 span.glyphicon.glyphicon-calendar
                                             input#newStartDate.form-control(size='16', type='text', value='', readonly='readonly')
+                                //
+                                   Start Time
+                                #start-date-time.form-group
+                                    label.col-sm-3.col-xs-3.control-label 开始日期（时间）
+                                    .col-sm-5.col-xs-8
+                                        .input-group.date.form_date_time(data-date-format='YYYY-MM-DD HH:mm')
+                                            span.input-group-addon
+                                                span.glyphicon.glyphicon-time
+                                            input#newStartDateTime.form-control(size='16', type='text', value='', readonly='readonly')
                                 //
                                    Tags
                                 .form-group
@@ -194,14 +210,29 @@ html
                                             option(value='4') 等待
                                             option(value='5') 收集
                                 //
-                                   Start Date
+                                    Start Time Checkbox
                                 .form-group
+                                    label.col-sm-3.col-xs-3.control-label 具体时间
+                                    .col-sm-3
+                                        input#changeStartTime-checkbox(type='checkbox', name='isStartTime')
+                                //
+                                   Start Date
+                                #change-start-date.form-group
                                     label.col-sm-3.col-xs-3.control-label 开始日期
                                     .col-sm-5.col-xs-8
                                         .input-group.date.form_date(data-date-format='YYYY-MM-DD')
                                             span.input-group-addon
                                                 span.glyphicon.glyphicon-calendar
                                             input#changeStartDate.form-control(size='16', type='text', value='', readonly='readonly')
+                                //
+                                   Start Time
+                                #change-start-date-time.form-group
+                                    label.col-sm-3.col-xs-3.control-label 开始日期（时间）
+                                    .col-sm-5.col-xs-8
+                                        .input-group.date.form_date_time(data-date-format='YYYY-MM-DD HH:mm')
+                                            span.input-group-addon
+                                                span.glyphicon.glyphicon-time
+                                            input#changeStartDateTime.form-control(size='16', type='text', value='', readonly='readonly')
                                 //
                                    Tags
                                 .form-group
@@ -287,5 +318,6 @@ html
         script(src='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/js/bootstrap.min.js')
         script(src='http://cdn.staticfile.org/bootstrap-datetimepicker/3.0.0/js/bootstrap-datetimepicker.js')
         script(src='../js/bootstrap-paginator.min.js')
+        script(src='http://cdn.staticfile.org/bootstrap-switch/3.0.0rc/js/bootstrap-switch.min.js')
         script(src='../js/all.js')
         script(src='../js/my.js')

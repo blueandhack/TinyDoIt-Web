@@ -2,7 +2,9 @@ $(document).ready(function () {
 
     var taskId,
         thisClass = 0,
-        thisPage = 1;
+        thisPage = 1,
+        checkboxDateVal = false,
+        changeCheckboxDateVal = false;
     //初始化当前页面
     intThisPage();
 
@@ -15,6 +17,7 @@ $(document).ready(function () {
     $("#intAddTask").click(function () {
         $("#newTitle").val("");
         $("#newStartDate").val("");
+        $("#newStartDateTime").val("");
         $("#newEndDate").val("");
         $("#newDescription").val("");
         $("#newTagOne").val("");
@@ -22,24 +25,30 @@ $(document).ready(function () {
         $("#newTagThree").val("");
         $("#newBox").val(0);
         $("#newPriority").val(0);
+        $("#start-date-time").hide();
+        $("#start-date").show();
+        $("#startTime-checkbox").bootstrapSwitch("state", false);
+
     });
 
     //提交添加任务按钮
     $("#addTaskPost").click(function () {
-
         var titleVal = $("#newTitle").val();
         var startDateVal = $("#newStartDate").val();
+        var startDateTimeVal = $("#newStartDateTime").val();
         var descriptionVal = $("#newDescription").val();
         var newTagOne = $("#newTagOne").val(),
             newTagTwo = $("#newTagTwo").val(),
             newTagThree = $("#newTagThree").val();
+
+        //console.log(checkboxDateVal);
         //表单验证
-        if (titleVal == "" || startDateVal == "" || descriptionVal == "" || (newTagOne == "" && newTagTwo == "" && newTagThree == "")) {
+        if (titleVal == "" || (startDateVal == "" && startDateTimeVal == "" ) || descriptionVal == "" || (newTagOne == "" && newTagTwo == "" && newTagThree == "")) {
             alert("请填写完全！");
             return false;
         }
 
-        $.post("addTask" + "?time=" + new Date().getTime(), {title: titleVal, start_date: startDateVal, description: descriptionVal, box: $("#newBox").val(), priority: $("#newPriority").val(), tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
+        $.post("/addTask" + "?time=" + new Date().getTime(), {title: titleVal, start_date: startDateVal, start_date_time: startDateTimeVal, checkbox_date: checkboxDateVal, description: descriptionVal, box: $("#newBox").val(), priority: $("#newPriority").val(), tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
             if (data.status == 1) {
                 $("#addTaskClose").click();
                 goToTodayButton();
@@ -52,15 +61,25 @@ $(document).ready(function () {
     $("#changeTaskPost").click(function () {
         var titleVal = $("#changeTitle").val();
         var startDateVal = $("#changeStartDate").val();
+        var startDateTimeVal = $("#changeStartDateTime").val();
         var descriptionVal = $("#changeDescription").val();
         var newTagOne = $("#changeTagOne").val(),
             newTagTwo = $("#changeTagTwo").val(),
             newTagThree = $("#changeTagThree").val();
-        if (titleVal == "" || startDateVal == "" || descriptionVal == "" || (newTagOne == "" && newTagTwo == "" && newTagThree == "")) {
-            alert("请填写完全！");
-            return false;
+        //console.log(changeCheckboxDateVal);
+        if (changeCheckboxDateVal == false) {
+            if (titleVal == "" || startDateVal == "" || descriptionVal == "" || (newTagOne == "" && newTagTwo == "" && newTagThree == "")) {
+                alert("请填写完全！");
+                return false;
+            }
         }
-        $.post("updateTaskById/" + taskId + "?time=" + new Date().getTime(), {title: titleVal, start_date: startDateVal, description: descriptionVal, box: $("#changeBox").val(), priority: $("#changePriority").val(), tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
+        if (changeCheckboxDateVal == true) {
+            if (titleVal == "" || startDateTimeVal == "" || descriptionVal == "" || (newTagOne == "" && newTagTwo == "" && newTagThree == "")) {
+                alert("请填写完全！");
+                return false;
+            }
+        }
+        $.post("updateTaskById/" + taskId + "?time=" + new Date().getTime(), {title: titleVal, start_date: startDateVal, start_date_time: startDateTimeVal, checkbox_date: changeCheckboxDateVal, description: descriptionVal, box: $("#changeBox").val(), priority: $("#changePriority").val(), tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
             if (data.status == 1) {
                 $("#changeTaskClose").click();
                 console.log(thisClass);
@@ -144,6 +163,7 @@ $(document).ready(function () {
         $("[id^=intChangeTask-]").click(function () {
             $("#changeTitle").val("");
             $("#changeStartDate").val("");
+            $("#changeStartDateTime").val("");
             $("#changeDescription").val("");
             $("#changeTagOne").val("");
             $("#changeTagTwo").val("");
@@ -151,18 +171,28 @@ $(document).ready(function () {
             $("#changeBox").val(0);
             $("#changePriority").val(0);
             taskId = $(this).val();
-
+            $("#changeStartTime-checkbox").bootstrapSwitch("state", false);
+            $("#change-start-date-time").hide();
+            var start_date;
             $.getJSON("/getTaskById/" + $(this).val() + "?time=" + new Date().getTime(), function (data) {
                 var task = eval(data);
-                var start_date = moment(task.start_date).format('YYYY-MM-DD');
+                if (task.checkbox_date) {
+                    start_date = moment(task.start_date).format('YYYY-MM-DD HH:mm');
+                    $("#changeStartDateTime").val(start_date);
+                }
+                else {
+                    start_date = moment(task.start_date).format('YYYY-MM-DD');
+                    $("#changeStartDate").val(start_date);
+                }
                 $("#changeTitle").val(task.title);
-                $("#changeStartDate").val(start_date);
                 $("#changeDescription").val(task.description);
                 $("#changeTagOne").val(task.tags[0]);
                 $("#changeTagTwo").val(task.tags[1]);
                 $("#changeTagThree").val(task.tags[2]);
                 $("#changeBox").val(task.box);
                 $("#changePriority").val(task.priority);
+                $("#changeStartTime-checkbox").bootstrapSwitch("state", task.checkbox_date);
+
             });
         });
     }
@@ -293,6 +323,8 @@ $(document).ready(function () {
         $.getJSON("/getTasksByToday/Date/" + moment().format('YYYY-MM-DD') + "/Page/" + page + "?time=" + new Date().getTime(), function (data) {
             $.each(data, function (idx, item) {
                 var color,
+                    hour,
+                    minute,
                     start_date = moment(item.start_date).format('YYYY-MM-DD');
                 switch (item.priority) {
                     case 1:
@@ -307,7 +339,15 @@ $(document).ready(function () {
                     default :
                         color = "none";
                 }
-                $("#taskTbody").append("<tr class='" + color + "' id='" + item._id + "'><td><button id='doneTask-" + item._id + "' class='btn btn-default btn-sm' value='" + item._id + "'>标记</button></td><td>" + start_date + "</td><td>" + item.title + "</td><td>" + item.description + "</td><td><button id='intChangeTask-" + item._id + "' data-toggle='modal' data-target='#ChangeTask' class='btn btn-primary btn-sm' value='" + item._id + "'>更改</button><span>&nbsp;</span><button id='deleteTask-" + item._id + "' class='btn btn-danger btn-sm' value='" + item._id + "'>删除</button><span>&nbsp;</span><button id='intShareTask-" + item._id + "' data-toggle='modal' data-target='#ShareTask' title='觉得不错，分享到分享圈吧！' class='btn btn-info btn-sm' value='" + item._id + "'>分享到分享圈</button></td></tr>");
+                if (item.checkbox_date) {
+                    hour = moment(item.start_date).hour() + ":";
+                    minute = moment(item.start_date).minute();
+
+                } else {
+                    hour = "";
+                    minute = "";
+                }
+                $("#taskTbody").append("<tr class='" + color + "' id='" + item._id + "'><td><button id='doneTask-" + item._id + "' class='btn btn-default btn-sm' value='" + item._id + "'>标记</button></td><td>" + start_date + "</br>" + hour + minute + "</td><td>" + item.title + "</td><td>" + item.description + "</td><td><button id='intChangeTask-" + item._id + "' data-toggle='modal' data-target='#ChangeTask' class='btn btn-primary btn-sm' value='" + item._id + "'>更改</button><span>&nbsp;</span><button id='deleteTask-" + item._id + "' class='btn btn-danger btn-sm' value='" + item._id + "'>删除</button><span>&nbsp;</span><button id='intShareTask-" + item._id + "' data-toggle='modal' data-target='#ShareTask' title='觉得不错，分享到分享圈吧！' class='btn btn-info btn-sm' value='" + item._id + "'>分享到分享圈</button></td></tr>");
             });
 
             //初始化更改任务窗口
@@ -362,6 +402,8 @@ $(document).ready(function () {
         $.getJSON("/getTasksByMiss/Date/" + moment().format('YYYY-MM-DD') + "/Page/" + page + "?time=" + new Date().getTime(), function (data) {
             $.each(data, function (idx, item) {
                 var color,
+                    hour,
+                    minute,
                     start_date = moment(item.start_date).format('YYYY-MM-DD');
                 switch (item.priority) {
                     case 1:
@@ -376,7 +418,15 @@ $(document).ready(function () {
                     default :
                         color = "none";
                 }
-                $("#taskTbody").append("<tr class='" + color + "' id='" + item._id + "'><td><button id='doneTask-" + item._id + "' class='btn btn-default btn-sm' value='" + item._id + "'>标记</button></td><td>" + start_date + "</td><td>" + item.title + "</td><td>" + item.description + "</td><td><button id='intChangeTask-" + item._id + "' data-toggle='modal' data-target='#ChangeTask' class='btn btn-primary btn-sm' value='" + item._id + "'>更改</button><span>&nbsp;</span><button id='deleteTask-" + item._id + "' class='btn btn-danger btn-sm' value='" + item._id + "'>删除</button><span>&nbsp;</span><button id='intShareTask-" + item._id + "' data-toggle='modal' data-target='#ShareTask' title='觉得不错，分享到分享圈吧！' class='btn btn-info btn-sm' value='" + item._id + "'>分享到分享圈</button></td></tr>");
+                if (item.checkbox_date) {
+                    hour = moment(item.start_date).hour() + ":";
+                    minute = moment(item.start_date).minute();
+
+                } else {
+                    hour = "";
+                    minute = "";
+                }
+                $("#taskTbody").append("<tr class='" + color + "' id='" + item._id + "'><td><button id='doneTask-" + item._id + "' class='btn btn-default btn-sm' value='" + item._id + "'>标记</button></td><td>" + start_date + "</br>" + hour + minute + "</td><td>" + item.title + "</td><td>" + item.description + "</td><td><button id='intChangeTask-" + item._id + "' data-toggle='modal' data-target='#ChangeTask' class='btn btn-primary btn-sm' value='" + item._id + "'>更改</button><span>&nbsp;</span><button id='deleteTask-" + item._id + "' class='btn btn-danger btn-sm' value='" + item._id + "'>删除</button><span>&nbsp;</span><button id='intShareTask-" + item._id + "' data-toggle='modal' data-target='#ShareTask' title='觉得不错，分享到分享圈吧！' class='btn btn-info btn-sm' value='" + item._id + "'>分享到分享圈</button></td></tr>");
 
             });
 
@@ -432,7 +482,17 @@ $(document).ready(function () {
         $.getJSON("/getTasksByTomorrow/Date/" + moment().format('YYYY-MM-DD') + "/Page/" + page + "?time=" + new Date().getTime(), function (data) {
             $.each(data, function (idx, item) {
                 var color,
+                    hour,
+                    minute,
                     start_date = moment(item.start_date).format('YYYY-MM-DD');
+                if (item.checkbox_date) {
+                    hour = moment(item.start_date).hour() + ":";
+                    minute = moment(item.start_date).minute();
+
+                } else {
+                    hour = "";
+                    minute = "";
+                }
                 switch (item.priority) {
                     case 1:
                         color = "low";
@@ -446,7 +506,7 @@ $(document).ready(function () {
                     default :
                         color = "none";
                 }
-                $("#taskTbody").append("<tr class='" + color + "' id='" + item._id + "'><td><button id='doneTask-" + item._id + "' class='btn btn-default btn-sm' value='" + item._id + "'>标记</button></td><td>" + start_date + "</td><td>" + item.title + "</td><td>" + item.description + "</td><td><button id='intChangeTask-" + item._id + "' data-toggle='modal' data-target='#ChangeTask' class='btn btn-primary btn-sm' value='" + item._id + "'>更改</button><span>&nbsp;</span><button id='deleteTask-" + item._id + "' class='btn btn-danger btn-sm' value='" + item._id + "'>删除</button><span>&nbsp;</span><button id='intShareTask-" + item._id + "' data-toggle='modal' data-target='#ShareTask' title='觉得不错，分享到分享圈吧！' class='btn btn-info btn-sm' value='" + item._id + "'>分享到分享圈</button></td></tr>");
+                $("#taskTbody").append("<tr class='" + color + "' id='" + item._id + "'><td><button id='doneTask-" + item._id + "' class='btn btn-default btn-sm' value='" + item._id + "'>标记</button></td><td>" + start_date + "</br>" + hour + minute + "</td><td>" + item.title + "</td><td>" + item.description + "</td><td><button id='intChangeTask-" + item._id + "' data-toggle='modal' data-target='#ChangeTask' class='btn btn-primary btn-sm' value='" + item._id + "'>更改</button><span>&nbsp;</span><button id='deleteTask-" + item._id + "' class='btn btn-danger btn-sm' value='" + item._id + "'>删除</button><span>&nbsp;</span><button id='intShareTask-" + item._id + "' data-toggle='modal' data-target='#ShareTask' title='觉得不错，分享到分享圈吧！' class='btn btn-info btn-sm' value='" + item._id + "'>分享到分享圈</button></td></tr>");
 
             });
 
@@ -502,16 +562,35 @@ $(document).ready(function () {
             $.each(data, function (idx, item) {
                 var check_date,
                     color,
+                    hour,
+                    minute,
+                    startDateHour,
+                    startDateMinute,
                     start_date = moment(item.start_date).format('YYYY-MM-DD');
                 if (item.check_date) {
                     var year = moment(item.check_date).format('YYYY');
-                    if(year == moment().format('YYYY')) {
-                        check_date = moment(item.check_date).format('MM-DD HH:mm');
-                    }else{
-                        check_date = moment(item.check_date).format('YYYY-MM-DD HH:mm');
+                    //判断是否是当前年份
+                    if (year == moment().format('YYYY')) {
+                        check_date = moment(item.check_date).format('MM-DD');
+                    } else {
+                        check_date = moment(item.check_date).format('YYYY-MM-DD');
                     }
+                    hour = moment(item.check_date).hour() + ":";
+                    minute = moment(item.check_date).minute()
+
                 } else {
                     check_date = "未记录";
+                    hour = "";
+                    minute = "";
+
+                }
+                if (item.checkbox_date) {
+                    startDateHour = moment(item.start_date).hour() + ":";
+                    startDateMinute = moment(item.start_date).minute();
+
+                } else {
+                    startDateHour = "";
+                    startDateMinute = "";
                 }
                 switch (item.priority) {
                     case 1:
@@ -526,7 +605,7 @@ $(document).ready(function () {
                     default :
                         color = "none";
                 }
-                $("#taskTbody").append("<tr class='" + color + "' id='" + item._id + "'><td><button id='doneTask-" + item._id + "' class='btn btn-default btn-sm' value='" + item._id + "' disabled='disabled'>" + check_date + "</button></td><td>" + start_date + "</td><td>" + item.title + "</td><td>" + item.description + "</td><td><button id='intChangeTask-" + item._id + "' data-toggle='modal' data-target='#ChangeTask' class='btn btn-primary btn-sm' value='" + item._id + "'>更改</button><span>&nbsp;</span><button id='deleteTask-" + item._id + "' class='btn btn-danger btn-sm' value='" + item._id + "'>删除</button><span>&nbsp;</span><button id='intShareTask-" + item._id + "' data-toggle='modal' data-target='#ShareTask' title='觉得不错，分享到分享圈吧！' class='btn btn-info btn-sm' value='" + item._id + "'>分享到分享圈</button></td></tr>");
+                $("#taskTbody").append("<tr class='" + color + "' id='" + item._id + "'><td><button id='doneTask-" + item._id + "' class='btn btn-default btn-sm' value='" + item._id + "' disabled='disabled'>" + check_date + "</br>" + hour + minute + "</button></td><td>" + start_date + "</br>" + startDateHour + startDateMinute +"</td><td>" + item.title + "</td><td>" + item.description + "</td><td><button id='intChangeTask-" + item._id + "' data-toggle='modal' data-target='#ChangeTask' class='btn btn-primary btn-sm' value='" + item._id + "'>更改</button><span>&nbsp;</span><button id='deleteTask-" + item._id + "' class='btn btn-danger btn-sm' value='" + item._id + "'>删除</button><span>&nbsp;</span><button id='intShareTask-" + item._id + "' data-toggle='modal' data-target='#ShareTask' title='觉得不错，分享到分享圈吧！' class='btn btn-info btn-sm' value='" + item._id + "'>分享到分享圈</button></td></tr>");
 
             });
             //初始化更改任务窗口
@@ -545,5 +624,45 @@ $(document).ready(function () {
         pickTime: false,
         autoclose: 1
     });
+
+    $('.form_date_time').datetimepicker({
+        minDate: moment().subtract('days', 1),
+        showToday: true,
+        language: 'zh-CN',
+        autoclose: 1
+    });
+
+    $("[name='isStartTime']").bootstrapSwitch('size', 'small');
+
+    $("#startTime-checkbox").on('switchChange.bootstrapSwitch', function (event, state) {
+        checkboxDateVal = state.value;
+        if (state.value == true) {
+            $("#start-date").hide();
+            $("#newStartDate").val("");
+            $("#start-date-time").show();
+        }
+        else {
+            $("#start-date").show();
+            $("#newStartDateTime").val("");
+            $("#start-date-time").hide();
+        }
+
+    });
+
+    $("#changeStartTime-checkbox").on('switchChange.bootstrapSwitch', function (event, state) {
+        changeCheckboxDateVal = state.value;
+        if (state.value == true) {
+            $("#change-start-date").hide();
+            //$("#changeStartDate").val("");
+            $("#change-start-date-time").show();
+        }
+        else {
+            $("#change-start-date").show();
+            //$("#changeStartDateTime").val("");
+            $("#change-start-date-time").hide();
+        }
+
+    });
+
 
 });

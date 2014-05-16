@@ -7,7 +7,8 @@ var TaskSchema = new Schema({
     check_task: {type: Boolean, default: false},
     title: String,
     description: String,
-    start_date: Date,
+    start_date: {type: Date, default: null},
+    checkbox_date: {type: Boolean, default: false},
     check_date: {type: Date, default: null},
     tags: [String],
     box: Number,
@@ -78,8 +79,13 @@ TaskDAO.prototype.getTaskByuId = function (uID, callback) {
 
 //通过今天日期获得今日任务总页数
 TaskDAO.prototype.getTasksPageByToday = function (date, uID, callback) {
-    var today = moment(date, "YYYY-MM-DD");
-    Task.find({"start_date": today, "uID": uID, "check_task": false}).count({}, function (err, count) {
+    var today = moment(date, "YYYY-MM-DD HH:mm"),
+        yesterday = moment(date, "YYYY-MM-DD HH:mm").subtract('days', 1),
+        tomorrow = moment(date, "YYYY-MM-DD HH:mm").add('days', 1);
+//    console.log(today);
+//    console.log(yesterday);
+//    console.log(tomorrow);
+    Task.find({"start_date": {$gte: today, $lt: tomorrow}, "uID": uID, "check_task": false}).count({}, function (err, count) {
         var pageCount = Math.ceil(count / 10);
         callback(err, pageCount);
     });
@@ -87,16 +93,19 @@ TaskDAO.prototype.getTasksPageByToday = function (date, uID, callback) {
 
 //通过今天日期获得今日任务
 TaskDAO.prototype.getTasksByToday = function (date, page, uID, callback) {
-    var today = moment(date, "YYYY-MM-DD"),
+    var today = moment(date, "YYYY-MM-DD HH:mm"),
+        yesterday = moment(date, "YYYY-MM-DD HH:mm").subtract('days', 1),
+        tomorrow = moment(date, "YYYY-MM-DD HH:mm").add('days', 1),
         start = (page - 1) * 10;
-    Task.find({"start_date": today, "uID": uID, "check_task": false}).skip(start).limit(10).exec(function (err, tasks) {
+    Task.find({"start_date": {$gte: today, $lt: tomorrow}, "uID": uID, "check_task": false}).skip(start).limit(10).exec(function (err, tasks) {
         callback(err, tasks);
     });
 };
 
 //通过今天日期获得以前任务总页数
 TaskDAO.prototype.getTasksPageByMiss = function (date, uID, callback) {
-    var today = moment(date, "YYYY-MM-DD");
+    var today = moment(date, "YYYY-MM-DD HH:mm"),
+        yesterday = moment(date, "YYYY-MM-DD HH:mm").subtract('days', 1);
     Task.find({"start_date": {$lt: today}, "uID": uID, "check_task": false}).count({}, function (err, count) {
         var pageCount = Math.ceil(count / 10);
         callback(err, pageCount);
@@ -104,7 +113,8 @@ TaskDAO.prototype.getTasksPageByMiss = function (date, uID, callback) {
 };
 //通过今天日期获得以前任务
 TaskDAO.prototype.getTasksByMiss = function (date, page, uID, callback) {
-    var today = moment(date, "YYYY-MM-DD"),
+    var today = moment(date, "YYYY-MM-DD HH:mm"),
+        yesterday = moment(date, "YYYY-MM-DD HH:mm").subtract('days', 1),
         start = (page - 1) * 10;
     Task.find({"start_date": {$lt: today}, "uID": uID, "check_task": false}).skip(start).limit(10).exec(function (err, tasks) {
         callback(err, tasks);
@@ -113,17 +123,19 @@ TaskDAO.prototype.getTasksByMiss = function (date, page, uID, callback) {
 
 //通过今天日期获得未来任务总页数
 TaskDAO.prototype.getTasksPageByTomorrow = function (date, uID, callback) {
-    var today = moment(date, "YYYY-MM-DD");
-    Task.find({"start_date": {$gt: today}, "uID": uID, "check_task": false}).count({}, function (err, count) {
+    var today = moment(date, "YYYY-MM-DD HH:mm"),
+        tomorrow = moment(date, "YYYY-MM-DD HH:mm").add('days', 1);
+    Task.find({"start_date": {$gte: tomorrow}, "uID": uID, "check_task": false}).count({}, function (err, count) {
         var pageCount = Math.ceil(count / 10);
         callback(err, pageCount);
     });
 };
 //通过今天日期获得未来任务
 TaskDAO.prototype.getTasksByTomorrow = function (date, page, uID, callback) {
-    var today = moment(date, "YYYY-MM-DD"),
+    var today = moment(date, "YYYY-MM-DD HH:mm"),
+        tomorrow = moment(date, "YYYY-MM-DD HH:mm").add('days', 1),
         start = (page - 1) * 10;
-    Task.find({"start_date": {$gt: today}, "uID": uID, "check_task": false}).skip(start).limit(10).exec(function (err, tasks) {
+    Task.find({"start_date": {$gte: tomorrow}, "uID": uID, "check_task": false}).skip(start).limit(10).exec(function (err, tasks) {
         callback(err, tasks);
     });
 };

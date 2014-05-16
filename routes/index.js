@@ -115,7 +115,7 @@ module.exports = function (app) {
         var md5 = crypto.createHash('md5'),
             password = md5.update(req.body.password).digest('hex'),
             email = req.body.email.toLowerCase();
-        console.log(email);
+        //console.log(email);
         //检查用户是否存在
         User.getUserByEmail(email, function (err, user) {
             //console.log(user.email);
@@ -265,7 +265,7 @@ module.exports = function (app) {
                     if (err) throw err;
                     var jsonObj = JSON.parse(data);
                     configPath = jsonObj.path;
-                    console.log(configPath);
+                    //console.log(configPath);
                     var path = req.params.x;
                     if (path == configPath) {
                         if (req.session.admin) {
@@ -292,7 +292,7 @@ module.exports = function (app) {
                     if (err) throw err;
                     var jsonObj = JSON.parse(data);
                     configPath = jsonObj.path;
-                    console.log(configPath);
+                    //console.log(configPath);
                     var path = req.params.x;
                     if (path == configPath) {
                         if (!req.session.admin) {
@@ -315,16 +315,16 @@ module.exports = function (app) {
             if (err) throw err;
             var jsonObj = JSON.parse(data);
             configPath = jsonObj.path;
-            console.log(configPath);
+            //console.log(configPath);
             var path = req.params.x;
             if (path == configPath) {
                 var md5 = crypto.createHash('md5'),
                     password = md5.update(req.body.password).digest('hex'),
                     email = req.body.email.toLowerCase();
-                console.log(email);
+                //console.log(email);
                 //检查用户是否存在
                 Admin.getUserByEmail(email, function (err, user) {
-                    console.log(user.email);
+                    //console.log(user.email);
                     if (!user) {
                         req.session.error = '此用户不存在';
                         return res.redirect('/' + configPath + '/login');//用户不存在则跳转到登录页
@@ -358,7 +358,7 @@ module.exports = function (app) {
                     if (err) throw err;
                     var jsonObj = JSON.parse(data);
                     configPath = jsonObj.path;
-                    console.log(configPath);
+                    //console.log(configPath);
                     var path = req.params.x;
                     if (path == configPath) {
                         if (req.session.admin) {
@@ -392,7 +392,7 @@ module.exports = function (app) {
                     if (err) throw err;
                     var jsonObj = JSON.parse(data);
                     configPath = jsonObj.path;
-                    console.log(configPath);
+                    //console.log(configPath);
                     var path = req.params.x;
                     if (path == configPath) {
                         if (req.session.admin) {
@@ -426,7 +426,7 @@ module.exports = function (app) {
                     if (err) throw err;
                     var jsonObj = JSON.parse(data);
                     configPath = jsonObj.path;
-                    console.log(configPath);
+                    //console.log(configPath);
                     var path = req.params.x;
                     if (path == configPath) {
                         if (req.session.admin) {
@@ -462,7 +462,7 @@ module.exports = function (app) {
                     if (err) throw err;
                     var jsonObj = JSON.parse(data);
                     configPath = jsonObj.path;
-                    console.log(configPath);
+                    //console.log(configPath);
                     var path = req.params.x;
                     if (path == configPath) {
                         if (req.session.admin) {
@@ -498,8 +498,8 @@ module.exports = function (app) {
     app.post('/changePasswordById/:id', function (req, res) {
         var md5 = crypto.createHash('md5'),
             password = md5.update(req.body.password).digest('hex');
-        console.log(password);
-        console.log(req.params.id);
+        //console.log(password);
+        //console.log(req.params.id);
         User.changePasswordById(password, req.params.id, function (err, user) {
             if (err) {
                 req.session.error = '密码未能修改成功请重试';
@@ -594,22 +594,54 @@ module.exports = function (app) {
         tags[1] = req.body.tag_two;
         tags[2] = req.body.tag_three;
 
-        var date = new Date();
-        //Start Date
-        var start_date = req.body.start_date;
-        start_date = moment(start_date, "YYYY-MM-DD");
+        var title = req.body.title,
+            description = req.body.description;
 
-        var newTask = {
-            check_task: false,
-            title: req.body.title,
-            description: req.body.description,
-            start_date: start_date,
-            tags: tags,
-            box: req.body.box,
-            priority: req.body.priority,
-            uID: req.session.user._id,
-            username: req.session.user.username
-        };
+        var checkboxDate = req.body.checkbox_date,
+            start_date,
+            newTask = {};
+        //var newTask;
+        //Start Date
+        console.log(checkboxDate);
+        //Start Date Time
+        if (checkboxDate == "true") {
+            start_date = req.body.start_date_time;
+            start_date = moment(start_date, "YYYY-MM-DD HH:mm");
+
+            newTask = {
+                check_task: false,
+                title: title,
+                description: description,
+                checkbox_date: true,
+                start_date: start_date,
+                tags: tags,
+                box: req.body.box,
+                priority: req.body.priority,
+                uID: req.session.user._id,
+                username: req.session.user.username
+            };
+        }
+        else {
+            start_date = req.body.start_date;
+            start_date = moment(start_date, "YYYY-MM-DD");
+
+            newTask = {
+                check_task: false,
+                title: title,
+                description: description,
+                checkbox_date: false,
+                start_date: start_date,
+                tags: tags,
+                box: req.body.box,
+                priority: req.body.priority,
+                uID: req.session.user._id,
+                username: req.session.user.username
+            };
+        }
+
+
+        console.log(title + " " + description);
+
         Task.save(newTask, function (err) {
             if (err) {
                 return err;
@@ -637,16 +669,34 @@ module.exports = function (app) {
         tags[1] = req.body.tag_two;
         tags[2] = req.body.tag_three;
         //Start Date
-        var start_date = req.body.start_date;
-        start_date = moment(start_date, "YYYY-MM-DD");
-        var changeTask = {
-            title: req.body.title,
-            description: req.body.description,
-            start_date: start_date,
-            tags: tags,
-            box: req.body.box,
-            priority: req.body.priority
-        };
+        var checkboxDate = req.body.checkbox_date;
+        var start_date,
+            changeTask = {};
+        if (checkboxDate == "true") {
+            start_date = req.body.start_date_time;
+            start_date = moment(start_date, "YYYY-MM-DD HH:mm");
+            changeTask = {
+                title: req.body.title,
+                description: req.body.description,
+                checkbox_date: true,
+                start_date: start_date,
+                tags: tags,
+                box: req.body.box,
+                priority: req.body.priority
+            };
+        } else {
+            start_date = req.body.start_date;
+            start_date = moment(start_date, "YYYY-MM-DD");
+            changeTask = {
+                title: req.body.title,
+                description: req.body.description,
+                checkbox_date: false,
+                start_date: start_date,
+                tags: tags,
+                box: req.body.box,
+                priority: req.body.priority
+            };
+        }
         Task.updateTaskById(req.params.id, changeTask, function (err) {
             if (err) {
                 return err;

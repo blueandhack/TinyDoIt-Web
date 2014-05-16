@@ -1,7 +1,9 @@
 $(document).ready(function () {
 
     var taskId,
-        thisPage;
+        thisPage,
+        checkboxDateVal = false,
+        changeCheckboxDateVal = false;
 
     intThisPage();
 
@@ -72,6 +74,8 @@ $(document).ready(function () {
             $("#newTagThree").val("");
             $("#newBox").val(0);
             $("#newPriority").val(0);
+            $("#start-date-time").hide();
+            $("#start-date").show();
             taskId = $(this).val();
             $.getJSON("/getShareTaskById/" + $(this).val() + "?time=" + new Date().getTime(), function (data) {
                 var task = eval(data);
@@ -88,16 +92,17 @@ $(document).ready(function () {
     $("#addTaskPost").click(function () {
         var titleVal = $("#newTitle").val();
         var startDateVal = $("#newStartDate").val();
+        var startDateTimeVal = $("#newStartDateTime").val();
         var descriptionVal = $("#newDescription").val();
         var newTagOne = $("#newTagOne").val(),
             newTagTwo = $("#newTagTwo").val(),
             newTagThree = $("#newTagThree").val();
-        if (titleVal == "" || startDateVal == "" || descriptionVal == "" || (newTagOne == "" && newTagTwo == "" && newTagThree == "")) {
+        if (titleVal == "" || (startDateVal == "" && startDateTimeVal == "") || descriptionVal == "" || (newTagOne == "" && newTagTwo == "" && newTagThree == "")) {
             alert("请填写完全");
             return false;
         }
 
-        $.post("addTask" + "?time=" + new Date().getTime(), {title: titleVal, start_date: startDateVal, description: descriptionVal, box: $("#newBox").val(), priority: $("#newPriority").val(), tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
+        $.post("/addTask" + "?time=" + new Date().getTime(), {title: titleVal, start_date: startDateVal, start_date_time: startDateTimeVal, checkbox_date: checkboxDateVal, description: descriptionVal, box: $("#newBox").val(), priority: $("#newPriority").val(), tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
             if (data.status == 1) {
                 $("#addTaskClose").click();
             }
@@ -167,6 +172,30 @@ $(document).ready(function () {
         language: 'zh-CN',
         pickTime: false,
         autoclose: 1
+    });
+
+    $('.form_date_time').datetimepicker({
+        minDate: moment().subtract('days', 1),
+        showToday: true,
+        language: 'zh-CN',
+        autoclose: 1
+    });
+
+    $("[name='isStartTime']").bootstrapSwitch('size', 'small');
+
+    $("#startTime-checkbox").on('switchChange.bootstrapSwitch', function (event, state) {
+        checkboxDateVal = state.value;
+        if (state.value == true) {
+            $("#start-date").hide();
+            $("#newStartDate").val("");
+            $("#start-date-time").show();
+        }
+        else {
+            $("#start-date").show();
+            $("#newStartDateTime").val("");
+            $("#start-date-time").hide();
+        }
+
     });
 
 });
