@@ -15,7 +15,7 @@ var TaskSchema = new Schema({
     priority: Number,
     uID: String,
     username: String,
-    create_task_date: {type: Date, default: new Date()}
+    create_task_date: {type: Date, default: new moment(new Date())}
 
 });
 

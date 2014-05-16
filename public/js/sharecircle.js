@@ -91,8 +91,8 @@ $(document).ready(function () {
     //添加任务
     $("#addTaskPost").click(function () {
         var titleVal = $("#newTitle").val();
-        var startDateVal = $("#newStartDate").val();
-        var startDateTimeVal = $("#newStartDateTime").val();
+        var startDateVal = moment($("#newStartDate").val(), "YYYY-MM-DD").format("YYYY-MM-DD ZZ");
+        var startDateTimeVal = moment($("#newStartDateTime").val(), "YYYY-MM-DD HH:mm").format("YYYY-MM-DD HH:mm ZZ");
         var descriptionVal = $("#newDescription").val();
         var newTagOne = $("#newTagOne").val(),
             newTagTwo = $("#newTagTwo").val(),

@@ -34,13 +34,13 @@ $(document).ready(function () {
     //提交添加任务按钮
     $("#addTaskPost").click(function () {
         var titleVal = $("#newTitle").val();
-        var startDateVal = $("#newStartDate").val();
-        var startDateTimeVal = $("#newStartDateTime").val();
+        var startDateVal = moment($("#newStartDate").val(), "YYYY-MM-DD").format("YYYY-MM-DD ZZ");
+        var startDateTimeVal = moment($("#newStartDateTime").val(), "YYYY-MM-DD HH:mm").format("YYYY-MM-DD HH:mm ZZ");
         var descriptionVal = $("#newDescription").val();
         var newTagOne = $("#newTagOne").val(),
             newTagTwo = $("#newTagTwo").val(),
             newTagThree = $("#newTagThree").val();
-
+        //console.log(startDateTimeVal);
         //console.log(checkboxDateVal);
         //表单验证
         if (titleVal == "" || (startDateVal == "" && startDateTimeVal == "" ) || descriptionVal == "" || (newTagOne == "" && newTagTwo == "" && newTagThree == "")) {
@@ -60,8 +60,8 @@ $(document).ready(function () {
     //提交更改任务按钮
     $("#changeTaskPost").click(function () {
         var titleVal = $("#changeTitle").val();
-        var startDateVal = $("#changeStartDate").val();
-        var startDateTimeVal = $("#changeStartDateTime").val();
+        var startDateVal = moment($("#changeStartDate").val(), "YYYY-MM-DD").format("YYYY-MM-DD ZZ");
+        var startDateTimeVal = moment($("#changeStartDateTime").val(), "YYYY-MM-DD HH:mm").format("YYYY-MM-DD HH:mm ZZ");
         var descriptionVal = $("#changeDescription").val();
         var newTagOne = $("#changeTagOne").val(),
             newTagTwo = $("#changeTagTwo").val(),
@@ -605,7 +605,7 @@ $(document).ready(function () {
                     default :
                         color = "none";
                 }
-                $("#taskTbody").append("<tr class='" + color + "' id='" + item._id + "'><td><button id='doneTask-" + item._id + "' class='btn btn-default btn-sm' value='" + item._id + "' disabled='disabled'>" + check_date + "</br>" + hour + minute + "</button></td><td>" + start_date + "</br>" + startDateHour + startDateMinute +"</td><td>" + item.title + "</td><td>" + item.description + "</td><td><button id='intChangeTask-" + item._id + "' data-toggle='modal' data-target='#ChangeTask' class='btn btn-primary btn-sm' value='" + item._id + "'>更改</button><span>&nbsp;</span><button id='deleteTask-" + item._id + "' class='btn btn-danger btn-sm' value='" + item._id + "'>删除</button><span>&nbsp;</span><button id='intShareTask-" + item._id + "' data-toggle='modal' data-target='#ShareTask' title='觉得不错，分享到分享圈吧！' class='btn btn-info btn-sm' value='" + item._id + "'>分享到分享圈</button></td></tr>");
+                $("#taskTbody").append("<tr class='" + color + "' id='" + item._id + "'><td><button id='doneTask-" + item._id + "' class='btn btn-default btn-sm' value='" + item._id + "' disabled='disabled'>" + check_date + "</br>" + hour + minute + "</button></td><td>" + start_date + "</br>" + startDateHour + startDateMinute + "</td><td>" + item.title + "</td><td>" + item.description + "</td><td><button id='intChangeTask-" + item._id + "' data-toggle='modal' data-target='#ChangeTask' class='btn btn-primary btn-sm' value='" + item._id + "'>更改</button><span>&nbsp;</span><button id='deleteTask-" + item._id + "' class='btn btn-danger btn-sm' value='" + item._id + "'>删除</button><span>&nbsp;</span><button id='intShareTask-" + item._id + "' data-toggle='modal' data-target='#ShareTask' title='觉得不错，分享到分享圈吧！' class='btn btn-info btn-sm' value='" + item._id + "'>分享到分享圈</button></td></tr>");
 
             });
             //初始化更改任务窗口

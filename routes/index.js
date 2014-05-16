@@ -606,7 +606,9 @@ module.exports = function (app) {
         //Start Date Time
         if (checkboxDate == "true") {
             start_date = req.body.start_date_time;
-            start_date = moment(start_date, "YYYY-MM-DD HH:mm");
+            start_date = moment(start_date, "YYYY-MM-DD HH:mm ZZ");
+
+            console.log(start_date);
 
             newTask = {
                 check_task: false,
@@ -623,7 +625,9 @@ module.exports = function (app) {
         }
         else {
             start_date = req.body.start_date;
-            start_date = moment(start_date, "YYYY-MM-DD");
+            start_date = moment(start_date, "YYYY-MM-DD ZZ");
+
+            console.log(start_date);
 
             newTask = {
                 check_task: false,
@@ -674,7 +678,8 @@ module.exports = function (app) {
             changeTask = {};
         if (checkboxDate == "true") {
             start_date = req.body.start_date_time;
-            start_date = moment(start_date, "YYYY-MM-DD HH:mm");
+            start_date = moment(start_date, "YYYY-MM-DD HH:mm ZZ");
+            console.log(start_date);
             changeTask = {
                 title: req.body.title,
                 description: req.body.description,
@@ -686,7 +691,8 @@ module.exports = function (app) {
             };
         } else {
             start_date = req.body.start_date;
-            start_date = moment(start_date, "YYYY-MM-DD");
+            start_date = moment(start_date, "YYYY-MM-DD ZZ");
+            console.log(start_date);
             changeTask = {
                 title: req.body.title,
                 description: req.body.description,
@@ -708,7 +714,7 @@ module.exports = function (app) {
     app.post('/doneTaskById/:id', function (req, res) {
         var changeTask = {
             check_task: true,
-            check_date: new Date()
+            check_date: moment(new Date())
         };
         Task.updateTaskById(req.params.id, changeTask, function (err) {
             if (err) {
