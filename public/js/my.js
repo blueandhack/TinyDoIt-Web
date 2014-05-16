@@ -284,7 +284,8 @@ $(document).ready(function () {
 
     //获得今天任务总页数
     function getTodayPageCount() {
-        var today = moment().format('YYYY-MM-DD');
+        var today = moment().format('YYYY-MM-DDZZ');
+        today = today.replace("+","i");
         $.getJSON("/getTasksByToday/Date/" + today + "/SumPage" + "?time=" + new Date().getTime(), function (result) {
             if (result.count == 1 || result.count == 0) {
                 $('#pagination').empty();
@@ -320,7 +321,9 @@ $(document).ready(function () {
     //获得今日任务并分页显示
     function getTodayTasks(page) {
         $("#taskTbody").empty();
-        $.getJSON("/getTasksByToday/Date/" + moment().format('YYYY-MM-DD') + "/Page/" + page + "?time=" + new Date().getTime(), function (data) {
+        var date = moment().format('YYYY-MM-DDZZ');
+        date = date.replace("+","i");
+        $.getJSON("/getTasksByToday/Date/" + date + "/Page/" + page + "?time=" + new Date().getTime(), function (data) {
             $.each(data, function (idx, item) {
                 var color,
                     hour,
@@ -363,7 +366,8 @@ $(document).ready(function () {
 
     //获得以前任务总页数
     function getMissPageCount() {
-        var today = moment().format('YYYY-MM-DD');
+        var today = moment().format('YYYY-MM-DDZZ');
+        today = today.replace("+","i");
         $.getJSON("/getTasksByMiss/Date/" + today + "/SumPage" + "?time=" + new Date().getTime(), function (result) {
             if (result.count == 1 || result.count == 0) {
                 $('#pagination').empty();
@@ -399,7 +403,9 @@ $(document).ready(function () {
     //获得以前任务并分页显示
     function getMissTasks(page) {
         $("#taskTbody").empty();
-        $.getJSON("/getTasksByMiss/Date/" + moment().format('YYYY-MM-DD') + "/Page/" + page + "?time=" + new Date().getTime(), function (data) {
+        var today = moment().format('YYYY-MM-DDZZ');
+        today = today.replace("+","i");
+        $.getJSON("/getTasksByMiss/Date/" + today + "/Page/" + page + "?time=" + new Date().getTime(), function (data) {
             $.each(data, function (idx, item) {
                 var color,
                     hour,
@@ -443,7 +449,8 @@ $(document).ready(function () {
 
     //获得未来任务总页数
     function getTomorrowPageCount() {
-        var today = moment().format('YYYY-MM-DD');
+        var today = moment().format('YYYY-MM-DDZZ');
+        today = today.replace("+","i");
         $.getJSON("/getTasksByTomorrow/Date/" + today + "/SumPage" + "?time=" + new Date().getTime(), function (result) {
             if (result.count == 1 || result.count == 0) {
                 $('#pagination').empty();
@@ -479,7 +486,9 @@ $(document).ready(function () {
     //获得未来任务并分页显示
     function getTomorrowTasks(page) {
         $("#taskTbody").empty();
-        $.getJSON("/getTasksByTomorrow/Date/" + moment().format('YYYY-MM-DD') + "/Page/" + page + "?time=" + new Date().getTime(), function (data) {
+        var today = moment().format('YYYY-MM-DDZZ');
+        today = today.replace("+","i");
+        $.getJSON("/getTasksByTomorrow/Date/" + today + "/Page/" + page + "?time=" + new Date().getTime(), function (data) {
             $.each(data, function (idx, item) {
                 var color,
                     hour,
