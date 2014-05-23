@@ -100,7 +100,7 @@ $(document).ready(function () {
         $("#title").html("<h4>修改SMTP邮件配置</h4>");
 
         $("#content").html("<div class='row'><form id='changeSMTPForm' class='form-horizontal'>" +
-            "<div class='form-group'><label class='control-label col-sm-2'>主机</label><div class='col-sm-5'><input id='host' name='host' type='text' class='form-control' placeholder='请输入您要更改的新密码' required='true' autofocus='true'></div></div>" +
+            "<div class='form-group'><label class='control-label col-sm-2'>主机</label><div class='col-sm-5'><input id='host' name='host' type='text' class='form-control' placeholder='主机 eg:smtp.exmail.qq.com' required='true' autofocus='true'></div></div>" +
             "<div class='form-group'><div class='col-sm-offset-2'><div class='checkbox'><label>是否开启SSL<input id='checkboxSSL' name='checkboxSSL' type='checkbox' required='true'></label></div></div></div>" +
             "<div class='form-group'><label class='control-label col-sm-2'>端口</label><div class='col-sm-5'><input id='port' name='port' type='text' class='form-control' placeholder='请输入端口号 eg:465' required='true' autofocus=''></div></div>" +
             "<div class='form-group'><label class='control-label col-sm-2'>账号</label><div class='col-sm-5'><input id='smtpAccount' name='smtpAccount' type='text' class='form-control' placeholder='请输入发件邮箱账号' required='true' autofocus=''></div></div>" +

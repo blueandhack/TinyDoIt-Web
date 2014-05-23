@@ -106,7 +106,7 @@ module.exports = function (app) {
                         try {
                             //发送邮件
                             var md5 = crypto.createHash('md5');
-                            md5.update(Math.floor(Math.random()*10+1).toString());
+                            md5.update(Math.floor(Math.random() * 10 + 1).toString());
                             var code = md5.digest("hex");
                             console.log(code);
                             var checkEmailUser = {
@@ -198,7 +198,7 @@ module.exports = function (app) {
                 try {
                     //发送邮件
                     var md5 = crypto.createHash('md5');
-                    md5.update(Math.floor(Math.random()*10+1).toString());
+                    md5.update(Math.floor(Math.random() * 10 + 1).toString());
                     var code = md5.digest("hex");
                     console.log(code);
                     var checkPasswordUser = {
@@ -467,7 +467,8 @@ module.exports = function (app) {
                 }
                 Admin.save(newAdmin, function (err) {
                     var config = {
-                        path: path
+                        path: path,
+                        smtp: {}
                     };
                     var jsonPath = JSON.stringify(config);
                     fs.writeFile('config.json', jsonPath, function (err) {
@@ -866,7 +867,7 @@ module.exports = function (app) {
     //验证邮箱请求
     app.post('/postCheckEmail', function (req, res) {
         var md5 = crypto.createHash('md5');
-        md5.update(Math.floor(Math.random()*10+1).toString());
+        md5.update(Math.floor(Math.random() * 10 + 1).toString());
         var code = md5.digest("hex");
         console.log(code);
         var user = {
