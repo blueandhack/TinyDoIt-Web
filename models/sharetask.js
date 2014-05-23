@@ -7,6 +7,7 @@ var ShareTaskSchema = new Schema({
     description: String,
     tags: [String],
     username: String,
+    usernameLowerCase: String,
     create_task_date: {type: Date, default: Date.now}
 });
 

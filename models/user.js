@@ -5,8 +5,13 @@ var Schema = mongodb.mongoose.Schema;
 
 var UserSchema = new Schema({
     username: String,
+    usernameLowerCase: String,
     password: String,
     email: String,
+    checkEmail: {type: Boolean, default: false},
+    checkEmailCode: {type: String, default: null},
+    checkPassword: {type: Boolean, default: false},
+    checkPasswordCode: {type: String, default: null},
     create: Date,
     head: String
 });
@@ -24,6 +29,7 @@ UserDAO.prototype.save = function (user, callback) {
     //要存入数据库的用户信息文档
     var newUser = {
         username: user.username,
+        usernameLowerCase: user.username.toLowerCase(),
         password: user.password,
         email: user.email,
         head: head,
@@ -43,43 +49,57 @@ UserDAO.prototype.save = function (user, callback) {
 UserDAO.prototype.getUserByEmailAndUsername = function (email, username, callback) {
     User.find({$or: [
         {email: email},
-        {username: username}
+        {usernameLowerCase: username}
     ]}, function (err, user) {
+        callback(err, user);
+    });
+};
+
+//通过用户名修改任意值
+UserDAO.prototype.updateUserByUsername = function (data, username, callback) {
+    User.update({usernameLowerCase: username}, data, function (err, user) {
+        callback(err, user);
+    });
+};
+
+//通过ID修改任意值
+UserDAO.prototype.updateUserById = function (data, Id, callback) {
+    User.update({_id: Id}, data, function (err, user) {
         callback(err, user);
     });
 };
 
 //通过用户名修改密码
 UserDAO.prototype.changePasswordByUsername = function (password, username, callback) {
-    User.update({username: username},{password: password}, function (err, user) {
+    User.update({usernameLowerCase: username}, {password: password}, function (err, user) {
         callback(err, user);
     });
 };
 
 //通过用户名修改密码
 UserDAO.prototype.changePasswordById = function (password, Id, callback) {
-    User.update({_id: Id},{password: password}, function (err, user) {
+    User.update({_id: Id}, {password: password}, function (err, user) {
         callback(err, user);
     });
 };
 
 //通过用户名修改邮箱
 UserDAO.prototype.changeEmailByUsername = function (email, username, callback) {
-    User.update({username: username},{email: email}, function (err, user) {
+    User.update({usernameLowerCase: username}, {email: email}, function (err, user) {
         callback(err, user);
     });
 };
 
 //通过用户名修改头像
 UserDAO.prototype.changeHeadByUsername = function (head, username, callback) {
-    User.update({username: username},{head: head}, function (err, user) {
+    User.update({usernameLowerCase: username}, {head: head}, function (err, user) {
         callback(err, user);
     });
 };
 
 //通过用户名删除用户
 UserDAO.prototype.deleteUserByUsername = function (username, callback) {
-    User.remove({username: username}, function (err, user) {
+    User.remove({usernameLowerCase: username}, function (err, user) {
         callback(err);
     });
 };
@@ -91,8 +111,7 @@ UserDAO.prototype.deleteUserById = function (Id, callback) {
 };
 
 UserDAO.prototype.getUserByUsername = function (username, callback) {
-    //正则表达式，不区分大小写搜索
-    User.findOne({username: {$regex: username, $options: "i"}}, {username: 1, email: 1, create: 1, head: 1}, function (err, user) {
+    User.findOne({usernameLowerCase: username}, {username: 1, email: 1, create: 1, head: 1, checkEmail: 1, checkEmailCode: 1, checkPasswordCode: 1, checkPassword: 1}, function (err, user) {
         callback(err, user);
     });
 };
@@ -104,13 +123,13 @@ UserDAO.prototype.getUserByEmail = function (email, callback) {
 };
 
 UserDAO.prototype.getUserById = function (Id, callback) {
-    User.findOne({_id: Id},{username: 1, email: 1, create: 1, head: 1}, function (err, user) {
+    User.findOne({_id: Id}, {username: 1, email: 1, create: 1, head: 1, checkEmail: 1, checkEmailCode: 1, checkPasswordCode: 1, checkPassword: 1}, function (err, user) {
         callback(err, user);
     });
 };
 
 UserDAO.prototype.getAllUsers = function (callback) {
-    User.find({}, {username: 1, email: 1, create: 1, head: 1},function (err, user) {
+    User.find({}).sort({create: 1}, {username: 1, email: 1, create: 1, head: 1}, function (err, user) {
         callback(err, user);
     });
 };
@@ -131,7 +150,7 @@ UserDAO.prototype.getUsersPage = function (callback) {
 //通过页数获取用户
 UserDAO.prototype.getUsersByPage = function (page, callback) {
     var start = (page - 1) * 10;
-    User.find({}).skip(start).limit(10).exec(function (err, users) {
+    User.find({}).sort({create: -1}).skip(start).limit(10).exec(function (err, users) {
         callback(err, users);
     });
 };

@@ -1,6 +1,6 @@
 {
     "name": "TinyDoIt",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "private": true,
     "scripts": {
         "start": "node app.js"
@@ -11,6 +11,7 @@
         "mongodb": "1.4.0",
         "moment": "2.5.1",
         "mongoose": "3.8.8",
-        "session-mongoose": "0.4.1"
+        "session-mongoose": "0.4.1",
+        "nodemailer": "0.6.5"
     }
 }

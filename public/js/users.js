@@ -110,9 +110,14 @@ $(document).ready(function () {
         $("#usersTbody").empty();
         $.getJSON("/getUsersByPage/Page/" + page + "?time=" + new Date().getTime(), function (data) {
             $.each(data, function (idx, item) {
-
+                var checkEmail;
+                if (item.checkEmail == true) {
+                    checkEmail = "是";
+                } else {
+                    checkEmail = "否";
+                }
                 var create_user_date = moment(item.create).format('YYYY-MM-DD');
-                $("#usersTbody").append("<tr id='" + item._id + "'><td><img class='img-circle user-avatar' src='" + item.head + "'></td><td>" + item.username + "</td><td>" + item.email + "</td><td>" + create_user_date + "</td><td><button id='intChangeUser-" + item._id + "' data-toggle='modal' data-target='#ChangeUser' class='btn btn-info btn-sm' value='" + item._id + "'>更改用户密码</button>&nbsp;<button id='deleteUser-" + item._id + "' class='btn btn-danger btn-sm' value='" + item._id + "'>删除</button></td></tr>");
+                $("#usersTbody").append("<tr id='" + item._id + "'><td><img class='img-circle user-avatar' src='" + item.head + "'></td><td>" + item.username + "</td><td>" + item.email + "</td><td>" + checkEmail + "</td><td>" + create_user_date + "</td><td><button id='intChangeUser-" + item._id + "' data-toggle='modal' data-target='#ChangeUser' class='btn btn-info btn-sm' value='" + item._id + "'>更改用户密码</button>&nbsp;<button id='deleteUser-" + item._id + "' class='btn btn-danger btn-sm' value='" + item._id + "'>删除</button></td></tr>");
             });
             //初始化更改任务窗口
             changeButton();

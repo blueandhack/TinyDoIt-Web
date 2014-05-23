@@ -8,6 +8,13 @@ $(document).ready(function () {
     //初始化当前页面
     intThisPage();
 
+    $.getJSON("/getUserByUsername" + "?time=" + new Date().getTime(), function (data) {
+        if(data.checkEmail == false){
+            $("#tip").html("<div class='alert alert-warning alert-dismissable'><button class='close' type='button' data-dismiss='alert' aria-hidden='true'> &times;</button>请您在<a href='/settings'>设置界面</a>验证您的邮箱</div>");
+        }
+
+    });
+
     //初始化
     function intThisPage() {
         getTodayPageCount();
@@ -79,7 +86,7 @@ $(document).ready(function () {
                 return false;
             }
         }
-        $.post("updateTaskById/" + taskId + "?time=" + new Date().getTime(), {title: titleVal, start_date: startDateVal, start_date_time: startDateTimeVal, checkbox_date: changeCheckboxDateVal, description: descriptionVal, box: $("#changeBox").val(), priority: $("#changePriority").val(), tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
+        $.post("/updateTaskById/" + taskId + "?time=" + new Date().getTime(), {title: titleVal, start_date: startDateVal, start_date_time: startDateTimeVal, checkbox_date: changeCheckboxDateVal, description: descriptionVal, box: $("#changeBox").val(), priority: $("#changePriority").val(), tag_one: newTagOne, tag_two: newTagTwo, tag_three: newTagThree  }, function (data) {
             if (data.status == 1) {
                 $("#changeTaskClose").click();
                 console.log(thisClass);
@@ -285,7 +292,7 @@ $(document).ready(function () {
     //获得今天任务总页数
     function getTodayPageCount() {
         var today = moment().format('YYYY-MM-DDZZ');
-        today = today.replace("+","i");
+        today = today.replace("+", "i");
         $.getJSON("/getTasksByToday/Date/" + today + "/SumPage" + "?time=" + new Date().getTime(), function (result) {
             if (result.count == 1 || result.count == 0) {
                 $('#pagination').empty();
@@ -322,7 +329,7 @@ $(document).ready(function () {
     function getTodayTasks(page) {
         $("#taskTbody").empty();
         var date = moment().format('YYYY-MM-DDZZ');
-        date = date.replace("+","i");
+        date = date.replace("+", "i");
         $.getJSON("/getTasksByToday/Date/" + date + "/Page/" + page + "?time=" + new Date().getTime(), function (data) {
             $.each(data, function (idx, item) {
                 var color,
@@ -367,7 +374,7 @@ $(document).ready(function () {
     //获得以前任务总页数
     function getMissPageCount() {
         var today = moment().format('YYYY-MM-DDZZ');
-        today = today.replace("+","i");
+        today = today.replace("+", "i");
         $.getJSON("/getTasksByMiss/Date/" + today + "/SumPage" + "?time=" + new Date().getTime(), function (result) {
             if (result.count == 1 || result.count == 0) {
                 $('#pagination').empty();
@@ -404,7 +411,7 @@ $(document).ready(function () {
     function getMissTasks(page) {
         $("#taskTbody").empty();
         var today = moment().format('YYYY-MM-DDZZ');
-        today = today.replace("+","i");
+        today = today.replace("+", "i");
         $.getJSON("/getTasksByMiss/Date/" + today + "/Page/" + page + "?time=" + new Date().getTime(), function (data) {
             $.each(data, function (idx, item) {
                 var color,
@@ -450,7 +457,7 @@ $(document).ready(function () {
     //获得未来任务总页数
     function getTomorrowPageCount() {
         var today = moment().format('YYYY-MM-DDZZ');
-        today = today.replace("+","i");
+        today = today.replace("+", "i");
         $.getJSON("/getTasksByTomorrow/Date/" + today + "/SumPage" + "?time=" + new Date().getTime(), function (result) {
             if (result.count == 1 || result.count == 0) {
                 $('#pagination').empty();
@@ -487,7 +494,7 @@ $(document).ready(function () {
     function getTomorrowTasks(page) {
         $("#taskTbody").empty();
         var today = moment().format('YYYY-MM-DDZZ');
-        today = today.replace("+","i");
+        today = today.replace("+", "i");
         $.getJSON("/getTasksByTomorrow/Date/" + today + "/Page/" + page + "?time=" + new Date().getTime(), function (data) {
             $.each(data, function (idx, item) {
                 var color,

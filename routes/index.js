@@ -4,6 +4,8 @@ var crypto = require('crypto'),
     ShareTask = require('../models/sharetask.js'),
     Admin = require('../models/admin.js'),
     moment = require('moment'),
+    nodemailer = require('nodemailer'),
+    packageJson = require("../package.json"),
     fs = require('fs');
 
 module.exports = function (app) {
@@ -20,7 +22,8 @@ module.exports = function (app) {
         }
         res.render('index', {
             user: req.session.user,
-            userHead: userHead
+            userHead: userHead,
+            ver: packageJson.version
         });
 
     });
@@ -32,7 +35,8 @@ module.exports = function (app) {
         }
         res.render('index', {
             user: req.session.user,
-            userHead: userHead
+            userHead: userHead,
+            ver: packageJson.version
         });
     });
     //帮助页面
@@ -43,7 +47,8 @@ module.exports = function (app) {
         }
         res.render('help', {
             user: req.session.user,
-            userHead: userHead
+            userHead: userHead,
+            ver: packageJson.version
         });
     });
     //注册页面
@@ -89,7 +94,7 @@ module.exports = function (app) {
                 req.session.error = '此邮箱已存在';
                 return res.redirect('/register');
             }
-            User.getUserByUsername(newUser.username, function (err, user) {
+            User.getUserByUsername(newUser.username.toLowerCase(), function (err, user) {
                 if (user != null) {
                     req.session.error = '此用户已存在';
                     return res.redirect('/register');
@@ -97,6 +102,71 @@ module.exports = function (app) {
                 User.save(newUser, function (err) {
                     User.getUserByEmail(newUser.email, function (err, user) {
                         req.session.user = user._doc;
+
+                        try {
+                            //发送邮件
+                            var md5 = crypto.createHash('md5');
+                            md5.update(Math.floor(Math.random()*10+1).toString());
+                            var code = md5.digest("hex");
+                            console.log(code);
+                            var checkEmailUser = {
+                                checkEmailCode: code,
+                                checkEmail: false
+                            };
+                            User.updateUserByUsername(checkEmailUser, req.session.user.username.toLowerCase(), function () {
+                                User.getUserByUsername(req.session.user.username.toLowerCase(), function (err, user) {
+                                    //获取邮件信息
+                                    var configSMTP;
+                                    fs.exists('config.json', function (exists) {
+                                        if (exists) {
+                                            fs.readFile('config.json', function (err, data) {
+                                                if (err) throw err;
+                                                var jsonObj = JSON.parse(data);
+                                                configSMTP = jsonObj.smtp;
+                                                var ssl;
+                                                if (configSMTP.ssl == "true") {
+                                                    ssl = true
+                                                } else {
+                                                    ssl = false
+                                                }
+                                                var smtpTransport = nodemailer.createTransport("SMTP", {
+                                                    host: configSMTP.host, // 主机
+                                                    secureConnection: configSMTP.ssl, // 使用 SSL
+                                                    port: parseInt(configSMTP.port), // SMTP 端口
+                                                    auth: {
+                                                        user: configSMTP.account, // 账号
+                                                        pass: configSMTP.password // 密码
+                                                    }
+                                                });
+                                                // 设置邮件内容
+                                                var mailOptions = {
+                                                    from: configSMTP.email, // 发件地址
+                                                    to: user._doc.email, // 收件列表
+                                                    subject: configSMTP.subject, // 标题
+                                                    html: "亲爱的用户，您好！<br/><b>感谢您注册" + configSMTP.websiteName + "，点击下方链接，验证您的邮箱。</b><br/><a href='http://" + configSMTP.website + "/email/verify?uid=" + user._doc._id + "&code=" + code + "'>http://" + configSMTP.website + "/email/verify?uid=" + user._doc._id + "&code=" + code + "</a>" // html 内容
+                                                };
+
+                                                // 发送邮件
+                                                smtpTransport.sendMail(mailOptions, function (error, response) {
+                                                    if (error) {
+                                                        console.log(error);
+                                                    } else {
+                                                        res.send({"status": 1});
+                                                        console.log("Message sent: " + response.message);
+                                                    }
+                                                    smtpTransport.close(); // 如果没用，关闭连接池
+                                                });
+
+                                            });
+                                        }
+                                    });
+                                });
+
+                            });
+                        } catch (error) {
+                            console.log(error);
+                        }
+
                         res.redirect('/');
                     });
                 });
@@ -108,6 +178,161 @@ module.exports = function (app) {
     app.get('/signin', notAuthentication);
     app.get('/signin', function (req, res) {
         res.render('signin', {});
+    });
+    //找回密码页面
+    app.get('/forgot', notAuthentication);
+    app.get('/forgot', function (req, res) {
+        res.render('forgot', {});
+    });
+    //提交找回密码
+    app.post("/forgot", function (req, res) {
+        var username = req.body.username,
+            email = req.body.email;
+        User.getUserByUsername(username.toLowerCase(), function (err, user) {
+            if (user == null || !user) {
+                req.session.error = '用户名及密码有误';
+                res.send({"status": 0});
+            }
+            if (user._doc.email == email) {
+                //发送邮件
+                try {
+                    //发送邮件
+                    var md5 = crypto.createHash('md5');
+                    md5.update(Math.floor(Math.random()*10+1).toString());
+                    var code = md5.digest("hex");
+                    console.log(code);
+                    var checkPasswordUser = {
+                        checkPasswordCode: code,
+                        checkPassword: true
+                    };
+                    User.updateUserByUsername(checkPasswordUser, username.toLowerCase(), function () {
+                        User.getUserByUsername(username.toLowerCase(), function (err, user) {
+                            //获取邮件信息
+                            var configSMTP;
+                            fs.exists('config.json', function (exists) {
+                                if (exists) {
+                                    fs.readFile('config.json', function (err, data) {
+                                        if (err) throw err;
+                                        var jsonObj = JSON.parse(data);
+                                        configSMTP = jsonObj.smtp;
+                                        var ssl;
+                                        if (configSMTP.ssl == "true") {
+                                            ssl = true
+                                        } else {
+                                            ssl = false
+                                        }
+                                        var smtpTransport = nodemailer.createTransport("SMTP", {
+                                            host: configSMTP.host, // 主机
+                                            secureConnection: configSMTP.ssl, // 使用 SSL
+                                            port: parseInt(configSMTP.port), // SMTP 端口
+                                            auth: {
+                                                user: configSMTP.account, // 账号
+                                                pass: configSMTP.password // 密码
+                                            }
+                                        });
+                                        // 设置邮件内容
+                                        var mailOptions = {
+                                            from: configSMTP.email, // 发件地址
+                                            to: user._doc.email, // 收件列表
+                                            subject: configSMTP.subjectPassword, // 标题
+                                            html: "亲爱的用户，您好！<br/><b>感谢您使用" + configSMTP.websiteName + "，点击下方链接，重置您的密码。</b><br/><a href='http://" + configSMTP.website + "/password/verify?uid=" + user._doc._id + "&code=" + code + "'>http://" + configSMTP.website + "/password/verify?uid=" + user._doc._id + "&code=" + code + "</a>" // html 内容
+                                        };
+
+                                        // 发送邮件
+                                        smtpTransport.sendMail(mailOptions, function (error, response) {
+                                            if (error) {
+                                                console.log(error);
+                                            } else {
+                                                res.send({"status": 1});
+                                                console.log("Message sent: " + response.message);
+                                            }
+                                            smtpTransport.close(); // 如果没用，关闭连接池
+                                        });
+
+                                    });
+                                }
+                            });
+                        });
+
+                    });
+                } catch (error) {
+                    console.log(error);
+                }
+                res.send({"status": 1});
+            } else {
+                res.send({"status": 0});
+            }
+        });
+    });
+    app.get("/password/verify", function (req, res) {
+        var uid = req.query.uid,
+            code = req.query.code;
+        console.log(uid);
+        console.log(code);
+        var userHead = null;
+        if (req.session.user != null) {
+            userHead = req.session.user.head;
+        }
+        User.getUserById(uid, function (err, user) {
+            if (err || (user == null)) {
+                res.render('password', {
+                    check: false,
+                    info: "链接已失效",
+                    user: req.session.user,
+                    userHead: userHead,
+                    ver: packageJson.version
+                });
+            } else {
+                if (user.checkPassword == false) {
+                    res.render('password', {
+                        check: false,
+                        info: "链接已失效",
+                        user: req.session.user,
+                        userHead: userHead,
+                        ver: packageJson.version
+                    });
+                } else {
+                    if (code != user._doc.checkPasswordCode) {
+                        res.render('password', {
+                            check: false,
+                            info: "链接已失效",
+                            user: req.session.user,
+                            userHead: userHead,
+                            ver: packageJson.version
+                        });
+                    } else {
+                        res.render('password', {
+                            check: true,
+                            info: "请输入新密码",
+                            user: req.session.user,
+                            userHead: userHead,
+                            ver: packageJson.version
+                        });
+                    }
+                }
+            }
+        });
+    });
+    app.post("/password/verify", function (req, res) {
+        var password = req.body.password,
+            uid = req.body.uid,
+            code = req.body.code;
+        var md5 = crypto.createHash('md5');
+        password = md5.update(password).digest('hex');
+        User.getUserById(uid, function (err, user) {
+            if (err || user == null) {
+                res.send({"status": 0});
+            }
+            if (user.checkPassword == false) {
+                res.send({"status": 0});
+            }
+            if (user.checkPasswordCode != code) {
+                res.send({"status": 0});
+            }
+            User.updateUserById({password: password, checkPassword: false}, uid, function (err, user) {
+                res.send({"status": 1});
+            });
+        });
     });
     //提交登录
     app.post('/signin', notAuthentication);
@@ -136,7 +361,7 @@ module.exports = function (app) {
     });
     //获取用户信息
     app.get('/getUserByUsername', function (req, res) {
-        User.getUserByUsername(req.session.user.username, function (err, user) {
+        User.getUserByUsername(req.session.user.username.toLowerCase(), function (err, user) {
             res.json(user);
         });
     });
@@ -160,7 +385,8 @@ module.exports = function (app) {
         }
         res.render('about', {
             user: req.session.user,
-            userHead: userHead
+            userHead: userHead,
+            ver: packageJson.version
         });
     });
     //我的任务页面
@@ -234,7 +460,7 @@ module.exports = function (app) {
                 req.session.error = '此邮箱已存在';
                 return res.redirect('/admin/config');
             }
-            Admin.getUserByUsername(newAdmin.username, function (err, admin) {
+            Admin.getUserByUsername(newAdmin.username.toLowerCase(), function (err, admin) {
                 if (admin != null) {
                     req.session.error = '此用户已存在';
                     return res.redirect('/admin/config');
@@ -448,6 +674,57 @@ module.exports = function (app) {
         });
     });
 
+    //邮箱验证
+    app.get('/email/verify', function (req, res, next) {
+        var uid = req.query.uid,
+            code = req.query.code;
+        console.log(uid);
+        console.log(code);
+        var userHead = null;
+        if (req.session.user != null) {
+            userHead = req.session.user.head;
+        }
+        User.getUserById(uid, function (err, user) {
+            if (err || (user == null)) {
+                res.render('verify', {
+                    info: "验证错误",
+                    user: req.session.user,
+                    userHead: userHead,
+                    ver: packageJson.version
+                });
+            } else {
+                if (user.checkEmail == true) {
+                    res.render('verify', {
+                        info: "邮箱已验证",
+                        user: req.session.user,
+                        userHead: userHead,
+                        ver: packageJson.version
+                    });
+                } else {
+                    if (code != user._doc.checkEmailCode) {
+                        res.render('verify', {
+                            info: "验证错误",
+                            user: req.session.user,
+                            userHead: userHead,
+                            ver: packageJson.version
+                        });
+                    }
+                    var newUser = {
+                        checkEmail: true
+                    };
+                    User.updateUserById(newUser, uid, function (err, user) {
+                        res.render('verify', {
+                            info: "邮箱验证成功",
+                            user: req.session.user,
+                            userHead: userHead,
+                            ver: packageJson.version
+                        });
+                    });
+                }
+            }
+        });
+    });
+
     //登出
     app.get('/signout', authentication);
     app.get('/signout', function (req, res) {
@@ -517,7 +794,7 @@ module.exports = function (app) {
     app.post('/changePassword', function (req, res) {
         var md5 = crypto.createHash('md5'),
             password = md5.update(req.body.password).digest('hex');
-        User.changePasswordByUsername(password, req.session.user.username, function (err) {
+        User.changePasswordByUsername(password, req.session.user.username.toLowerCase(), function (err) {
             if (err) {
                 req.session.error = '密码未能修改成功请重试';
                 res.send({"status": 0});
@@ -537,7 +814,7 @@ module.exports = function (app) {
                 return err;
             }
             //将email转换为小写并更改
-            User.changeEmailByUsername(email, req.session.user.username, function (err) {
+            User.changeEmailByUsername(email, req.session.user.username.toLowerCase(), function (err) {
                 if (err) {
                     req.session.error = '邮箱未能修改成功请重试';
                     res.send({"status": 0});
@@ -547,9 +824,13 @@ module.exports = function (app) {
                     hmd5 = crypto.createHash('md5'),
                     email_MD5 = hmd5.update(email.toLowerCase()).digest('hex'),
                     head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";
-                User.changeHeadByUsername(head, req.session.user.username, function (err) {
+                User.changeHeadByUsername(head, req.session.user.username.toLowerCase(), function (err) {
                     return err;
                 });
+                User.updateUserByUsername({checkEmail: false}, req.session.user.username.toLowerCase(), function (err) {
+                    return err;
+                });
+
                 //重新刷新session
                 User.getUserByEmail(email.toLowerCase(), function (err, user) {
                     req.session.user = user._doc;
@@ -562,7 +843,7 @@ module.exports = function (app) {
     });
     //提交删除账户
     app.post('/deleteAccount', function (req, res) {
-        User.deleteUserByUsername(req.session.user.username, function (err) {
+        User.deleteUserByUsername(req.session.user.username.toLowerCase(), function (err) {
             if (err) {
                 req.session.error = '删除账户出现错误，请重试';
                 res.send({"status": 0});
@@ -573,7 +854,7 @@ module.exports = function (app) {
     });
     //通过某一用户删除此用户所有任务
     app.post('/deleteTasksByUsername', function (req, res) {
-        Task.deleteTasksByUsername(req.session.user.username, function (err) {
+        Task.deleteTasksByUsername(req.session.user.username.toLowerCase(), function (err) {
             if (err) {
                 req.session.error = '清空账户所有内容出现错误，请重试';
                 res.send({"status": 0});
@@ -582,7 +863,126 @@ module.exports = function (app) {
             res.send({"status": 1});
         });
     });
+    //验证邮箱请求
+    app.post('/postCheckEmail', function (req, res) {
+        var md5 = crypto.createHash('md5');
+        md5.update(Math.floor(Math.random()*10+1).toString());
+        var code = md5.digest("hex");
+        console.log(code);
+        var user = {
+            checkEmailCode: code,
+            checkEmail: false
+        };
+        User.updateUserByUsername(user, req.session.user.username.toLowerCase(), function () {
+            User.getUserByUsername(req.session.user.username.toLowerCase(), function (err, user) {
+                //获取邮件信息
+                var configSMTP;
+                fs.exists('config.json', function (exists) {
+                    if (exists) {
+                        fs.readFile('config.json', function (err, data) {
+                            if (err) throw err;
+                            var jsonObj = JSON.parse(data);
+                            configSMTP = jsonObj.smtp;
+                            var ssl;
+                            if (configSMTP.ssl == "true") {
+                                ssl = true
+                            } else {
+                                ssl = false
+                            }
+                            var smtpTransport = nodemailer.createTransport("SMTP", {
+                                host: configSMTP.host, // 主机
+                                secureConnection: configSMTP.ssl, // 使用 SSL
+                                port: parseInt(configSMTP.port), // SMTP 端口
+                                auth: {
+                                    user: configSMTP.account, // 账号
+                                    pass: configSMTP.password // 密码
+                                }
+                            });
+                            // 设置邮件内容
+                            var mailOptions = {
+                                from: configSMTP.email, // 发件地址
+                                to: user._doc.email, // 收件列表
+                                subject: configSMTP.subject, // 标题
+                                html: "亲爱的用户，您好！<br/><b>感谢您注册" + configSMTP.websiteName + "，点击下方链接，验证您的邮箱。</b><br/><a href='http://" + configSMTP.website + "/email/verify?uid=" + user._doc._id + "&code=" + code + "'>http://" + configSMTP.website + "/email/verify?uid=" + user._doc._id + "&code=" + code + "</a>" // html 内容
+                            };
 
+                            // 发送邮件
+                            smtpTransport.sendMail(mailOptions, function (error, response) {
+                                if (error) {
+                                    console.log(error);
+                                } else {
+                                    res.send({"status": 1});
+                                    console.log("Message sent: " + response.message);
+                                }
+                                smtpTransport.close(); // 如果没用，关闭连接池
+                            });
+
+                        });
+                    }
+                });
+            });
+
+        });
+
+    });
+    //获取SMTP设置
+    app.get('/getSMTP', function (req, res) {
+        var configSMTP;
+        fs.exists('config.json', function (exists) {
+            if (exists) {
+                fs.readFile('config.json', function (err, data) {
+                    if (err) throw err;
+                    var jsonObj = JSON.parse(data);
+                    configSMTP = jsonObj.smtp;
+                    res.json(configSMTP);
+
+                });
+            }
+        });
+    });
+    //设置SMTP设置
+    app.post('/setSMTP', function (req, res) {
+        var host = req.body.host,
+            port = req.body.port,
+            ssl = req.body.ssl,
+            account = req.body.account,
+            password = req.body.password,
+            email = req.body.email,
+            subject = req.body.subject,
+            subjectPassword = req.body.subjectPassword,
+            websiteName = req.body.websiteName,
+            website = req.body.website;
+
+        var configSMTP = {
+            host: host,
+            port: port,
+            ssl: ssl,
+            account: account,
+            password: password,
+            email: email,
+            subject: subject,
+            subjectPassword: subjectPassword,
+            websiteName: websiteName,
+            website: website
+        };
+
+        fs.exists('config.json', function (exists) {
+            if (exists) {
+                fs.readFile('config.json', function (err, data) {
+                    if (err) throw err;
+                    var jsonObj = JSON.parse(data);
+                    jsonObj.smtp = configSMTP;
+                    //写入文件
+                    var jsonConfig = JSON.stringify(jsonObj);
+                    fs.writeFile('config.json', jsonConfig, function (err) {
+                        if (err) throw err;
+                        console.log('has finished');
+                        res.send({"status": 1});
+                    });
+                });
+            }
+        });
+    });
 
     /*
      我的任务页面各项功能
@@ -620,7 +1020,8 @@ module.exports = function (app) {
                 box: req.body.box,
                 priority: req.body.priority,
                 uID: req.session.user._id,
-                username: req.session.user.username
+                username: req.session.user.username,
+                usernameLowerCase: req.session.user.username.toLowerCase()
             };
         }
         else {
@@ -639,7 +1040,8 @@ module.exports = function (app) {
                 box: req.body.box,
                 priority: req.body.priority,
                 uID: req.session.user._id,
-                username: req.session.user.username
+                username: req.session.user.username,
+                usernameLowerCase: req.session.user.username.toLowerCase()
             };
         }
 
@@ -740,6 +1142,7 @@ module.exports = function (app) {
         tags[2] = req.body.tag_three;
         var newShareTask = {
             username: req.body.username,
+            usernameLowerCase: req.body.username.toLowerCase(),
             title: req.body.title,
             description: req.body.description,
             tags: tags
@@ -924,7 +1327,7 @@ module.exports = function (app) {
                 return err;
             }
             //将email转换为小写并更改
-            Admin.changeEmailByUsername(email, req.session.admin.username, function (err) {
+            Admin.changeEmailByUsername(email, req.session.admin.username.toLowerCase(), function (err) {
                 if (err) {
                     req.session.error = '邮箱未能修改成功请重试';
                     res.send({"status": 0});
@@ -934,7 +1337,7 @@ module.exports = function (app) {
                     hmd5 = crypto.createHash('md5'),
                     email_MD5 = hmd5.update(email.toLowerCase()).digest('hex'),
                     head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";
-                Admin.changeHeadByUsername(head, req.session.admin.username, function (err) {
+                Admin.changeHeadByUsername(head, req.session.admin.username.toLowerCase(), function (err) {
                     return err;
                 });
                 //重新刷新session
@@ -951,7 +1354,7 @@ module.exports = function (app) {
     app.post('/changeAdminPassword', function (req, res) {
         var md5 = crypto.createHash('md5'),
             password = md5.update(req.body.password).digest('hex');
-        Admin.changePasswordByUsername(password, req.session.admin.username, function (err) {
+        Admin.changePasswordByUsername(password, req.session.admin.username.toLowerCase(), function (err) {
             if (err) {
                 req.session.error = '密码未能修改成功请重试';
                 res.send({"status": 0});
@@ -963,7 +1366,7 @@ module.exports = function (app) {
 
     //提交删除管理员账户
     app.post('/deleteAdminAccount', function (req, res) {
-        Admin.deleteUserByUsername(req.session.admin.username, function (err) {
+        Admin.deleteUserByUsername(req.session.admin.username.toLowerCase(), function (err) {
             if (err) {
                 req.session.error = '删除账户出现错误，请重试';
                 res.send({"status": 0});

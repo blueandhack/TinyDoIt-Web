@@ -1,0 +1,31 @@
+doctype html
+html
+    head
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1.0')
+        link(href='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
+        link(href='../css/style.css', rel='stylesheet')
+        link(rel='shortcut icon', href='../images/favicon.png', type='image/png')
+        script(src='http://cdn.staticfile.org/jquery/2.1.1-beta1/jquery.min.js')
+        script(src='http://cdn.staticfile.org/twitter-bootstrap/3.1.1/js/bootstrap.min.js')
+        script(src='/js/forgot.js')
+        title 找回密码 - TinyDoIt 微动
+    body.body-signin
+        .container
+            form.form-signin(method='post')
+                h2
+                    img.logo.img-circle(src='../images/favicon.png', title='TinyDoIt')
+                    | 找回密码
+                p
+                    | 想起来了？
+                    a(href='/signin') 请登录
+                    | &nbsp;&nbsp;
+                    a(href='/') 返回主页
+                #tip
+                label.control-label 邮箱
+                input#email.form-control(type='text', name='email', placeholder='邮箱', required='required', autofocus='autofocus')
+                label.control-label 用户名
+                input#username.form-control(type='text', name='username', placeholder='用户名', required='required')
+                | <br/>
+                button#forgot.btn.btn-block.btn-primary.btn-lg(type='button') 确认找回
+

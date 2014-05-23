@@ -6,6 +6,7 @@ $(document).ready(function () {
     //用户信息点击事件
     $("#information").click(function () {
         $("#email").removeClass("active");
+        $("#checkEmail").removeClass("active");
         $("#delete").removeClass("active");
         $("#password").removeClass("active");
         $("#information").addClass("active");
@@ -13,6 +14,7 @@ $(document).ready(function () {
     });
     //更改邮箱点击事件
     $("#email").click(function () {
+        $("#checkEmail").removeClass("active");
         $("#information").removeClass("active");
         $("#delete").removeClass("active");
         $("#password").removeClass("active");
@@ -21,6 +23,7 @@ $(document).ready(function () {
     });
     //删除账户点击事件
     $("#delete").click(function () {
+        $("#checkEmail").removeClass("active");
         $("#email").removeClass("active");
         $("#information").removeClass("active");
         $("#password").removeClass("active");
@@ -29,11 +32,21 @@ $(document).ready(function () {
     });
     //更改密码点击事件
     $("#password").click(function () {
+        $("#checkEmail").removeClass("active");
         $("#email").removeClass("active");
         $("#information").removeClass("active");
         $("#delete").removeClass("active");
         $("#password").addClass("active");
-        postPassword()
+        postPassword();
+    });
+    //更改密码点击事件
+    $("#checkEmail").click(function () {
+        $("#checkEmail").addClass("active");
+        $("#email").removeClass("active");
+        $("#information").removeClass("active");
+        $("#delete").removeClass("active");
+        $("#password").removeClass("active");
+        getCheckEmail();
     });
 
     //获取用户信息
@@ -49,8 +62,10 @@ $(document).ready(function () {
     //
     function postEmail() {
         $("#title").html("<h4>修改电子邮箱</h4>");
-        $("#content").html("<div class='container'><div class='row'><form id='changeEmailForm' class='form-horizontal'><div class='form-group'><label class='control-label col-sm-2'>新的电子邮箱</label><div class='col-sm-4'><input id='emailForm' type='text' class='form-control' placeholder='请输入您要更改的新邮箱地址' required='' autofocus='true'></div></div><div class='form-group'><label class='control-label col-sm-2'>确认电子邮箱</label><div class='col-sm-4'><input id='confirm_emailForm' type='text' class='form-control' placeholder='请确认新邮箱地址' required='' autofocus=''></div></div><div class='col-sm-offset-5'><button type='button' id='changeEmailButton' class='btn btn-primary'>确认更改</button></div></form></div></div>");
-        changeEmail();
+        $.getJSON("/getUserByUsername" + "?time=" + new Date().getTime(), function (data) {
+            $("#content").html("<div class='container'><div class='row'><form id='changeEmailForm' class='form-horizontal'><div class='form-group'><label class='control-label col-sm-2'>原始电子邮箱</label><div class='col-sm-4'><input id='originalEmail' type='text' class='form-control' readonly value='" + data.email + "'></div></div><div class='form-group'><label class='control-label col-sm-2'>新的电子邮箱</label><div class='col-sm-4'><input id='emailForm' type='text' class='form-control' placeholder='请输入您要更改的新邮箱地址' required='' autofocus='true'></div></div><div class='form-group'><label class='control-label col-sm-2'>确认电子邮箱</label><div class='col-sm-4'><input id='confirm_emailForm' type='text' class='form-control' placeholder='请确认新邮箱地址' required='' autofocus=''></div></div><div class='col-sm-offset-5'><button type='button' id='changeEmailButton' class='btn btn-primary'>确认更改</button></div></form></div></div>");
+            changeEmail();
+        });
     }
 
     function postPassword() {
@@ -58,6 +73,20 @@ $(document).ready(function () {
 
         $("#content").html("<div class='container'><div class='row'><form id='changePasswordForm' class='form-horizontal'><div class='form-group'><label class='control-label col-sm-2'>新的密码</label><div class='col-sm-4'><input id='passwordForm' name='passwordForm' type='password' class='form-control' placeholder='请输入您要更改的新密码' required='true' autofocus='true'></div></div><div class='form-group'><label class='control-label col-sm-2'>确认密码</label><div class='col-sm-4'><input id='confirm_passwordForm' name='confirm_passwordForm' type='password' class='form-control' placeholder='请确认新密码' required='true' autofocus=''></div></div><div class='col-sm-offset-5'><button id='changePasswordButton' type='button' class='btn btn-primary'>确认更改</button></div></form></div></div>");
         changePassword();
+    }
+
+    function getCheckEmail() {
+        $("#title").html("<h4>验证电子邮箱</h4>");
+        $.getJSON("/getUserByUsername" + "?time=" + new Date().getTime(), function (data) {
+            if (data.checkEmail == true) {
+                $("#content").html("<button id='checkEmailButton' class='btn btn-primary' disabled='disabled'>验证邮箱</button><div id='checkEmailContent'><br/><p>邮箱已验证</p></div>");
+                postCheckEmail();
+            } else {
+                $("#content").html("<button id='checkEmailButton' class='btn btn-primary'>验证邮箱</button><div id='checkEmailContent'></div>");
+                postCheckEmail();
+            }
+        });
+
     }
 
     function postDelete() {
@@ -133,6 +162,9 @@ $(document).ready(function () {
                         if (data.status == 1) {
                             $("#emailForm").val("");
                             $("#confirm_emailForm").val("");
+                            $.getJSON("/getUserByUsername" + "?time=" + new Date().getTime(), function (data) {
+                                $("#originalEmail").val(data.email);
+                            });
                             alert("邮箱修改成功");
                         }
                         if (data.status == 2) {
@@ -150,6 +182,17 @@ $(document).ready(function () {
                 alert("您输入的邮箱格式不正确，请重新输入");
                 return false;
             }
+        });
+    }
+
+    function postCheckEmail() {
+        $("#checkEmailButton").click(function () {
+            $.post("/postCheckEmail", function (data) {
+                if (data.status == 1) {
+                    $("#checkEmailButton").attr("disabled", "disabled");
+                    $("#checkEmailContent").append("<br/><p>邮件已发送，请您前往邮箱接收确认</p>");
+                }
+            });
         });
     }
 
