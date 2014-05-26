@@ -361,6 +361,9 @@ module.exports = function (app) {
     });
     //获取用户信息
     app.get('/getUserByUsername', function (req, res) {
+        if (!req.session.user || req.session.user == null) {
+            return res.redirect('/404');
+        }
         User.getUserByUsername(req.session.user.username.toLowerCase(), function (err, user) {
             res.json(user);
         });
@@ -774,6 +777,14 @@ module.exports = function (app) {
     });
     //通过用户ID更改密码
     app.post('/changePasswordById/:id', function (req, res) {
+        if (!req.session.admin) {
+            if (!req.session.user) {
+                res.send({"count": "0"});
+            }
+            if (req.session.user._id != req.params.id) {
+                res.send({"count": "0"});
+            }
+        }
         var md5 = crypto.createHash('md5'),
             password = md5.update(req.body.password).digest('hex');
         //console.log(password);
@@ -793,6 +804,14 @@ module.exports = function (app) {
      */
     //提交更改密码
     app.post('/changePassword', function (req, res) {
+        if (!req.session.admin) {
+            if (!req.session.user) {
+                res.send({"count": "0"});
+            }
+            if (req.session.user._id != req.params.id) {
+                res.send({"count": "0"});
+            }
+        }
         var md5 = crypto.createHash('md5'),
             password = md5.update(req.body.password).digest('hex');
         User.changePasswordByUsername(password, req.session.user.username.toLowerCase(), function (err) {
@@ -806,6 +825,14 @@ module.exports = function (app) {
     });
     //提交更改邮箱
     app.post('/changeEmail', function (req, res) {
+        if (!req.session.admin) {
+            if (!req.session.user) {
+                res.send({"count": "0"});
+            }
+            if (req.session.user._id != req.params.id) {
+                res.send({"count": "0"});
+            }
+        }
         var email = req.body.email.toLowerCase();
         //将email转换为小写并查找
         User.getUserByEmail(email, function (err, user) {
@@ -927,6 +954,7 @@ module.exports = function (app) {
 
     });
     //获取SMTP设置
+    app.get('/getSMTP', notAuthenticationInformation);
     app.get('/getSMTP', function (req, res) {
         var configSMTP;
         fs.exists('config.json', function (exists) {
@@ -1058,6 +1086,14 @@ module.exports = function (app) {
     });
     //获得某一用户任务
     app.get('/getTaskByuId', function (req, res) {
+        if (!req.session.admin) {
+            if (!req.session.user) {
+                res.send({"count": "0"});
+            }
+            if (req.session.user._id != req.params.id) {
+                res.send({"count": "0"});
+            }
+        }
         var userID = req.session.user._id;
         Task.getTaskByuId(userID, function (err, tasks) {
             res.json(tasks);
@@ -1071,6 +1107,14 @@ module.exports = function (app) {
     });
     //提交更新某一ID的任务
     app.post('/updateTaskById/:id', function (req, res) {
+        if (!req.session.admin) {
+            if (!req.session.user) {
+                res.send({"count": "0"});
+            }
+            if (req.session.user._id != req.params.id) {
+                res.send({"count": "0"});
+            }
+        }
         var tags = new Array(3);
         tags[0] = req.body.tag_one;
         tags[1] = req.body.tag_two;
@@ -1115,6 +1159,14 @@ module.exports = function (app) {
     });
     //提交完成某一ID的任务
     app.post('/doneTaskById/:id', function (req, res) {
+        if (!req.session.admin) {
+            if (!req.session.user) {
+                res.send({"count": "0"});
+            }
+            if (req.session.user._id != req.params.id) {
+                res.send({"count": "0"});
+            }
+        }
         var changeTask = {
             check_task: true,
             check_date: moment(new Date())
@@ -1215,6 +1267,14 @@ module.exports = function (app) {
      */
     //更改分享任务
     app.post('/changeShareTaskById/:id', function (req, res) {
+        if (!req.session.admin) {
+            if (!req.session.user) {
+                res.send({"count": "0"});
+            }
+            if (req.session.user._id != req.params.id) {
+                res.send({"count": "0"});
+            }
+        }
         var tags = new Array(3);
         tags[0] = req.body.tag_one;
         tags[1] = req.body.tag_two;
@@ -1301,23 +1361,33 @@ module.exports = function (app) {
             res.json(user);
         });
     });
+    //获取用户总数
     app.get('/getUsersCount', function (req, res) {
+        if (!req.session.admin) {
+            res.send({"count": "0"});
+        }
         User.getUsersCount(function (err, count) {
             res.send({"count": count});
         });
     });
+    //获取分享任务总数
     app.get('/getShareTasksCount', function (req, res) {
         ShareTask.getShareTasksCount(function (err, count) {
             res.send({"count": count});
         });
     });
+    //获取所有用户私有任务总数
     app.get('/getTasksCount', function (req, res) {
+        if (!req.session.admin) {
+            res.send({"count": "0"});
+        }
         Task.getTasksCount(function (err, count) {
             res.send({"count": count});
         });
     });
 
     //提交更改管理员的邮箱
+    app.post('/changeAdminEmail', notAuthenticationInformation);
     app.post('/changeAdminEmail', function (req, res) {
         var email = req.body.email.toLowerCase();
         //将email转换为小写并查找
@@ -1352,6 +1422,7 @@ module.exports = function (app) {
 
     });
     //提交更改管理员密码
+    app.post('/changeAdminPassword', notAuthenticationInformation);
     app.post('/changeAdminPassword', function (req, res) {
         var md5 = crypto.createHash('md5'),
             password = md5.update(req.body.password).digest('hex');
@@ -1366,6 +1437,7 @@ module.exports = function (app) {
     });
 
     //提交删除管理员账户
+    app.post('/deleteAdminAccount', notAuthenticationInformation);
     app.post('/deleteAdminAccount', function (req, res) {
         Admin.deleteUserByUsername(req.session.admin.username.toLowerCase(), function (err) {
             if (err) {
@@ -1410,6 +1482,14 @@ module.exports = function (app) {
         if (req.session.user) {
             req.session.error = '已登陆';
             return res.redirect('/my');
+        }
+        next();
+    }
+
+    //验证是否有权限获取一些敏感信息
+    function notAuthenticationInformation(req, res, next) {
+        if (!req.session.admin) {
+            return res.redirect('/404');
         }
         next();
     }
