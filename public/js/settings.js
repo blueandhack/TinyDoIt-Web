@@ -106,7 +106,7 @@ $(document).ready(function () {
                             $.post("/deleteAccount" + "?time=" + new Date().getTime(), function (data) {
                                 if (data.status == 1) {
                                     alert("成功删除");
-                                    window.location.href = '/logout';
+                                    window.location.href = '/signout';
                                 }
                                 if (data.status == 0) {
                                     alert("删除账户出现错误，请重试");
