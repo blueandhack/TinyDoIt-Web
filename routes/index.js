@@ -808,9 +808,6 @@ module.exports = function (app) {
             if (!req.session.user) {
                 res.send({"count": "0"});
             }
-            if (req.session.user._id != req.params.id) {
-                res.send({"count": "0"});
-            }
         }
         var md5 = crypto.createHash('md5'),
             password = md5.update(req.body.password).digest('hex');
@@ -827,9 +824,6 @@ module.exports = function (app) {
     app.post('/changeEmail', function (req, res) {
         if (!req.session.admin) {
             if (!req.session.user) {
-                res.send({"count": "0"});
-            }
-            if (req.session.user._id != req.params.id) {
                 res.send({"count": "0"});
             }
         }
@@ -1090,9 +1084,6 @@ module.exports = function (app) {
             if (!req.session.user) {
                 res.send({"count": "0"});
             }
-            if (req.session.user._id != req.params.id) {
-                res.send({"count": "0"});
-            }
         }
         var userID = req.session.user._id;
         Task.getTaskByuId(userID, function (err, tasks) {
@@ -1109,9 +1100,6 @@ module.exports = function (app) {
     app.post('/updateTaskById/:id', function (req, res) {
         if (!req.session.admin) {
             if (!req.session.user) {
-                res.send({"count": "0"});
-            }
-            if (req.session.user._id != req.params.id) {
                 res.send({"count": "0"});
             }
         }
@@ -1161,9 +1149,6 @@ module.exports = function (app) {
     app.post('/doneTaskById/:id', function (req, res) {
         if (!req.session.admin) {
             if (!req.session.user) {
-                res.send({"count": "0"});
-            }
-            if (req.session.user._id != req.params.id) {
                 res.send({"count": "0"});
             }
         }
@@ -1269,9 +1254,6 @@ module.exports = function (app) {
     app.post('/changeShareTaskById/:id', function (req, res) {
         if (!req.session.admin) {
             if (!req.session.user) {
-                res.send({"count": "0"});
-            }
-            if (req.session.user._id != req.params.id) {
                 res.send({"count": "0"});
             }
         }
