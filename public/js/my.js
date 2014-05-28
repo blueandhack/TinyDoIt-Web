@@ -293,6 +293,7 @@ $(document).ready(function () {
     function getTodayPageCount() {
         var today = moment().format('YYYY-MM-DDZZ');
         today = today.replace("+", "i");
+        showLoading();
         $.getJSON("/getTasksByToday/Date/" + today + "/SumPage" + "?time=" + new Date().getTime(), function (result) {
             if (result.count == 1 || result.count == 0) {
                 $('#pagination').empty();
@@ -301,6 +302,7 @@ $(document).ready(function () {
                     getTodayTasks(1);
                 } else {
                     $("#taskTbody").empty();
+                    hideLoading();
                     getTodayTomorrowDoneMiss();
                 }
             } else {
@@ -328,6 +330,7 @@ $(document).ready(function () {
     //获得今日任务并分页显示
     function getTodayTasks(page) {
         $("#taskTbody").empty();
+        showLoading();
         var date = moment().format('YYYY-MM-DDZZ');
         date = date.replace("+", "i");
         $.getJSON("/getTasksByToday/Date/" + date + "/Page/" + page + "?time=" + new Date().getTime(), function (data) {
@@ -360,6 +363,7 @@ $(document).ready(function () {
                 $("#taskTbody").append("<tr class='" + color + "' id='" + item._id + "'><td><button id='doneTask-" + item._id + "' class='btn btn-default btn-sm' value='" + item._id + "'>标记</button></td><td>" + start_date + "</br>" + hour + minute + "</td><td>" + item.title + "</td><td>" + item.description + "</td><td><button id='intChangeTask-" + item._id + "' data-toggle='modal' data-target='#ChangeTask' class='btn btn-primary btn-sm' value='" + item._id + "'>更改</button><span>&nbsp;</span><button id='deleteTask-" + item._id + "' class='btn btn-danger btn-sm' value='" + item._id + "'>删除</button><span>&nbsp;</span><button id='intShareTask-" + item._id + "' data-toggle='modal' data-target='#ShareTask' title='觉得不错，分享到分享圈吧！' class='btn btn-info btn-sm' value='" + item._id + "'>分享到分享圈</button></td></tr>");
             });
 
+            hideLoading();
             //初始化更改任务窗口
             changButton();
             doneButton();
@@ -375,6 +379,7 @@ $(document).ready(function () {
     function getMissPageCount() {
         var today = moment().format('YYYY-MM-DDZZ');
         today = today.replace("+", "i");
+        showLoading();
         $.getJSON("/getTasksByMiss/Date/" + today + "/SumPage" + "?time=" + new Date().getTime(), function (result) {
             if (result.count == 1 || result.count == 0) {
                 $('#pagination').empty();
@@ -383,6 +388,7 @@ $(document).ready(function () {
                     getMissTasks(1);
                 } else {
                     $("#taskTbody").empty();
+                    hideLoading();
                     getTodayTomorrowDoneMiss();
                 }
             } else {
@@ -410,6 +416,7 @@ $(document).ready(function () {
     //获得以前任务并分页显示
     function getMissTasks(page) {
         $("#taskTbody").empty();
+        showLoading();
         var today = moment().format('YYYY-MM-DDZZ');
         today = today.replace("+", "i");
         $.getJSON("/getTasksByMiss/Date/" + today + "/Page/" + page + "?time=" + new Date().getTime(), function (data) {
@@ -443,6 +450,7 @@ $(document).ready(function () {
 
             });
 
+            hideLoading();
             //初始化更改任务窗口
             changButton();
             doneButton();
@@ -458,6 +466,7 @@ $(document).ready(function () {
     function getTomorrowPageCount() {
         var today = moment().format('YYYY-MM-DDZZ');
         today = today.replace("+", "i");
+        showLoading();
         $.getJSON("/getTasksByTomorrow/Date/" + today + "/SumPage" + "?time=" + new Date().getTime(), function (result) {
             if (result.count == 1 || result.count == 0) {
                 $('#pagination').empty();
@@ -466,6 +475,7 @@ $(document).ready(function () {
                     getTomorrowTasks(1);
                 } else {
                     $("#taskTbody").empty();
+                    hideLoading();
                     getTodayTomorrowDoneMiss();
                 }
             } else {
@@ -493,6 +503,7 @@ $(document).ready(function () {
     //获得未来任务并分页显示
     function getTomorrowTasks(page) {
         $("#taskTbody").empty();
+        showLoading();
         var today = moment().format('YYYY-MM-DDZZ');
         today = today.replace("+", "i");
         $.getJSON("/getTasksByTomorrow/Date/" + today + "/Page/" + page + "?time=" + new Date().getTime(), function (data) {
@@ -526,6 +537,7 @@ $(document).ready(function () {
 
             });
 
+            hideLoading();
             //初始化更改任务窗口
             changButton();
             doneButton();
@@ -539,6 +551,7 @@ $(document).ready(function () {
 
     //获得已完成任务总页数
     function getDonePageCount() {
+        showLoading();
         $.getJSON("/getTasksPageByDone/SumPage" + "?time=" + new Date().getTime(), function (result) {
             if (result.count == 1 || result.count == 0) {
                 $('#pagination').empty();
@@ -547,6 +560,7 @@ $(document).ready(function () {
                     getDoneTasks(1);
                 } else {
                     $("#taskTbody").empty();
+                    hideLoading();
                     getTodayTomorrowDoneMiss();
                 }
             } else {
@@ -574,6 +588,7 @@ $(document).ready(function () {
     //获得已完成任务并分页显示
     function getDoneTasks(page) {
         $("#taskTbody").empty();
+        showLoading();
         $.getJSON("/getTasksByDone/Page/" + page + "?time=" + new Date().getTime(), function (data) {
             $.each(data, function (idx, item) {
                 var check_date,
@@ -624,6 +639,8 @@ $(document).ready(function () {
                 $("#taskTbody").append("<tr class='" + color + "' id='" + item._id + "'><td><button id='doneTask-" + item._id + "' class='btn btn-default btn-sm' value='" + item._id + "' disabled='disabled'>" + check_date + "</br>" + hour + minute + "</button></td><td>" + start_date + "</br>" + startDateHour + startDateMinute + "</td><td>" + item.title + "</td><td>" + item.description + "</td><td><button id='intChangeTask-" + item._id + "' data-toggle='modal' data-target='#ChangeTask' class='btn btn-primary btn-sm' value='" + item._id + "'>更改</button><span>&nbsp;</span><button id='deleteTask-" + item._id + "' class='btn btn-danger btn-sm' value='" + item._id + "'>删除</button><span>&nbsp;</span><button id='intShareTask-" + item._id + "' data-toggle='modal' data-target='#ShareTask' title='觉得不错，分享到分享圈吧！' class='btn btn-info btn-sm' value='" + item._id + "'>分享到分享圈</button></td></tr>");
 
             });
+
+            hideLoading();
             //初始化更改任务窗口
             changButton();
             doneButton();
@@ -679,6 +696,14 @@ $(document).ready(function () {
         }
 
     });
+
+    function showLoading(){
+        $("#loading").show();
+    }
+
+    function hideLoading(){
+        $("#loading").hide();
+    }
 
 
 });

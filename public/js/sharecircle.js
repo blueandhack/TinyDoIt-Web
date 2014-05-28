@@ -111,6 +111,7 @@ $(document).ready(function () {
 
     //获得总页数
     function getPageCount() {
+        showLoading();
         $.getJSON("/getShareTasksSumPage" + "?time=" + new Date().getTime(), function (result) {
             if (result.count == 1 || result.count == 0) {
                 $('#pagination').empty();
@@ -119,6 +120,7 @@ $(document).ready(function () {
                     getShareTasks(1);
                 } else {
                     $("#shareTaskTbody").empty();
+                    hideLoading();
                 }
             } else {
                 getShareTasks(1);
@@ -145,6 +147,7 @@ $(document).ready(function () {
 
     function getShareTasks(page) {
         $("#shareTaskTbody").empty();
+        showLoading();
         var username;
         $.getJSON("/getUserByUsername" + "?time=" + new Date().getTime(), function (data) {
             username = data.username;
@@ -160,6 +163,7 @@ $(document).ready(function () {
 
             });
             //初始化更改任务窗口
+            hideLoading();
             doButton();
             changeButton();
             deleteButton();
@@ -197,5 +201,13 @@ $(document).ready(function () {
         }
 
     });
+
+    function showLoading(){
+        $("#loading").show();
+    }
+
+    function hideLoading(){
+        $("#loading").hide();
+    }
 
 });
