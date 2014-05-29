@@ -131,6 +131,7 @@ $(document).ready(function () {
         $("#miss").removeClass("active");
         $("#today").addClass("active");
         thisClass = 0;
+        $("#taskTbody").empty();
         getTodayPageCount();
     });
 
@@ -141,6 +142,7 @@ $(document).ready(function () {
         $("#miss").removeClass("active");
         $("#tomorrow").addClass("active");
         thisClass = 1;
+        $("#taskTbody").empty();
         getTomorrowPageCount();
     });
 
@@ -151,6 +153,7 @@ $(document).ready(function () {
         $("#miss").removeClass("active");
         $("#done").addClass("active");
         thisClass = 2;
+        $("#taskTbody").empty();
         getDonePageCount();
     });
 
@@ -161,6 +164,7 @@ $(document).ready(function () {
         $("#today").removeClass("active");
         $("#miss").addClass("active");
         thisClass = 3;
+        $("#taskTbody").empty();
         getMissPageCount();
     });
 
